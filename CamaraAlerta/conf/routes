@@ -7,7 +7,9 @@ GET     /                                       Application.index
 
 
 # Usuarios
-POST /user/facebookLogin                        UserController.facebookLogin
+POST    /user/facebookLogin                     UserController.facebookLogin
+POST    /user/novoCidadao                       UserController.novoCadastroCidadao
+POST    /user/login                             UserController.cidadaoLogin
 
 
 # Ignore favicon requests
