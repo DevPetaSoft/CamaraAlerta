@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	__webpack_require__(268);
+	__webpack_require__(274);
 
 /***/ },
 /* 1 */
@@ -38324,9 +38324,29 @@
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
-	var _TopMenu = __webpack_require__(270);
+	var _TopMenu = __webpack_require__(268);
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
+
+	var _SolicitationList = __webpack_require__(269);
+
+	var _SolicitationList2 = _interopRequireDefault(_SolicitationList);
+
+	var _SolicitationNumbers = __webpack_require__(270);
+
+	var _SolicitationNumbers2 = _interopRequireDefault(_SolicitationNumbers);
+
+	var _ReceivedSolicitation = __webpack_require__(271);
+
+	var _ReceivedSolicitation2 = _interopRequireDefault(_ReceivedSolicitation);
+
+	var _SolicitationSolved = __webpack_require__(272);
+
+	var _SolicitationSolved2 = _interopRequireDefault(_SolicitationSolved);
+
+	var _SolicitationMap = __webpack_require__(273);
+
+	var _SolicitationMap2 = _interopRequireDefault(_SolicitationMap);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38338,7 +38358,44 @@
 							"div",
 							{ className: "dashboardBody" },
 							_react2.default.createElement(_TopMenu2.default, null),
-							_react2.default.createElement(_Menu2.default, null)
+							_react2.default.createElement(_Menu2.default, null),
+							_react2.default.createElement(
+									"div",
+									{ className: "dashboardContainder" },
+									_react2.default.createElement(
+											"div",
+											{ className: "col-sm-3" },
+											_react2.default.createElement(_SolicitationList2.default, null)
+									),
+									_react2.default.createElement(
+											"div",
+											{ className: "col-sm-4" },
+											_react2.default.createElement(
+													"div",
+													{ className: "row" },
+													_react2.default.createElement(_SolicitationNumbers2.default, null)
+											),
+											_react2.default.createElement(
+													"div",
+													{ className: "row" },
+													_react2.default.createElement(_SolicitationSolved2.default, null)
+											)
+									),
+									_react2.default.createElement(
+											"div",
+											{ className: "col-offset-1 col-sm-4" },
+											_react2.default.createElement(
+													"div",
+													{ className: "row" },
+													_react2.default.createElement(_ReceivedSolicitation2.default, null)
+											),
+											_react2.default.createElement(
+													"div",
+													{ className: "row" },
+													_react2.default.createElement(_SolicitationMap2.default, null)
+											)
+									)
+							)
 					);
 			}
 	});
@@ -38350,7 +38407,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
 
 	var _react = __webpack_require__(12);
@@ -38364,80 +38421,90 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-			displayName: "Menu",
+		displayName: "Menu",
 
-			render: function render() {
-					return _react2.default.createElement(
-							"div",
-							{ className: "sideMenu" },
-							_react2.default.createElement("img", { src: "public/images/logotipo.svg", className: "perfilImage" }),
-							_react2.default.createElement(
-									"div",
-									null,
-									" Nome: ",
-									_react2.default.createElement(
-											"span",
-											null,
-											"Vereador 1"
-									)
-							),
-							_react2.default.createElement(
-									"div",
-									null,
-									" E-mail: ",
-									_react2.default.createElement(
-											"span",
-											null,
-											"vereador@gmail.com"
-									)
-							),
-							_react2.default.createElement("hr", null)
-					);
-			}
+		render: function render() {
+			return _react2.default.createElement(
+				"div",
+				{ className: "sideMenu" },
+				_react2.default.createElement(
+					"div",
+					{ className: "sideMenuHeader" },
+					_react2.default.createElement("img", { src: "public/images/logotipo.svg", className: "perfilImage" }),
+					_react2.default.createElement(
+						"div",
+						{ className: "sideMenuHeaderText" },
+						" ",
+						_react2.default.createElement(
+							"span",
+							{ className: "bold" },
+							"Nome:"
+						),
+						" Vereador 1"
+					),
+					_react2.default.createElement(
+						"div",
+						{ className: "sideMenuHeaderText" },
+						" ",
+						_react2.default.createElement(
+							"span",
+							{ className: "bold" },
+							"E-mail:"
+						),
+						" vereador@gmail.com"
+					)
+				),
+				_react2.default.createElement("hr", null),
+				_react2.default.createElement(
+					"li",
+					null,
+					_react2.default.createElement(
+						"ul",
+						{ className: "sideMenuItens" },
+						"Painel de bordo"
+					),
+					_react2.default.createElement(
+						"ul",
+						{ className: "sideMenuItens" },
+						"Solicita\xE7\xF5es",
+						_react2.default.createElement(
+							"span",
+							{ className: "sideMenuItensNumber" },
+							"2"
+						)
+					),
+					_react2.default.createElement(
+						"ul",
+						{ className: "sideMenuItens" },
+						"Mensagens",
+						_react2.default.createElement(
+							"span",
+							{ className: "sideMenuItensNumber" },
+							"3"
+						)
+					),
+					_react2.default.createElement(
+						"ul",
+						{ className: "sideMenuItens" },
+						"Mapas"
+					),
+					_react2.default.createElement(
+						"ul",
+						{ className: "sideMenuItens" },
+						"Editar Perfil"
+					),
+					_react2.default.createElement(
+						"ul",
+						{ className: "sideMenuItens" },
+						"Configura\xE7\xF5es"
+					)
+				)
+			);
+		}
 	});
 
 /***/ },
 /* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(269);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(9)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    padding-right: 15px;\n    padding-left: 15px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 150px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0; }\n  .sideMenu .perfilImage {\n    width: 70px;\n    height: 70px;\n    border: 1px solid #ccc;\n    border-radius: 50px;\n    margin-left: 40px;\n    margin-top: 25px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  left: 150px;\n  position: fixed; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  position: fixed; }\n\nbody {\n  height: 100%;\n  width: 100%; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38465,12 +38532,258 @@
 							{ className: "topMenu" },
 							_react2.default.createElement(
 									"div",
-									null,
-									" Teste"
+									{ className: "logout" },
+									"Sair ",
+									_react2.default.createElement("img", { src: "public/icons/login-variant.svg" })
 							)
 					);
 			}
 	});
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(43);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+			displayName: "SolicitationList",
+
+			render: function render() {
+					return _react2.default.createElement(
+							"div",
+							{ className: "dashboardWidget" },
+							_react2.default.createElement(
+									"h4",
+									null,
+									"Lista de solicita\xE7\xF5es"
+							)
+					);
+			}
+	});
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(43);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+			displayName: "SolicitationNumbers",
+
+			render: function render() {
+					return _react2.default.createElement(
+							"div",
+							{ className: "dashboardWidget" },
+							_react2.default.createElement(
+									"h4",
+									null,
+									"N\xFAmero de solicita\xE7\xF5es"
+							),
+							_react2.default.createElement(
+									"div",
+									{ className: "row" },
+									_react2.default.createElement(
+											"div",
+											{ className: "col-md-4" },
+											"40",
+											_react2.default.createElement("br", null),
+											"Solicita\xE7\xF5es recebidas"
+									),
+									_react2.default.createElement(
+											"div",
+											{ className: "col-md-4" },
+											"20",
+											_react2.default.createElement("br", null),
+											"Solicita\xE7\xF5es resolvidas"
+									),
+									_react2.default.createElement(
+											"div",
+											{ className: "col-md-4" },
+											"20",
+											_react2.default.createElement("br", null),
+											"Solicita\xE7\xF5es aguardando"
+									)
+							)
+					);
+			}
+	});
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(43);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+			displayName: "ReceivedSolicitation",
+
+			render: function render() {
+					return _react2.default.createElement(
+							"div",
+							{ className: "dashboardWidget" },
+							_react2.default.createElement(
+									"h4",
+									null,
+									"Solicita\xE7\xF5es recebidas"
+							)
+					);
+			}
+	});
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(43);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+			displayName: "SolicitationSolved",
+
+			render: function render() {
+					return _react2.default.createElement(
+							"div",
+							{ className: "dashboardWidget" },
+							_react2.default.createElement(
+									"h4",
+									null,
+									"Solicita\xE7\xF5es resolvidas"
+							)
+					);
+			}
+	});
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(43);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+			displayName: "SolicitationMap",
+
+			render: function render() {
+					return _react2.default.createElement(
+							"div",
+							{ className: "dashboardWidget" },
+							_react2.default.createElement(
+									"h4",
+									null,
+									"Mapa de solicita\xE7\xF5es"
+							)
+					);
+			}
+	});
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(275);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    padding-right: 15px;\n    padding-left: 15px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu .sideMenuItens {\n    margin-left: 5px;\n    margin-right: 5px;\n    padding-left: 10px;\n    padding-top: 5px;\n    padding-bottom: 5px; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px; }\n\n.bold {\n  font-weight: bold; }\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

@@ -20,4 +20,4 @@ GET     /public/                                staticDir:public
 
 # Catch all
 *       /{controller}/{action}                  Application.index
-*       /{controller}                               Application.index
+*       /{controller}                           Application.index
