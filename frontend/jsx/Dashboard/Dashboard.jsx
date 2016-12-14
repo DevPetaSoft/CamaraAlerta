@@ -27,7 +27,7 @@ export default React.createClass({
 	     					<SolicitationSolved/>
 	     				</div>
 	     			</div>
-	     			<div className="col-offset-1 col-sm-4">
+	     			<div className="col-sm-4 marginLeft20">
 	     				<div className="row">
 	     					<ReceivedSolicitation/>
 	     				</div>

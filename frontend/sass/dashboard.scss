@@ -6,6 +6,7 @@
 	border-top: none;
 	position: fixed;
 	top: 0;
+	z-index:81;
 
 	.sideMenuHeader{
 
@@ -27,7 +28,17 @@
 
 	}
 
-	
+	.sideMenuItensActive{
+		margin-left:5px;
+		margin-right: 5px;
+		padding-left: 10px;
+		padding-top:5px;
+		padding-bottom:5px;
+		border:1px solid #3DB2FF;
+		border-radius: 5px;
+		background-color: #3DB2FF;
+		color:white;
+	}
 
 	.sideMenuItens{
 		margin-left:5px;
@@ -35,6 +46,8 @@
 		padding-left: 10px;
 		padding-top:5px;
 		padding-bottom:5px;
+		border:1px solid #3DB2FF;
+		border-radius: 5px;
 
 		&:hover{
 			background-color: #3DB2FF;
@@ -74,6 +87,13 @@
 	background-color: white;
 	border-bottom: 1px solid #ccc;
 	position: fixed;
+	z-index: 80;
+
+	.topMenuImage{
+		height: 60px;
+		left:50%;
+		position:fixed;
+	}
 
 	.logout{
 		float: right;
@@ -86,6 +106,7 @@
 .dashboardBody{
 	height:100%;
 	width: 100%;
+	overflow-y: auto;
 	position:fixed;
 	background-color: #3DB2FF;
 	.dashboardContainder{
@@ -93,8 +114,46 @@
 		margin-top:60px;
 	}
 
+	.dashboardWidgetList{
+		background-color:white;
+		border-radius:5px;
+		min-height: 510px;
+		box-shadow: 2px 3px 5px #444;
+	}
+
+
+	.dashboardWidgetTitle{
+		padding-top:15px;
+		padding-bottom:15px;
+		text-align: center;
+	}
+
 	.dashboardWidget{
 		background-color:white;
 		border-radius:5px;
+		height: 250px;	
+		box-shadow: 2px 3px 5px #444;
+
+
+		.solicitationNumbers{
+			margin-top:40px;
+		}
 	}
+
+	.solicitationNumber{
+		font-size: 24px;
+	}
+
+	.solicitationSubtitle{
+		font-size: 14px;
+	}
+}
+
+
+.solicitationListItemBackground{
+	background-color: #3F51B5;
+	color: white;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 5px;
 }
