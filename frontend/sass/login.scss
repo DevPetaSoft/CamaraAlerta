@@ -1,0 +1,52 @@
+.loginBackground{
+	background-color: #3DB2FF;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	padding: 0px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+
+	.loginPanel{
+		background-color: white;
+	    top: 25%;
+	    height: 50%;
+	    position: relative;
+	    border-radius: 2px;
+	    box-shadow: 2px 2px 2px #222;
+	    padding:20px;
+	}
+
+	.loginLogotype{
+		width: 300px;
+		left: 25%;
+		margin-top: 30px;
+		position: relative;
+		margin-bottom: 30px;
+	}
+
+	.loginButton{
+		background-color: #2ecc71;
+		border: 0;
+		border-radius: 50px;
+		padding: 13px;
+		padding-right: 15px;
+		padding-left: 15px;
+		float: right;
+		box-shadow: 2px 2px 2px black;
+
+		.loginButtonIcon:before{
+			color:white;
+		}
+	}
+}
+
+.footer{
+	position:absolute;
+	bottom:0;
+	width:100%;
+	height:40px;
+	background-color:white;
+	text-align:center;
+}
