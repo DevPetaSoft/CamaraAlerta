@@ -10,6 +10,8 @@ GET     /                                       Application.index
 POST    /user/facebookLogin                     UserController.facebookLogin
 POST    /user/novoCidadao                       UserController.novoCadastroCidadao
 POST    /user/login                             UserController.cidadaoLogin
+POST    /user/recuperarSenha                    UserController.recuperarSenha
+POST    /user/numeroDenuncias                   UserController.numeroDenuncias
 POST    /denuncia/novaDenuncia                  DenunciaController.novaDenuncia
 
 # Ignore favicon requests

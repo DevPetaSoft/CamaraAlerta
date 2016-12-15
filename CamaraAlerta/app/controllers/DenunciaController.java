@@ -2,8 +2,7 @@ package controllers;
 
 import com.google.gson.Gson;
 import dto.DenunciaDTO;
-import models.Cidadao;
-import models.Denuncia;
+import models.*;
 import play.Logger;
 import play.mvc.Controller;
 
@@ -40,8 +39,46 @@ public class DenunciaController extends Controller {
                 e.printStackTrace();
             }
         }
+
+        //Mock coordenadas
+        Coordenadas c = new Coordenadas();
+        c.latitude = -21.232756;
+        c.longitude = -44.995004;
+        c.save();
+
+        //Adm
+        Administrador a = Administrador.find("byEmail", "adm@email.com").first();
+        if(a==null) {
+            a = new Administrador();
+            a.email = "adm@email.com";
+            a.nome = "Adm";
+            a.save();
+        }
+
+        Cidade cidade = Cidade.find("byNome", "Lavras").first();
+        if(cidade==null) {
+            cidade.estado = "MG";
+            cidade.nome = "Lavras";
+            cidade.save();
+        }
+
+        Vereador vereador = Vereador.find("byEmail", "vereador1@email.com").first();
+        if(vereador==null) {
+            vereador.cidade=cidade;
+            vereador.nome = "Vereador 1";
+            vereador.dataCadastro = new Date();
+            vereador.email = "vereador1@email.com";
+            vereador.criadoPor = a;
+            vereador.save();
+        }
+
         Denuncia d = dDTO.getDenuncia();
+        d.mensagem = "Mensagem";
+        d.relatorio = "Relatorio";
+        d.vereador = vereador;
         d.fotos = photoPaths;
+        d.coordenadas = c;
+        d.save();
         Logger.info("Sucesso incluindo denuncia!");
         renderJSON(d);
     }
