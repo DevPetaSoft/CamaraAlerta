@@ -2,6 +2,7 @@ package controllers;
 
 import com.google.gson.Gson;
 import dto.DenunciaDTO;
+import dto.MinhasDenunciasDTO;
 import models.*;
 import play.Logger;
 import play.mvc.Controller;
@@ -27,18 +28,7 @@ public class DenunciaController extends Controller {
         DenunciaDTO dDTO = gson.fromJson(dDTOString, DenunciaDTO.class);
         ArrayList<String> listaDeFotos = (ArrayList<String>) dDTO.getListaFotos();
         ArrayList<String> photoPaths = new ArrayList<String>();
-        for(int i = 0; i<listaDeFotos.size(); i++){
-            byte[] decoded = org.apache.commons.codec.binary.Base64.decodeBase64(listaDeFotos.get(i).getBytes());
-            try {
-                InputStream in2 = new ByteArrayInputStream(decoded);
-                BufferedImage bImageFromConvert = ImageIO.read(in2);
-                ImageIO.write(bImageFromConvert, "png", new File("d:/imageFromServer" + i + ".png"));
-                photoPaths.add("d:/imageFromServer" + i + ".png");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+
 
         //Mock coordenadas
         Coordenadas c = new Coordenadas();
@@ -76,10 +66,35 @@ public class DenunciaController extends Controller {
         d.mensagem = "Mensagem";
         d.relatorio = "Relatorio";
         d.vereador = vereador;
-        d.fotos = photoPaths;
         d.coordenadas = c;
         d.save();
+
+        //salvando fotos
+        for(int i = 0; i<listaDeFotos.size(); i++){
+            byte[] decoded = org.apache.commons.codec.binary.Base64.decodeBase64(listaDeFotos.get(i).getBytes());
+            try {
+                InputStream in2 = new ByteArrayInputStream(decoded);
+                BufferedImage bImageFromConvert = ImageIO.read(in2);
+                ImageIO.write(bImageFromConvert, "png", new File("d:/imageDenuncia_" + d.id + "_" + i + ".png"));
+                photoPaths.add("d:/imageFromServer" + i + ".png");
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
         Logger.info("Sucesso incluindo denuncia!");
         renderJSON(d);
+    }
+
+    public void minhasDenuncias(String idUsuario){
+        ArrayList<Denuncia> denunciasUsuario = (ArrayList) Denuncia.find("byCidadao_id", idUsuario).fetch();
+        if(denunciasUsuario == null){
+            renderJSON(new String("Usuário não tem denuncias!"));
+        } else {
+            int count = denunciasUsuario.size();
+            MinhasDenunciasDTO minhasDenunciaDTO = new MinhasDenunciasDTO(denunciasUsuario, count);
+            renderJSON(minhasDenunciaDTO);
+        }
     }
 }

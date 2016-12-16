@@ -13,6 +13,7 @@ POST    /user/login                             UserController.cidadaoLogin
 POST    /user/recuperarSenha                    UserController.recuperarSenha
 POST    /user/numeroDenuncias                   UserController.numeroDenuncias
 POST    /denuncia/novaDenuncia                  DenunciaController.novaDenuncia
+POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenuncias
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
