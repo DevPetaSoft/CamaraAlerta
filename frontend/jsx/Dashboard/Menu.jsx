@@ -15,11 +15,11 @@ export default React.createClass({
 	     		<hr/>
 	     		<li>
 	     			<Link to="/dashboard" ><ul className="sideMenuItens" >Painel de bordo</ul></Link>
-	     			<Link to="/solicitations" ><ul activeClassName="active" className="sideMenuItens">Solicitações<span className="sideMenuItensNumber">2</span></ul></Link>
-	     			<ul activeClassName="active" className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul>
-	     			<ul activeClassName="active" className="sideMenuItens">Mapas</ul>
-	     			<ul activeClassName="active" className="sideMenuItens">Editar Perfil</ul>
-	     			<ul activeClassName="active" className="sideMenuItens">Configurações</ul>
+	     			<Link to="/solicitations" ><ul className="sideMenuItens">Solicitações<span className="sideMenuItensNumber">2</span></ul></Link>
+	     			<ul  className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul>
+	     			<ul  className="sideMenuItens">Mapas</ul>
+	     			<ul  className="sideMenuItens">Editar Perfil</ul>
+	     			<ul  className="sideMenuItens">Configurações</ul>
 	     		</li>
 
 	      	</div>
