@@ -1,0 +1,80 @@
+.messageListItemBackground{
+	background-color: white;
+	border: 1px solid #3F51B5;
+	color: black;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 5px;
+
+	&:hover{
+		background-color: #3F51B5;
+		border: 1px solid white;
+		color: white;
+	}
+}
+
+.messageBoardBackground{
+	background-color:white;
+	border-radius:5px;
+	height: 510px;	
+	box-shadow: 2px 3px 5px #444;
+	margin-top:10px;
+	padding:10px;
+
+	.messageBoardBackgroundContainer{
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		width: 100%;
+		height: 92%;
+
+		.messageInputBlock{
+
+			bottom: 0;
+			position: absolute;
+			.messagesBlock{
+				overflow-y: auto;
+				height: 390px;
+			}
+
+			.messageInput{
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				padding: 5px;
+				margin-left: 10px;
+			}
+
+			.messageButton{
+				background-color: #2ecc71;
+				border: 0;
+				border-radius: 50px;
+				padding: 10px;
+				width: 42px;
+				box-shadow: 2px 2px 2px black;
+				margin-left: 10px;
+			}
+		}		
+	}
+}
+
+
+.messageItemChatBackgroundYourself{
+	width:75%;
+	margin-left:1%;
+	float:left;
+	background-color: #3F51B5;
+	border: 1px solid white;
+	color: white;
+	border-radius:10px;
+	margin-bottom:10px;
+	padding:5px;
+}
+
+.messageItemChatBackgroundClient{
+	width: 75%;
+	float: right;
+	margin-right: 5%;
+	border: 1px solid #ccc;
+	padding: 5px;
+	border-radius: 10px;
+	margin-bottom:10px;
+}

@@ -12,3 +12,5 @@ frontend/node_modules
 
 CamaraAlerta/backend.iws
 CamaraAlerta/backend.ipr
+CamaraAlerta/.idea/
+CamaraAlerta/public/app.js

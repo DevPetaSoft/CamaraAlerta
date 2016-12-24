@@ -16,7 +16,7 @@ export default React.createClass({
 	     		<li>
 	     			<Link to="/dashboard" ><ul className="sideMenuItens" >Painel de bordo</ul></Link>
 	     			<Link to="/solicitations" ><ul className="sideMenuItens">Solicitações<span className="sideMenuItensNumber">2</span></ul></Link>
-	     			<ul  className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul>
+	     			<Link to="/messages"><ul  className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul></Link>
 	     			<ul  className="sideMenuItens">Mapas</ul>
 	     			<ul  className="sideMenuItens">Editar Perfil</ul>
 	     			<ul  className="sideMenuItens">Configurações</ul>
