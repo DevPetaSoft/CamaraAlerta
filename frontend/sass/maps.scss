@@ -1,0 +1,24 @@
+.mapsListItemBackground{
+	background-color: white;
+	border: 1px solid #3F51B5;
+	color: black;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 5px;
+
+	&:hover{
+		background-color: #3F51B5;
+		border: 1px solid white;
+		color: white;
+	}
+}
+
+
+.mapsBackground{
+	background-color:white;
+	border-radius:5px;
+	height: 510px;	
+	box-shadow: 2px 3px 5px #444;
+	margin-top:10px;
+	padding:10px;
+}
