@@ -18,7 +18,7 @@ export default React.createClass({
 	     			<Link to="/solicitations" ><ul className="sideMenuItens">Solicitações<span className="sideMenuItensNumber">2</span></ul></Link>
 	     			<Link to="/messages"><ul  className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul></Link>
 	     			<Link to="/maps"><ul  className="sideMenuItens">Mapas</ul></Link>
-	     			<ul  className="sideMenuItens">Editar Perfil</ul>
+	     			<Link to="/editProfile"><ul  className="sideMenuItens">Editar Perfil</ul></Link>
 	     			<ul  className="sideMenuItens">Configurações</ul>
 	     		</li>
 

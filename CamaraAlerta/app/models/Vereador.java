@@ -35,4 +35,7 @@ public class Vereador extends User implements Serializable {
     @Column(nullable=false)
     public boolean deleted = false;
 
+    @Column(nullable=true, length=14)
+    public String telefone;
+
 }

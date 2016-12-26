@@ -1,0 +1,22 @@
+.profileBackground{
+	background-color:white;
+	border-radius:5px;
+	height: 310px;	
+	box-shadow: 2px 3px 5px #444;
+	margin-top:10px;
+	padding:10px;
+
+	.profileTitle{
+		text-align: center;
+	}
+
+	.profileEditButton{
+		background-color: #2ecc71;
+		border: 0;
+		border-radius: 50px;
+		padding: 13px;
+		float: right;
+		box-shadow: 2px 2px 2px black;
+
+	}
+}
