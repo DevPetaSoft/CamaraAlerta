@@ -51,7 +51,7 @@ public class DenunciaController extends Controller {
             cidade.nome = "Lavras";
             cidade.save();
         }
-
+        /*
         Vereador vereador = Vereador.find("byEmail", "vereador1@email.com").first();
         if(vereador==null) {
             vereador.cidade=cidade;
@@ -60,12 +60,12 @@ public class DenunciaController extends Controller {
             vereador.email = "vereador1@email.com";
             vereador.criadoPor = a;
             vereador.save();
-        }
+        }*/
 
         Denuncia d = dDTO.getDenuncia();
         d.mensagem = "Mensagem";
         d.relatorio = "Relatorio";
-        d.vereador = vereador;
+        //d.vereador = vereador;
         d.coordenadas = c;
         d.save();
 
