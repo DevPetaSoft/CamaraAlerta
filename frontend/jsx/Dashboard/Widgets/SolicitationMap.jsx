@@ -25,7 +25,7 @@ export default React.createClass({
   	render: function() {
 	    return (
 	     	<div className="dashboardWidget">
-	     		<h4 className="dashboardWidgetTitle">Mapa de solicitações</h4>
+	     		<h4 className="paddingBottom0 dashboardWidgetTitle">Mapa de solicitações</h4>
 	     		
 					<GettingStartedGoogleMap
 				    containerElement={

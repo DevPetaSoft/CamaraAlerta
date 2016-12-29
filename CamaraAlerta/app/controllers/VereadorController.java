@@ -7,6 +7,9 @@ import models.Vereador;
 import play.Logger;
 import play.mvc.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by gudominguete on 28/12/16.
  */
@@ -42,5 +45,20 @@ public class VereadorController extends Controller {
         }
         renderJSON(vereador);
 
+    }
+
+    /**
+     * Listar vereadores
+     * TODO: filtrar por cidades
+     */
+    public void listVereadoresPorCidade(){
+        Logger.info("Obtendo lista de vereadores");
+        List<Vereador> list = new ArrayList<Vereador>();
+        list = Vereador.findAll();
+        if(list.size()>0){
+            renderJSON(list);
+        }else{
+            renderJSON(new String("Não existem vereadores nessa cidade"));
+        }
     }
 }

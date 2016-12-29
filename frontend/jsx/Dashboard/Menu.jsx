@@ -15,12 +15,12 @@ export default class Menu extends React.Component{
 	     		</div>
 	     		<hr/>
 	     		<li>
-	     			<Link to="/dashboard" ><ul className="sideMenuItens" >Painel de bordo</ul></Link>
-	     			<Link to="/solicitations" ><ul className="sideMenuItens">Solicitações<span className="sideMenuItensNumber">2</span></ul></Link>
-	     			<Link to="/messages"><ul  className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul></Link>
-	     			<Link to="/maps"><ul  className="sideMenuItens">Mapas</ul></Link>
-	     			<Link to="/editProfile"><ul  className="sideMenuItens">Editar Perfil</ul></Link>
-	     			<Link to="/configuration"><ul  className="sideMenuItens">Configurações</ul></Link>
+	     			<ul ><Link to="/dashboard" activeClassName="sideMenuItensActive" className="sideMenuItens">Painel de bordo</Link></ul>
+	     			<ul ><Link to="/solicitations" className="sideMenuItens" activeClassName="sideMenuItensActive"  >Solicitações<span className="sideMenuItensNumber">2</span></Link></ul>
+	     			<ul ><Link to="/messages" className="sideMenuItens" activeClassName="sideMenuItensActive">Mensagens<span className="sideMenuItensNumber">3</span></Link></ul>
+	     			<ul ><Link to="/maps" className="sideMenuItens" activeClassName="sideMenuItensActive">Mapas</Link></ul>
+	     			<ul ><Link to="/editProfile" className="sideMenuItens" activeClassName="sideMenuItensActive">Editar Perfil</Link></ul>
+	     			<ul ><Link to="/configuration" className="sideMenuItens" activeClassName="sideMenuItensActive">Configurações</Link></ul>
 	     		</li>
 
 	      	</div>

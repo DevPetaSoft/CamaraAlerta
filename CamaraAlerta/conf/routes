@@ -20,6 +20,7 @@ POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenunci
 
 # Vereador
 POST    /vereador/login                         VereadorController.login
+GET     /vereador/listPorCidade                 VereadorController.listVereadoresPorCidade
 
 
 # Ignore favicon requests

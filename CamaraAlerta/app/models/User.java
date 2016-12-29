@@ -26,7 +26,7 @@ public class User extends GenericModel implements Serializable {
     @Column(nullable=true,unique=true,length=50)
     public String login;
 
-    @Column(nullable=true,unique=false,length=16)
+    @Column(nullable=true,unique=false,length=255)
     public String senha;
 
     @Column(nullable=false,unique=true,length=50)
