@@ -12,8 +12,15 @@ POST    /user/novoCidadao                       UserController.novoCadastroCidad
 POST    /user/login                             UserController.cidadaoLogin
 POST    /user/recuperarSenha                    UserController.recuperarSenha
 POST    /user/numeroDenuncias                   UserController.numeroDenuncias
+
+# Denuncias
 POST    /denuncia/novaDenuncia                  DenunciaController.novaDenuncia
 POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenuncias
+
+
+# Vereador
+POST    /vereador/login                         VereadorController.login
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -9,8 +9,19 @@ import ReceivedSolicitation from "./Widgets/ReceivedSolicitation.jsx";
 import SolicitationSolved from "./Widgets/SolicitationSolved.jsx";
 import SolicitationMap from "./Widgets/SolicitationMap.jsx";
 
-export default React.createClass({
-  	render: function() {
+
+import { connect } from "react-redux";
+
+@connect((store) => {
+	return {
+		vereador: store.vereador
+	};
+})
+export default class Dashboard extends React.Component{
+	componentWillMount(){
+		console.log(this.props);
+	}
+  	render() {
 	    return (
 	     	<div className="dashboardBody">
 	     		<TopMenu />
@@ -39,4 +50,4 @@ export default React.createClass({
 	      	</div>
 	    );
   	}
-});
+}

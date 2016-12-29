@@ -1,8 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {Map, MarkerGroup} from "react-d3-map";
 
+
+import { withGoogleMap, GoogleMap } from "react-google-maps";
+
+const GettingStartedGoogleMap = withGoogleMap(props => (
+  <GoogleMap
+    ref={props.onMapLoad}
+    defaultZoom={3}
+    defaultCenter={{ lat: -23, lng: -45 }}
+    onClick={props.onMapClick}
+  >
+  </GoogleMap>
+));
 
 
 export default React.createClass({
@@ -15,7 +26,16 @@ export default React.createClass({
 	    return (
 	     	<div className="dashboardWidget">
 	     		<h4 className="dashboardWidgetTitle">Mapa de solicitações</h4>
-
+	     		
+					<GettingStartedGoogleMap
+				    containerElement={
+				      <div style={{ height: `80%` }} />
+				    }
+				    mapElement={
+				      <div style={{ height: `100%` }} />
+				    }
+				    
+				  />
 	      	</div>
 	    );
   	}

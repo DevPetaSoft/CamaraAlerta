@@ -3,14 +3,15 @@ import ReactDOM from "react-dom";
 
 import {Link} from 'react-router';
 
-export default React.createClass({
-  	render: function() {
+export default class Menu extends React.Component{
+
+  	render() {
 	    return (
 	     	<div className="sideMenu">
 	     		<div className="sideMenuHeader">
 		     		<img src="public/images/logotipo.svg" className="perfilImage"/>
-		     		<div className="sideMenuHeaderText"> <span className="bold">Nome:</span> Vereador 1</div>
-		     		<div className="sideMenuHeaderText"> <span className="bold">E-mail:</span> vereador@gmail.com</div>
+		     		<div className="sideMenuHeaderText"> <span className="bold">Nome:</span> {localStorage.vereadorNome}</div>
+		     		<div className="sideMenuHeaderText"> <span className="bold">E-mail:</span> {localStorage.vereadorEmail}</div>
 	     		</div>
 	     		<hr/>
 	     		<li>
@@ -19,10 +20,10 @@ export default React.createClass({
 	     			<Link to="/messages"><ul  className="sideMenuItens">Mensagens<span className="sideMenuItensNumber">3</span></ul></Link>
 	     			<Link to="/maps"><ul  className="sideMenuItens">Mapas</ul></Link>
 	     			<Link to="/editProfile"><ul  className="sideMenuItens">Editar Perfil</ul></Link>
-	     			<ul  className="sideMenuItens">Configurações</ul>
+	     			<Link to="/configuration"><ul  className="sideMenuItens">Configurações</ul></Link>
 	     		</li>
 
 	      	</div>
 	    );
   	}
-});
+}
