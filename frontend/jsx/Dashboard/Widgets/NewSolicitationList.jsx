@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import SolicitationListItem from "./SolicitationListItem.jsx"; 
 
-import { listagemSolicitacao } from "./../../Redux/Actions/SolicitacaoActions.jsx";
+import { listagemNovaSolicitacao } from "./../../Redux/Actions/SolicitacaoActions.jsx";
 
 import { connect } from "react-redux";
 
@@ -21,10 +21,11 @@ export default class SolicitationList extends React.Component{
 		store.subscribe(()=>{
 			this.setState({
 				solicitacoes:store.getState().solicitacao.solicitacoes
-			});	
+			});
+				
 		});
 
-		this.props.dispatch(listagemSolicitacao(localStorage.vereadorId));
+		this.props.dispatch(listagemNovaSolicitacao(localStorage.vereadorId));
 
 	}
 

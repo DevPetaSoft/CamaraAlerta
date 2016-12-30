@@ -68,6 +68,7 @@ public class VereadorController extends Controller {
      * @param id
      */
     public void listDenunciasPorVereador(Integer id){
+        Logger.info("Listagem de todas as denuncias por vereador");
         if(id == null){
             renderJSON(new String("Não foi passado o vereador para buscar as denuncias"));
         }
@@ -79,6 +80,28 @@ public class VereadorController extends Controller {
         }
 
         List<Denuncia> list = Denuncia.find("byVereador", vereador).fetch();
+
+        //TODO: Criar serializer
+        renderJSON(list);
+    }
+
+    /**
+     * Listar denuncias não visualizadas pelo vereador
+     * @param id
+     */
+    public void listNovasDenunciasPorVereador(Integer id){
+        Logger.info("Listagem de solicitacoes novas");
+        if(id == null){
+            renderJSON(new String("Não foi passado o vereador para buscar as denuncias"));
+        }
+
+        Vereador vereador = Vereador.findById(id);
+
+        if(vereador == null){
+            renderJSON(new String("Não exista vereador com o id passado"));
+        }
+
+        List<Denuncia> list = Denuncia.find("byVereadorAndNovo", vereador,true).fetch();
 
         //TODO: Criar serializer
         renderJSON(list);

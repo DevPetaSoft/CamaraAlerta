@@ -59,4 +59,7 @@ public class Denuncia extends GenericModel implements Serializable {
 
     @Column(nullable=false,unique=false)
     public boolean deleted;
+
+    @Column(nullable=false, unique=false)
+    public boolean novo=true;
 }

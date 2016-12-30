@@ -22,6 +22,7 @@ POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenunci
 POST    /vereador/login                         VereadorController.login
 GET     /vereador/listPorCidade                 VereadorController.listVereadoresPorCidade
 GET     /vereador/{id}/listSolicitacoes         VereadorController.listDenunciasPorVereador
+GET     /vereador/{id}/listNovasSolicitacoes    VereadorController.listNovasDenunciasPorVereador
 
 
 # Ignore favicon requests

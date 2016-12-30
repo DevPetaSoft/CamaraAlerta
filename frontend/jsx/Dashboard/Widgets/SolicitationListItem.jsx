@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 
 export default React.createClass({
 	componentDidMount(){
-		console.log(this.props);
-
 	},
   	render: function() {
 	    return (

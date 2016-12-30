@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import Menu from "./Menu.jsx";
 import TopMenu from "./TopMenu.jsx";
-import SolicitationList from "./Widgets/SolicitationList.jsx";
+import NewSolicitationList from "./Widgets/NewSolicitationList.jsx";
 import SolicitationNumbers from "./Widgets/SolicitationNumbers.jsx";
 import ReceivedSolicitation from "./Widgets/ReceivedSolicitation.jsx";
 import SolicitationSolved from "./Widgets/SolicitationSolved.jsx";
@@ -27,7 +27,7 @@ export default class Dashboard extends React.Component{
 	     		<Menu/>
 
 	     		<div className="dashboardContainder">
-	     			<div className="col-sm-3"><SolicitationList/></div>
+	     			<div className="col-sm-3"><NewSolicitationList/></div>
 	     			<div className="col-sm-4">
 	     				<div className="row">
 	     					<SolicitationNumbers/>
