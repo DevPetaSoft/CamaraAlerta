@@ -23,7 +23,7 @@ import store from "./Redux/Store.jsx";
 })
 export default class Login extends React.Component {
 	componentWillMount(){
-		console.log(localStorage);
+		
 		store.subscribe(()=>{
 			var state = store.getState();
 			console.log(localStorage);

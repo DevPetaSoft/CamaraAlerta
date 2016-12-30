@@ -37206,7 +37206,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var middleware = (0, _redux.applyMiddleware)((0, _reduxPromiseMiddleware2.default)(), _reduxThunk2.default, (0, _reduxLogger2.default)());
+	var middleware = (0, _redux.applyMiddleware)((0, _reduxPromiseMiddleware2.default)(), _reduxThunk2.default);
 
 	exports.default = (0, _redux.createStore)(_index2.default, middleware);
 
@@ -38299,7 +38299,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 
 	var _redux = __webpack_require__(242);
@@ -38308,11 +38308,17 @@
 
 	var _VereadorReducer2 = _interopRequireDefault(_VereadorReducer);
 
+	var _SolicitacaoReducer = __webpack_require__(663);
+
+	var _SolicitacaoReducer2 = _interopRequireDefault(_SolicitacaoReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = (0, _redux.combineReducers)({ vereador: _VereadorReducer2.default });
-
 	//Import reducers
+	exports.default = (0, _redux.combineReducers)({
+		vereador: _VereadorReducer2.default,
+		solicitacao: _SolicitacaoReducer2.default
+	});
 
 /***/ },
 /* 280 */
@@ -38416,7 +38422,7 @@
 		_createClass(Login, [{
 			key: "componentWillMount",
 			value: function componentWillMount() {
-				console.log(localStorage);
+
 				_Store2.default.subscribe(function () {
 					var state = _Store2.default.getState();
 					console.log(localStorage);
@@ -41727,9 +41733,7 @@
 
 		_createClass(Dashboard, [{
 			key: "componentWillMount",
-			value: function componentWillMount() {
-				console.log(this.props);
-			}
+			value: function componentWillMount() {}
 		}, {
 			key: "render",
 			value: function render() {
@@ -41981,8 +41985,13 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
 
 	var _react = __webpack_require__(12);
 
@@ -41996,26 +42005,70 @@
 
 	var _SolicitationListItem2 = _interopRequireDefault(_SolicitationListItem);
 
+	var _SolicitacaoActions = __webpack_require__(664);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _react2.default.createClass({
-			displayName: "SolicitationList",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-			render: function render() {
-					return _react2.default.createElement(
-							"div",
-							{ className: "dashboardWidgetList" },
-							_react2.default.createElement(
-									"h4",
-									{ className: "dashboardWidgetTitle" },
-									"Lista de solicita\xE7\xF5es"
-							),
-							_react2.default.createElement(_SolicitationListItem2.default, null),
-							_react2.default.createElement(_SolicitationListItem2.default, null),
-							_react2.default.createElement(_SolicitationListItem2.default, null)
-					);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SolicitationList = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			solicitacoes: store.solicitacao
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(SolicitationList, _React$Component);
+
+		function SolicitationList() {
+			_classCallCheck(this, SolicitationList);
+
+			return _possibleConstructorReturn(this, (SolicitationList.__proto__ || Object.getPrototypeOf(SolicitationList)).apply(this, arguments));
+		}
+
+		_createClass(SolicitationList, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					_this2.setState({
+						solicitacoes: _Store2.default.getState().solicitacao.solicitacoes
+					});
+				});
+
+				this.props.dispatch((0, _SolicitacaoActions.listagemSolicitacao)(localStorage.vereadorId));
 			}
-	});
+		}, {
+			key: "render",
+			value: function render() {
+				return _react2.default.createElement(
+					"div",
+					{ className: "dashboardWidgetList" },
+					_react2.default.createElement(
+						"h4",
+						{ className: "dashboardWidgetTitle" },
+						"Lista de solicita\xE7\xF5es"
+					),
+					this.state.solicitacoes ? this.state.solicitacoes.map(function (solicitacao) {
+						return _react2.default.createElement(_SolicitationListItem2.default, { key: solicitacao.id, solicitacao: solicitacao });
+					}) : ""
+				);
+			}
+		}]);
+
+		return SolicitationList;
+	}(_react2.default.Component)) || _class);
+	exports.default = SolicitationList;
+	;
 
 /***/ },
 /* 325 */
@@ -42024,7 +42077,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
 
 	var _react = __webpack_require__(12);
@@ -42038,54 +42091,58 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-			displayName: "SolicitationListItem",
+		displayName: "SolicitationListItem",
+		componentDidMount: function componentDidMount() {
+			console.log(this.props);
+		},
 
-			render: function render() {
-					return _react2.default.createElement(
-							"div",
-							{ className: "solicitationListItemBackground" },
-							_react2.default.createElement(
-									"div",
-									null,
-									_react2.default.createElement(
-											"span",
-											null,
-											"Id:"
-									),
-									"1"
-							),
-							_react2.default.createElement(
-									"div",
-									null,
-									_react2.default.createElement(
-											"span",
-											null,
-											"Solicitante:"
-									),
-									"Gustavo"
-							),
-							_react2.default.createElement(
-									"div",
-									null,
-									_react2.default.createElement(
-											"span",
-											null,
-											"Estado:"
-									),
-									"Aguardando"
-							),
-							_react2.default.createElement(
-									"div",
-									null,
-									_react2.default.createElement(
-											"span",
-											null,
-											"Data:"
-									),
-									" 24/12/2016"
-							)
-					);
-			}
+		render: function render() {
+			return _react2.default.createElement(
+				"div",
+				{ className: "solicitationListItemBackground" },
+				_react2.default.createElement(
+					"div",
+					null,
+					_react2.default.createElement(
+						"span",
+						null,
+						"Id:"
+					),
+					this.props.solicitacao.id
+				),
+				_react2.default.createElement(
+					"div",
+					null,
+					_react2.default.createElement(
+						"span",
+						null,
+						"Solicitante:"
+					),
+					this.props.solicitacao.cidadao.nome
+				),
+				_react2.default.createElement(
+					"div",
+					null,
+					_react2.default.createElement(
+						"span",
+						null,
+						"Titulo:"
+					),
+					this.props.solicitacao.titulo
+				),
+				_react2.default.createElement(
+					"div",
+					null,
+					_react2.default.createElement(
+						"span",
+						null,
+						"Data:"
+					),
+					" ",
+					this.props.solicitacao.data
+				)
+			);
+		}
 	});
 
 /***/ },
@@ -61179,6 +61236,74 @@
 
 	// exports
 
+
+/***/ },
+/* 663 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = reducer;
+	function reducer() {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+			solicitacoes: null,
+			fetching: false,
+			fetched: false,
+			error: null
+		};
+		var action = arguments[1];
+
+
+		switch (action.type) {
+			case "FETCHING_SOLICITATION_START":
+				{
+					state.fetching = true;
+					return state;
+				}
+			case "FETCHING_SOLICITATION_FINISH":
+				{
+					state.fetching = false;
+					state.fetched = true;
+					state.solicitacoes = action.payload;
+					return state;
+				}
+		}
+
+		return state;
+	}
+
+/***/ },
+/* 664 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.listagemSolicitacao = listagemSolicitacao;
+
+	var _axios = __webpack_require__(292);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function listagemSolicitacao(id) {
+		return function (dispatch) {
+
+			dispatch({ type: "FETCHING_SOLICITATION_START" });
+			_axios2.default.get("http://localhost:9000/vereador/" + id + "/listSolicitacoes").then(function (response) {
+
+				dispatch({ type: "FETCHING_SOLICITATION_FINISH", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
 
 /***/ }
 /******/ ]);

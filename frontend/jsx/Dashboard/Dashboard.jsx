@@ -19,7 +19,6 @@ import { connect } from "react-redux";
 })
 export default class Dashboard extends React.Component{
 	componentWillMount(){
-		console.log(this.props);
 	}
   	render() {
 	    return (

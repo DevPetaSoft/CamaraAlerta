@@ -3,6 +3,7 @@ package controllers;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import models.Denuncia;
 import models.Vereador;
 import play.Logger;
 import play.mvc.Controller;
@@ -60,5 +61,26 @@ public class VereadorController extends Controller {
         }else{
             renderJSON(new String("Não existem vereadores nessa cidade"));
         }
+    }
+
+    /**
+     * Listar denuncias do vereador
+     * @param id
+     */
+    public void listDenunciasPorVereador(Integer id){
+        if(id == null){
+            renderJSON(new String("Não foi passado o vereador para buscar as denuncias"));
+        }
+
+        Vereador vereador = Vereador.findById(id);
+
+        if(vereador == null){
+            renderJSON(new String("Não exista vereador com o id passado"));
+        }
+
+        List<Denuncia> list = Denuncia.find("byVereador", vereador).fetch();
+
+        //TODO: Criar serializer
+        renderJSON(list);
     }
 }
