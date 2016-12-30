@@ -32,11 +32,6 @@ public class DenunciaController extends Controller {
         ArrayList<String> photoPaths = new ArrayList<String>();
 
 
-        //Mock coordenadas
-        Coordenadas c = new Coordenadas();
-        c.latitude = -21.232756;
-        c.longitude = -44.995004;
-        c.save();
 
         //Adm
         /*Administrador a = Administrador.find("byEmail", "adm@email.com").first();
@@ -68,7 +63,12 @@ public class DenunciaController extends Controller {
         d.mensagem = "Mensagem";
         d.relatorio = "Relatorio";
         //d.vereador = vereador;
-        d.coordenadas = c;
+        //d.coordenadas = c;
+
+        //Salvando coordenadas no banco
+        Coordenadas c = d.coordenadas;
+        c.save();
+
         d.save();
 
         //salvando fotos
