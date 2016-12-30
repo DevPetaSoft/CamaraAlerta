@@ -21,6 +21,9 @@ public class Denuncia extends GenericModel implements Serializable {
     @GeneratedValue
     public int id;
 
+    @Column(nullable=false,unique=false, length=150)
+    public String titulo;
+
     @Column(nullable=false,unique=false, length=4000)
     public String descricao;
 
