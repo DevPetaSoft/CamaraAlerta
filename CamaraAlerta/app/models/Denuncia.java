@@ -39,6 +39,9 @@ public class Denuncia extends GenericModel implements Serializable {
     @Column(nullable=false,unique=false)
     public ArrayList<String> fotos;
 
+    @Column(nullable=false,unique=false)
+    public ArrayList<String> fotosServidor;
+
     @ManyToOne(targetEntity=Coordenadas.class, fetch=FetchType.EAGER, optional=false)
     public Coordenadas coordenadas;
 
