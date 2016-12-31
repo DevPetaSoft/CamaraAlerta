@@ -17,6 +17,7 @@ POST    /user/numeroDenuncias                   UserController.numeroDenuncias
 POST    /denuncia/novaDenuncia                  DenunciaController.novaDenuncia
 POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenuncias
 GET     /denuncia/{idVereador}/{idSolicitacao}  DenunciaController.find
+POST    /denuncia/mudarEstado                   DenunciaController.changeStatus
 
 
 # Vereador

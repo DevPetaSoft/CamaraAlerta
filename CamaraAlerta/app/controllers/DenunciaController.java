@@ -1,6 +1,8 @@
 package controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dto.DenunciaDTO;
 import dto.MinhasDenunciasDTO;
 import models.*;
@@ -129,6 +131,48 @@ public class DenunciaController extends Controller {
         }
 
         renderJSON("Não foi possivel buscar a solicitacao");
+
+    }
+
+    /**
+     * Função para mudar o estado de uma solicitação
+     * @param body
+     */
+    public void changeStatus(String body){
+
+        JsonParser parser = new JsonParser();
+        JsonObject json =(JsonObject) parser.parse(body);
+
+        String relatorio = json.get("relatorio").getAsString();
+
+        if(relatorio == null){
+            renderJSON(new String("Não foi passado nenhuma mensagem de relatorio"));
+        }
+
+        Integer status = json.get("status").getAsInt();
+
+        if(status == null){
+            renderJSON(new String("Não foi passado nenhum estado da solicitacao"));
+        }
+
+        Integer solicitacaoId = json.get("id").getAsInt();
+
+        if(solicitacaoId == null){
+            renderJSON(new String("Não foi passado nenhuma solicitacao para ser alterada"));
+        }
+
+        Denuncia solicitacao = Denuncia.findById(solicitacaoId);
+
+        if(solicitacao == null){
+            renderJSON(new String("Não foi encotnrado nenhuma solicitacao com esse id"));
+        }
+
+        solicitacao.relatorio = relatorio;
+        solicitacao.status = status;
+
+        solicitacao.save();
+
+        renderJSON(solicitacao);
 
     }
 }

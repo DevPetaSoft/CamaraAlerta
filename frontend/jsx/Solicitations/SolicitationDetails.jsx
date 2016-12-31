@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Modal from "react-modal";
 
 import Menu from "./../Dashboard/Menu.jsx";
 import TopMenu from "./../Dashboard/TopMenu.jsx";
+
+import { mudancaEstado } from "./../Redux/Actions/SolicitacaoActions.jsx";
 
 import { connect } from "react-redux";
 
@@ -23,6 +26,15 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
   </GoogleMap>
 ));
 
+const modalStyle = {
+	content : {
+    left                  : '25%',
+    right                 : '25%'
+  }
+}
+
+
+
 @connect((store) => {
 	return {
 		solicitacao: store.solicitacao.solicitacaoSelecionada
@@ -38,6 +50,41 @@ export default class SolicitationDetails extends React.Component{
 			});
 		});
 	}
+
+	getStatus(status){
+		if(status === 0){
+			return "Pendente";
+		}else if(status === 1){
+			return "Em andamento";
+		}else if(status === 2){
+			return "Finalizada com sucesso";
+		}else if(status === 3){
+			return "Recusado";
+		}
+
+
+	}
+
+	enviarRelatorio(){
+
+		var relatorio = this.refs.relatorio.value;
+		var status = this.refs.status.value;
+		var id = this.state.solicitacao.id;
+
+		this.props.dispatch(mudancaEstado(id,relatorio, status));
+	}
+
+	openModal(){
+		this.setState({
+			modalOpen:true
+		});
+	}
+
+	closeModal(){
+		this.setState({
+			modalOpen:false
+		});
+	}
   	render() {
   		if(!this.state){
   			return(
@@ -51,9 +98,30 @@ export default class SolicitationDetails extends React.Component{
 	     	<h4>Nenhuma solicitação selecionada</h4>
 	     	</div>)
   		}
-  		console.log(this.state);
 	    return (
 	     	<div className="solicitationBackground">
+
+	     	<Modal
+			  isOpen={this.state.modalOpen}
+			  contentLabel="Resposta da solicitação"
+			  style={modalStyle}
+			>
+			  <h4 className="solicitationModalTitle	">Resposta da solicitação</h4>
+			  <p>Relatório:</p>
+			  <textarea className="solicitationModalTextArea"ref="relatorio" />
+			  <p>Status: </p>
+			  <select ref="status">
+			  	<option value="0">Pendente</option>
+			  	<option value="1">Em andamento</option>
+			  	<option value="2">Finalizado com sucesso</option>
+			  	<option value="3">Recusado</option>
+			  </select>
+			  <br/>
+			  <div className="solicitationModalButtons">
+				  <button onClick={this.closeModal.bind(this)}>Fechar</button>
+				  <button className="solicitationModalSendButton" onClick={this.enviarRelatorio.bind(this)}>Enviar</button>
+			  </div>
+			</Modal>
 
 	     		<div className="col-sm-6">
 
@@ -69,9 +137,9 @@ export default class SolicitationDetails extends React.Component{
 		     		<p>{this.state.solicitacao.cidadao.nome}<button className="contactButton">Entrar em contato</button></p>
 
 		     		<h4>Status</h4>
-		     		<p>{(this.state.solicitacao.status == 0) ?("Pendente"):("")}</p>
+		     		<p>{this.getStatus(this.state.solicitacao.status)}</p>
 
-		     		<button className="col-sm-offset-3 col-sm-6">Responder</button>
+		     		<button className="col-sm-offset-3 col-sm-6" onClick={this.openModal.bind(this)}>Responder</button>
 
 	     		</div>
 

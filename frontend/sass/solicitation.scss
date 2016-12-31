@@ -28,4 +28,23 @@
 			width:100%;
 			margin-top:10px;
 		}
+
+}
+
+.solicitationModalTitle{
+	text-align:center;
+}
+
+.solicitationModalTextArea{
+	width:100%;
+	margin:5px;
+}
+
+
+.solicitationModalButtons{
+	margin-top:50px;
+
+	.solicitationModalSendButton{
+		float:right;
+	}
 }

@@ -1,5 +1,6 @@
 export default function reducer(state={
 	solicitacoes:null,
+	solicitacaoSelecionada:null,
 	fetching:false,
 	fetched:false,
 	error:null
@@ -26,6 +27,11 @@ export default function reducer(state={
 			state.solicitacaoSelecionada = action.payload;
 			return state;
 		}
+		case "CHANGING_SOLICITATION_STATE":{
+			state.solicitacaoSelecionada = action.payload;
+			return state;
+		}
+
 	}
 
 	return state;

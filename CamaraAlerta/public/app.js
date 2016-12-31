@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	__webpack_require__(664);
+	__webpack_require__(674);
 
 /***/ },
 /* 1 */
@@ -9677,19 +9677,19 @@
 
 	var _Solicitations2 = _interopRequireDefault(_Solicitations);
 
-	var _Messages = __webpack_require__(652);
+	var _Messages = __webpack_require__(662);
 
 	var _Messages2 = _interopRequireDefault(_Messages);
 
-	var _MapsBoard = __webpack_require__(657);
+	var _MapsBoard = __webpack_require__(667);
 
 	var _MapsBoard2 = _interopRequireDefault(_MapsBoard);
 
-	var _EditProfile = __webpack_require__(661);
+	var _EditProfile = __webpack_require__(671);
 
 	var _EditProfile2 = _interopRequireDefault(_EditProfile);
 
-	var _ConfigurationBoard = __webpack_require__(662);
+	var _ConfigurationBoard = __webpack_require__(672);
 
 	var _ConfigurationBoard2 = _interopRequireDefault(_ConfigurationBoard);
 
@@ -38380,6 +38380,7 @@
 	function reducer() {
 		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
 			solicitacoes: null,
+			solicitacaoSelecionada: null,
 			fetching: false,
 			fetched: false,
 			error: null
@@ -38412,6 +38413,12 @@
 					state.solicitacaoSelecionada = action.payload;
 					return state;
 				}
+			case "CHANGING_SOLICITATION_STATE":
+				{
+					state.solicitacaoSelecionada = action.payload;
+					return state;
+				}
+
 		}
 
 		return state;
@@ -42268,6 +42275,7 @@
 	exports.listagemSolicitacao = listagemSolicitacao;
 	exports.listagemNovaSolicitacao = listagemNovaSolicitacao;
 	exports.listagemUnicaSolicitacao = listagemUnicaSolicitacao;
+	exports.mudancaEstado = mudancaEstado;
 
 	var _axios = __webpack_require__(293);
 
@@ -42308,6 +42316,23 @@
 			_axios2.default.get("http://localhost:9000/denuncia/" + idVereador + "/" + idSolicitacao).then(function (response) {
 
 				dispatch({ type: "FETCHING_SOLICITATION_ONE_FINISH", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function mudancaEstado(idSolicitacao, relatorio, status) {
+		return function (dispatch) {
+			var params = {
+				id: idSolicitacao,
+				relatorio: relatorio,
+				status: status
+			};
+			_axios2.default.post("http://localhost:9000/denuncia/mudarEstado", params).then(function (response) {
+				console.log(response);
+
+				dispatch({ type: "CHANGING_SOLICITATION_STATE", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -60590,6 +60615,10 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _reactModal = __webpack_require__(652);
+
+	var _reactModal2 = _interopRequireDefault(_reactModal);
+
 	var _Menu = __webpack_require__(323);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
@@ -60597,6 +60626,8 @@
 	var _TopMenu = __webpack_require__(324);
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
+
+	var _SolicitacaoActions = __webpack_require__(327);
 
 	var _reactRedux = __webpack_require__(233);
 
@@ -60628,6 +60659,13 @@
 		);
 	});
 
+	var modalStyle = {
+		content: {
+			left: '25%',
+			right: '25%'
+		}
+	};
+
 	var SolicitationDetails = (_dec = (0, _reactRedux.connect)(function (store) {
 		return {
 			solicitacao: store.solicitacao.solicitacaoSelecionada
@@ -60655,6 +60693,43 @@
 				});
 			}
 		}, {
+			key: "getStatus",
+			value: function getStatus(status) {
+				if (status === 0) {
+					return "Pendente";
+				} else if (status === 1) {
+					return "Em andamento";
+				} else if (status === 2) {
+					return "Finalizada com sucesso";
+				} else if (status === 3) {
+					return "Recusado";
+				}
+			}
+		}, {
+			key: "enviarRelatorio",
+			value: function enviarRelatorio() {
+
+				var relatorio = this.refs.relatorio.value;
+				var status = this.refs.status.value;
+				var id = this.state.solicitacao.id;
+
+				this.props.dispatch((0, _SolicitacaoActions.mudancaEstado)(id, relatorio, status));
+			}
+		}, {
+			key: "openModal",
+			value: function openModal() {
+				this.setState({
+					modalOpen: true
+				});
+			}
+		}, {
+			key: "closeModal",
+			value: function closeModal() {
+				this.setState({
+					modalOpen: false
+				});
+			}
+		}, {
 			key: "render",
 			value: function render() {
 				if (!this.state) {
@@ -60679,10 +60754,72 @@
 						)
 					);
 				}
-				console.log(this.state);
 				return _react2.default.createElement(
 					"div",
 					{ className: "solicitationBackground" },
+					_react2.default.createElement(
+						_reactModal2.default,
+						{
+							isOpen: this.state.modalOpen,
+							contentLabel: "Resposta da solicita\xE7\xE3o",
+							style: modalStyle
+						},
+						_react2.default.createElement(
+							"h4",
+							{ className: "solicitationModalTitle\t" },
+							"Resposta da solicita\xE7\xE3o"
+						),
+						_react2.default.createElement(
+							"p",
+							null,
+							"Relat\xF3rio:"
+						),
+						_react2.default.createElement("textarea", { className: "solicitationModalTextArea", ref: "relatorio" }),
+						_react2.default.createElement(
+							"p",
+							null,
+							"Status: "
+						),
+						_react2.default.createElement(
+							"select",
+							{ ref: "status" },
+							_react2.default.createElement(
+								"option",
+								{ value: "0" },
+								"Pendente"
+							),
+							_react2.default.createElement(
+								"option",
+								{ value: "1" },
+								"Em andamento"
+							),
+							_react2.default.createElement(
+								"option",
+								{ value: "2" },
+								"Finalizado com sucesso"
+							),
+							_react2.default.createElement(
+								"option",
+								{ value: "3" },
+								"Recusado"
+							)
+						),
+						_react2.default.createElement("br", null),
+						_react2.default.createElement(
+							"div",
+							{ className: "solicitationModalButtons" },
+							_react2.default.createElement(
+								"button",
+								{ onClick: this.closeModal.bind(this) },
+								"Fechar"
+							),
+							_react2.default.createElement(
+								"button",
+								{ className: "solicitationModalSendButton", onClick: this.enviarRelatorio.bind(this) },
+								"Enviar"
+							)
+						)
+					),
 					_react2.default.createElement(
 						"div",
 						{ className: "col-sm-6" },
@@ -60729,11 +60866,11 @@
 						_react2.default.createElement(
 							"p",
 							null,
-							this.state.solicitacao.status == 0 ? "Pendente" : ""
+							this.getStatus(this.state.solicitacao.status)
 						),
 						_react2.default.createElement(
 							"button",
-							{ className: "col-sm-offset-3 col-sm-6" },
+							{ className: "col-sm-offset-3 col-sm-6", onClick: this.openModal.bind(this) },
 							"Responder"
 						)
 					),
@@ -60787,6 +60924,1332 @@
 /* 652 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(653);
+
+
+
+/***/ },
+/* 653 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(12);
+	var ReactDOM = __webpack_require__(169);
+	var ExecutionEnvironment = __webpack_require__(654);
+	var ModalPortal = React.createFactory(__webpack_require__(655));
+	var ariaAppHider = __webpack_require__(660);
+	var elementClass = __webpack_require__(661);
+	var renderSubtreeIntoContainer = __webpack_require__(169).unstable_renderSubtreeIntoContainer;
+	var Assign = __webpack_require__(659);
+
+	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
+	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
+
+	function getParentElement(parentSelector) {
+	  return parentSelector();
+	}
+
+	var Modal = React.createClass({
+
+	  displayName: 'Modal',
+	  statics: {
+	    setAppElement: function(element) {
+	        AppElement = ariaAppHider.setElement(element);
+	    },
+	    injectCSS: function() {
+	      "production" !== process.env.NODE_ENV
+	        && console.warn('React-Modal: injectCSS has been deprecated ' +
+	                        'and no longer has any effect. It will be removed in a later version');
+	    }
+	  },
+
+	  propTypes: {
+	    isOpen: React.PropTypes.bool.isRequired,
+	    style: React.PropTypes.shape({
+	      content: React.PropTypes.object,
+	      overlay: React.PropTypes.object
+	    }),
+	    portalClassName: React.PropTypes.string,
+	    appElement: React.PropTypes.instanceOf(SafeHTMLElement),
+	    onAfterOpen: React.PropTypes.func,
+	    onRequestClose: React.PropTypes.func,
+	    closeTimeoutMS: React.PropTypes.number,
+	    ariaHideApp: React.PropTypes.bool,
+	    shouldCloseOnOverlayClick: React.PropTypes.bool,
+	    parentSelector: React.PropTypes.func,
+	    role: React.PropTypes.string,
+	    contentLabel: React.PropTypes.string.isRequired
+	  },
+
+	  getDefaultProps: function () {
+	    return {
+	      isOpen: false,
+	      portalClassName: 'ReactModalPortal',
+	      ariaHideApp: true,
+	      closeTimeoutMS: 0,
+	      shouldCloseOnOverlayClick: true,
+	      parentSelector: function () { return document.body; }
+	    };
+	  },
+
+	  componentDidMount: function() {
+	    this.node = document.createElement('div');
+	    this.node.className = this.props.portalClassName;
+
+	    var parent = getParentElement(this.props.parentSelector);
+	    parent.appendChild(this.node);
+	    this.renderPortal(this.props);
+	  },
+
+	  componentWillReceiveProps: function(newProps) {
+	    var currentParent = getParentElement(this.props.parentSelector);
+	    var newParent = getParentElement(newProps.parentSelector);
+
+	    if(newParent !== currentParent) {
+	      currentParent.removeChild(this.node);
+	      newParent.appendChild(this.node);
+	    }
+
+	    this.renderPortal(newProps);
+	  },
+
+	  componentWillUnmount: function() {
+	    if (this.props.ariaHideApp) {
+	      ariaAppHider.show(this.props.appElement);
+	    }
+
+	    ReactDOM.unmountComponentAtNode(this.node);
+	    var parent = getParentElement(this.props.parentSelector);
+	    parent.removeChild(this.node);
+	    elementClass(document.body).remove('ReactModal__Body--open');
+	  },
+
+	  renderPortal: function(props) {
+	    if (props.isOpen) {
+	      elementClass(document.body).add('ReactModal__Body--open');
+	    } else {
+	      elementClass(document.body).remove('ReactModal__Body--open');
+	    }
+
+	    if (props.ariaHideApp) {
+	      ariaAppHider.toggle(props.isOpen, props.appElement);
+	    }
+
+	    this.portal = renderSubtreeIntoContainer(this, ModalPortal(Assign({}, props, {defaultStyles: Modal.defaultStyles})), this.node);
+	  },
+
+	  render: function () {
+	    return React.DOM.noscript();
+	  }
+	});
+
+	Modal.defaultStyles = {
+	  overlay: {
+	    position        : 'fixed',
+	    top             : 0,
+	    left            : 0,
+	    right           : 0,
+	    bottom          : 0,
+	    backgroundColor : 'rgba(255, 255, 255, 0.75)'
+	  },
+	  content: {
+	    position                : 'absolute',
+	    top                     : '40px',
+	    left                    : '40px',
+	    right                   : '40px',
+	    bottom                  : '40px',
+	    border                  : '1px solid #ccc',
+	    background              : '#fff',
+	    overflow                : 'auto',
+	    WebkitOverflowScrolling : 'touch',
+	    borderRadius            : '4px',
+	    outline                 : 'none',
+	    padding                 : '20px'
+	  }
+	}
+
+	module.exports = Modal
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)))
+
+/***/ },
+/* 654 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Based on code that is Copyright 2013-2015, Facebook, Inc.
+	  All rights reserved.
+	*/
+
+	(function () {
+		'use strict';
+
+		var canUseDOM = !!(
+			typeof window !== 'undefined' &&
+			window.document &&
+			window.document.createElement
+		);
+
+		var ExecutionEnvironment = {
+
+			canUseDOM: canUseDOM,
+
+			canUseWorkers: typeof Worker !== 'undefined',
+
+			canUseEventListeners:
+				canUseDOM && !!(window.addEventListener || window.attachEvent),
+
+			canUseViewport: canUseDOM && !!window.screen
+
+		};
+
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return ExecutionEnvironment;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = ExecutionEnvironment;
+		} else {
+			window.ExecutionEnvironment = ExecutionEnvironment;
+		}
+
+	}());
+
+
+/***/ },
+/* 655 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(12);
+	var div = React.DOM.div;
+	var focusManager = __webpack_require__(656);
+	var scopeTab = __webpack_require__(658);
+	var Assign = __webpack_require__(659);
+
+	// so that our CSS is statically analyzable
+	var CLASS_NAMES = {
+	  overlay: {
+	    base: 'ReactModal__Overlay',
+	    afterOpen: 'ReactModal__Overlay--after-open',
+	    beforeClose: 'ReactModal__Overlay--before-close'
+	  },
+	  content: {
+	    base: 'ReactModal__Content',
+	    afterOpen: 'ReactModal__Content--after-open',
+	    beforeClose: 'ReactModal__Content--before-close'
+	  }
+	};
+
+	var ModalPortal = module.exports = React.createClass({
+
+	  displayName: 'ModalPortal',
+	  shouldClose: null,
+
+	  getDefaultProps: function() {
+	    return {
+	      style: {
+	        overlay: {},
+	        content: {}
+	      }
+	    };
+	  },
+
+	  getInitialState: function() {
+	    return {
+	      afterOpen: false,
+	      beforeClose: false
+	    };
+	  },
+
+	  componentDidMount: function() {
+	    // Focus needs to be set when mounting and already open
+	    if (this.props.isOpen) {
+	      this.setFocusAfterRender(true);
+	      this.open();
+	    }
+	  },
+
+	  componentWillUnmount: function() {
+	    clearTimeout(this.closeTimer);
+	  },
+
+	  componentWillReceiveProps: function(newProps) {
+	    // Focus only needs to be set once when the modal is being opened
+	    if (!this.props.isOpen && newProps.isOpen) {
+	      this.setFocusAfterRender(true);
+	      this.open();
+	    } else if (this.props.isOpen && !newProps.isOpen) {
+	      this.close();
+	    }
+	  },
+
+	  componentDidUpdate: function () {
+	    if (this.focusAfterRender) {
+	      this.focusContent();
+	      this.setFocusAfterRender(false);
+	    }
+	  },
+
+	  setFocusAfterRender: function (focus) {
+	    this.focusAfterRender = focus;
+	  },
+
+	  open: function() {
+	    if (this.state.afterOpen && this.state.beforeClose) {
+	      clearTimeout(this.closeTimer);
+	      this.setState({ beforeClose: false });
+	    } else {
+	      focusManager.setupScopedFocus(this.node);
+	      focusManager.markForFocusLater();
+	      this.setState({isOpen: true}, function() {
+	        this.setState({afterOpen: true});
+
+	        if (this.props.isOpen && this.props.onAfterOpen) {
+	          this.props.onAfterOpen();
+	        }
+	      }.bind(this));
+	    }
+	  },
+
+	  close: function() {
+	    if (!this.ownerHandlesClose())
+	      return;
+	    if (this.props.closeTimeoutMS > 0)
+	      this.closeWithTimeout();
+	    else
+	      this.closeWithoutTimeout();
+	  },
+
+	  focusContent: function() {
+	    // Don't steal focus from inner elements
+	    if (!this.contentHasFocus()) {
+	      this.refs.content.focus();
+	    }
+	  },
+
+	  closeWithTimeout: function() {
+	    this.setState({beforeClose: true}, function() {
+	      this.closeTimer = setTimeout(this.closeWithoutTimeout, this.props.closeTimeoutMS);
+	    }.bind(this));
+	  },
+
+	  closeWithoutTimeout: function() {
+	    this.setState({
+	      beforeClose: false,
+	      isOpen: false,
+	      afterOpen: false,
+	    }, this.afterClose);
+	  },
+
+	  afterClose: function() {
+	    focusManager.returnFocus();
+	    focusManager.teardownScopedFocus();
+	  },
+
+	  handleKeyDown: function(event) {
+	    if (event.keyCode == 9 /*tab*/) scopeTab(this.refs.content, event);
+	    if (event.keyCode == 27 /*esc*/) {
+	      event.preventDefault();
+	      this.requestClose(event);
+	    }
+	  },
+
+	  handleOverlayMouseDown: function(event) {
+	    if (this.shouldClose === null) {
+	      this.shouldClose = true;
+	    }
+	  },
+
+	  handleOverlayMouseUp: function(event) {
+	    if (this.shouldClose && this.props.shouldCloseOnOverlayClick) {
+	      if (this.ownerHandlesClose())
+	        this.requestClose(event);
+	      else
+	        this.focusContent();
+	    }
+	    this.shouldClose = null;
+	  },
+
+	  handleContentMouseDown: function(event) {
+	    this.shouldClose = false;
+	  },
+
+	  handleContentMouseUp: function(event) {
+	    this.shouldClose = false;
+	  },
+
+	  requestClose: function(event) {
+	    if (this.ownerHandlesClose())
+	      this.props.onRequestClose(event);
+	  },
+
+	  ownerHandlesClose: function() {
+	    return this.props.onRequestClose;
+	  },
+
+	  shouldBeClosed: function() {
+	    return !this.props.isOpen && !this.state.beforeClose;
+	  },
+
+	  contentHasFocus: function() {
+	    return document.activeElement === this.refs.content || this.refs.content.contains(document.activeElement);
+	  },
+
+	  buildClassName: function(which, additional) {
+	    var className = CLASS_NAMES[which].base;
+	    if (this.state.afterOpen)
+	      className += ' '+CLASS_NAMES[which].afterOpen;
+	    if (this.state.beforeClose)
+	      className += ' '+CLASS_NAMES[which].beforeClose;
+	    return additional ? className + ' ' + additional : className;
+	  },
+
+	  render: function() {
+	    var contentStyles = (this.props.className) ? {} : this.props.defaultStyles.content;
+	    var overlayStyles = (this.props.overlayClassName) ? {} : this.props.defaultStyles.overlay;
+
+	    return this.shouldBeClosed() ? div() : (
+	      div({
+	        ref: "overlay",
+	        className: this.buildClassName('overlay', this.props.overlayClassName),
+	        style: Assign({}, overlayStyles, this.props.style.overlay || {}),
+	        onMouseDown: this.handleOverlayMouseDown,
+	        onMouseUp: this.handleOverlayMouseUp
+	      },
+	        div({
+	          ref: "content",
+	          style: Assign({}, contentStyles, this.props.style.content || {}),
+	          className: this.buildClassName('content', this.props.className),
+	          tabIndex: "-1",
+	          onKeyDown: this.handleKeyDown,
+	          onMouseDown: this.handleContentMouseDown,
+	          onMouseUp: this.handleContentMouseUp,
+	          role: this.props.role,
+	          "aria-label": this.props.contentLabel
+	        },
+	          this.props.children
+	        )
+	      )
+	    );
+	  }
+	});
+
+
+/***/ },
+/* 656 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var findTabbable = __webpack_require__(657);
+	var modalElement = null;
+	var focusLaterElement = null;
+	var needToFocus = false;
+
+	function handleBlur(event) {
+	  needToFocus = true;
+	}
+
+	function handleFocus(event) {
+	  if (needToFocus) {
+	    needToFocus = false;
+	    if (!modalElement) {
+	      return;
+	    }
+	    // need to see how jQuery shims document.on('focusin') so we don't need the
+	    // setTimeout, firefox doesn't support focusin, if it did, we could focus
+	    // the element outside of a setTimeout. Side-effect of this implementation 
+	    // is that the document.body gets focus, and then we focus our element right 
+	    // after, seems fine.
+	    setTimeout(function() {
+	      if (modalElement.contains(document.activeElement))
+	        return;
+	      var el = (findTabbable(modalElement)[0] || modalElement);
+	      el.focus();
+	    }, 0);
+	  }
+	}
+
+	exports.markForFocusLater = function() {
+	  focusLaterElement = document.activeElement;
+	};
+
+	exports.returnFocus = function() {
+	  try {
+	    focusLaterElement.focus();
+	  }
+	  catch (e) {
+	    console.warn('You tried to return focus to '+focusLaterElement+' but it is not in the DOM anymore');
+	  }
+	  focusLaterElement = null;
+	};
+
+	exports.setupScopedFocus = function(element) {
+	  modalElement = element;
+
+	  if (window.addEventListener) {
+	    window.addEventListener('blur', handleBlur, false);
+	    document.addEventListener('focus', handleFocus, true);
+	  } else {
+	    window.attachEvent('onBlur', handleBlur);
+	    document.attachEvent('onFocus', handleFocus);
+	  }
+	};
+
+	exports.teardownScopedFocus = function() {
+	  modalElement = null;
+
+	  if (window.addEventListener) {
+	    window.removeEventListener('blur', handleBlur);
+	    document.removeEventListener('focus', handleFocus);
+	  } else {
+	    window.detachEvent('onBlur', handleBlur);
+	    document.detachEvent('onFocus', handleFocus);
+	  }
+	};
+
+
+
+
+/***/ },
+/* 657 */
+/***/ function(module, exports) {
+
+	/*!
+	 * Adapted from jQuery UI core
+	 *
+	 * http://jqueryui.com
+	 *
+	 * Copyright 2014 jQuery Foundation and other contributors
+	 * Released under the MIT license.
+	 * http://jquery.org/license
+	 *
+	 * http://api.jqueryui.com/category/ui-core/
+	 */
+
+	function focusable(element, isTabIndexNotNaN) {
+	  var nodeName = element.nodeName.toLowerCase();
+	  return (/input|select|textarea|button|object/.test(nodeName) ?
+	    !element.disabled :
+	    "a" === nodeName ?
+	      element.href || isTabIndexNotNaN :
+	      isTabIndexNotNaN) && visible(element);
+	}
+
+	function hidden(el) {
+	  return (el.offsetWidth <= 0 && el.offsetHeight <= 0) ||
+	    el.style.display === 'none';
+	}
+
+	function visible(element) {
+	  while (element) {
+	    if (element === document.body) break;
+	    if (hidden(element)) return false;
+	    element = element.parentNode;
+	  }
+	  return true;
+	}
+
+	function tabbable(element) {
+	  var tabIndex = element.getAttribute('tabindex');
+	  if (tabIndex === null) tabIndex = undefined;
+	  var isTabIndexNaN = isNaN(tabIndex);
+	  return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
+	}
+
+	function findTabbableDescendants(element) {
+	  return [].slice.call(element.querySelectorAll('*'), 0).filter(function(el) {
+	    return tabbable(el);
+	  });
+	}
+
+	module.exports = findTabbableDescendants;
+
+
+
+/***/ },
+/* 658 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var findTabbable = __webpack_require__(657);
+
+	module.exports = function(node, event) {
+	  var tabbable = findTabbable(node);
+	  if (!tabbable.length) {
+	      event.preventDefault();
+	      return;
+	  }
+	  var finalTabbable = tabbable[event.shiftKey ? 0 : tabbable.length - 1];
+	  var leavingFinalTabbable = (
+	    finalTabbable === document.activeElement ||
+	    // handle immediate shift+tab after opening with mouse
+	    node === document.activeElement
+	  );
+	  if (!leavingFinalTabbable) return;
+	  event.preventDefault();
+	  var target = tabbable[event.shiftKey ? tabbable.length - 1 : 0];
+	  target.focus();
+	};
+
+
+/***/ },
+/* 659 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** Used as references for various `Number` constants. */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]';
+
+	/** Used to detect unsigned integer values. */
+	var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+	/**
+	 * A faster alternative to `Function#apply`, this function invokes `func`
+	 * with the `this` binding of `thisArg` and the arguments of `args`.
+	 *
+	 * @private
+	 * @param {Function} func The function to invoke.
+	 * @param {*} thisArg The `this` binding of `func`.
+	 * @param {Array} args The arguments to invoke `func` with.
+	 * @returns {*} Returns the result of `func`.
+	 */
+	function apply(func, thisArg, args) {
+	  switch (args.length) {
+	    case 0: return func.call(thisArg);
+	    case 1: return func.call(thisArg, args[0]);
+	    case 2: return func.call(thisArg, args[0], args[1]);
+	    case 3: return func.call(thisArg, args[0], args[1], args[2]);
+	  }
+	  return func.apply(thisArg, args);
+	}
+
+	/**
+	 * The base implementation of `_.times` without support for iteratee shorthands
+	 * or max array length checks.
+	 *
+	 * @private
+	 * @param {number} n The number of times to invoke `iteratee`.
+	 * @param {Function} iteratee The function invoked per iteration.
+	 * @returns {Array} Returns the array of results.
+	 */
+	function baseTimes(n, iteratee) {
+	  var index = -1,
+	      result = Array(n);
+
+	  while (++index < n) {
+	    result[index] = iteratee(index);
+	  }
+	  return result;
+	}
+
+	/**
+	 * Creates a unary function that invokes `func` with its argument transformed.
+	 *
+	 * @private
+	 * @param {Function} func The function to wrap.
+	 * @param {Function} transform The argument transform.
+	 * @returns {Function} Returns the new function.
+	 */
+	function overArg(func, transform) {
+	  return function(arg) {
+	    return func(transform(arg));
+	  };
+	}
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/** Built-in value references. */
+	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeKeys = overArg(Object.keys, Object),
+	    nativeMax = Math.max;
+
+	/** Detect if properties shadowing those on `Object.prototype` are non-enumerable. */
+	var nonEnumShadows = !propertyIsEnumerable.call({ 'valueOf': 1 }, 'valueOf');
+
+	/**
+	 * Creates an array of the enumerable property names of the array-like `value`.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @param {boolean} inherited Specify returning inherited property names.
+	 * @returns {Array} Returns the array of property names.
+	 */
+	function arrayLikeKeys(value, inherited) {
+	  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+	  // Safari 9 makes `arguments.length` enumerable in strict mode.
+	  var result = (isArray(value) || isArguments(value))
+	    ? baseTimes(value.length, String)
+	    : [];
+
+	  var length = result.length,
+	      skipIndexes = !!length;
+
+	  for (var key in value) {
+	    if ((inherited || hasOwnProperty.call(value, key)) &&
+	        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * Assigns `value` to `key` of `object` if the existing value is not equivalent
+	 * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+	 * for equality comparisons.
+	 *
+	 * @private
+	 * @param {Object} object The object to modify.
+	 * @param {string} key The key of the property to assign.
+	 * @param {*} value The value to assign.
+	 */
+	function assignValue(object, key, value) {
+	  var objValue = object[key];
+	  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||
+	      (value === undefined && !(key in object))) {
+	    object[key] = value;
+	  }
+	}
+
+	/**
+	 * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 */
+	function baseKeys(object) {
+	  if (!isPrototype(object)) {
+	    return nativeKeys(object);
+	  }
+	  var result = [];
+	  for (var key in Object(object)) {
+	    if (hasOwnProperty.call(object, key) && key != 'constructor') {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * The base implementation of `_.rest` which doesn't validate or coerce arguments.
+	 *
+	 * @private
+	 * @param {Function} func The function to apply a rest parameter to.
+	 * @param {number} [start=func.length-1] The start position of the rest parameter.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseRest(func, start) {
+	  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
+	  return function() {
+	    var args = arguments,
+	        index = -1,
+	        length = nativeMax(args.length - start, 0),
+	        array = Array(length);
+
+	    while (++index < length) {
+	      array[index] = args[start + index];
+	    }
+	    index = -1;
+	    var otherArgs = Array(start + 1);
+	    while (++index < start) {
+	      otherArgs[index] = args[index];
+	    }
+	    otherArgs[start] = array;
+	    return apply(func, this, otherArgs);
+	  };
+	}
+
+	/**
+	 * Copies properties of `source` to `object`.
+	 *
+	 * @private
+	 * @param {Object} source The object to copy properties from.
+	 * @param {Array} props The property identifiers to copy.
+	 * @param {Object} [object={}] The object to copy properties to.
+	 * @param {Function} [customizer] The function to customize copied values.
+	 * @returns {Object} Returns `object`.
+	 */
+	function copyObject(source, props, object, customizer) {
+	  object || (object = {});
+
+	  var index = -1,
+	      length = props.length;
+
+	  while (++index < length) {
+	    var key = props[index];
+
+	    var newValue = customizer
+	      ? customizer(object[key], source[key], key, object, source)
+	      : undefined;
+
+	    assignValue(object, key, newValue === undefined ? source[key] : newValue);
+	  }
+	  return object;
+	}
+
+	/**
+	 * Creates a function like `_.assign`.
+	 *
+	 * @private
+	 * @param {Function} assigner The function to assign values.
+	 * @returns {Function} Returns the new assigner function.
+	 */
+	function createAssigner(assigner) {
+	  return baseRest(function(object, sources) {
+	    var index = -1,
+	        length = sources.length,
+	        customizer = length > 1 ? sources[length - 1] : undefined,
+	        guard = length > 2 ? sources[2] : undefined;
+
+	    customizer = (assigner.length > 3 && typeof customizer == 'function')
+	      ? (length--, customizer)
+	      : undefined;
+
+	    if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+	      customizer = length < 3 ? undefined : customizer;
+	      length = 1;
+	    }
+	    object = Object(object);
+	    while (++index < length) {
+	      var source = sources[index];
+	      if (source) {
+	        assigner(object, source, index, customizer);
+	      }
+	    }
+	    return object;
+	  });
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like index.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+	 */
+	function isIndex(value, length) {
+	  length = length == null ? MAX_SAFE_INTEGER : length;
+	  return !!length &&
+	    (typeof value == 'number' || reIsUint.test(value)) &&
+	    (value > -1 && value % 1 == 0 && value < length);
+	}
+
+	/**
+	 * Checks if the given arguments are from an iteratee call.
+	 *
+	 * @private
+	 * @param {*} value The potential iteratee value argument.
+	 * @param {*} index The potential iteratee index or key argument.
+	 * @param {*} object The potential iteratee object argument.
+	 * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+	 *  else `false`.
+	 */
+	function isIterateeCall(value, index, object) {
+	  if (!isObject(object)) {
+	    return false;
+	  }
+	  var type = typeof index;
+	  if (type == 'number'
+	        ? (isArrayLike(object) && isIndex(index, object.length))
+	        : (type == 'string' && index in object)
+	      ) {
+	    return eq(object[index], value);
+	  }
+	  return false;
+	}
+
+	/**
+	 * Checks if `value` is likely a prototype object.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
+	 */
+	function isPrototype(value) {
+	  var Ctor = value && value.constructor,
+	      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
+
+	  return value === proto;
+	}
+
+	/**
+	 * Performs a
+	 * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+	 * comparison between two values to determine if they are equivalent.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to compare.
+	 * @param {*} other The other value to compare.
+	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+	 * @example
+	 *
+	 * var object = { 'a': 1 };
+	 * var other = { 'a': 1 };
+	 *
+	 * _.eq(object, object);
+	 * // => true
+	 *
+	 * _.eq(object, other);
+	 * // => false
+	 *
+	 * _.eq('a', 'a');
+	 * // => true
+	 *
+	 * _.eq('a', Object('a'));
+	 * // => false
+	 *
+	 * _.eq(NaN, NaN);
+	 * // => true
+	 */
+	function eq(value, other) {
+	  return value === other || (value !== value && other !== other);
+	}
+
+	/**
+	 * Checks if `value` is likely an `arguments` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArguments(function() { return arguments; }());
+	 * // => true
+	 *
+	 * _.isArguments([1, 2, 3]);
+	 * // => false
+	 */
+	function isArguments(value) {
+	  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+	  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+	    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+	}
+
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(document.body.children);
+	 * // => false
+	 *
+	 * _.isArray('abc');
+	 * // => false
+	 *
+	 * _.isArray(_.noop);
+	 * // => false
+	 */
+	var isArray = Array.isArray;
+
+	/**
+	 * Checks if `value` is array-like. A value is considered array-like if it's
+	 * not a function and has a `value.length` that's an integer greater than or
+	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLike(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLike('abc');
+	 * // => true
+	 *
+	 * _.isArrayLike(_.noop);
+	 * // => false
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(value.length) && !isFunction(value);
+	}
+
+	/**
+	 * This method is like `_.isArrayLike` except that it also checks if `value`
+	 * is an object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array-like object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArrayLikeObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject('abc');
+	 * // => false
+	 *
+	 * _.isArrayLikeObject(_.noop);
+	 * // => false
+	 */
+	function isArrayLikeObject(value) {
+	  return isObjectLike(value) && isArrayLike(value);
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in Safari 8-9 which returns 'object' for typed array and other constructors.
+	  var tag = isObject(value) ? objectToString.call(value) : '';
+	  return tag == funcTag || tag == genTag;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This method is loosely based on
+	 * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 * @example
+	 *
+	 * _.isLength(3);
+	 * // => true
+	 *
+	 * _.isLength(Number.MIN_VALUE);
+	 * // => false
+	 *
+	 * _.isLength(Infinity);
+	 * // => false
+	 *
+	 * _.isLength('3');
+	 * // => false
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' &&
+	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/**
+	 * Assigns own enumerable string keyed properties of source objects to the
+	 * destination object. Source objects are applied from left to right.
+	 * Subsequent sources overwrite property assignments of previous sources.
+	 *
+	 * **Note:** This method mutates `object` and is loosely based on
+	 * [`Object.assign`](https://mdn.io/Object/assign).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.10.0
+	 * @category Object
+	 * @param {Object} object The destination object.
+	 * @param {...Object} [sources] The source objects.
+	 * @returns {Object} Returns `object`.
+	 * @see _.assignIn
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 * }
+	 *
+	 * function Bar() {
+	 *   this.c = 3;
+	 * }
+	 *
+	 * Foo.prototype.b = 2;
+	 * Bar.prototype.d = 4;
+	 *
+	 * _.assign({ 'a': 0 }, new Foo, new Bar);
+	 * // => { 'a': 1, 'c': 3 }
+	 */
+	var assign = createAssigner(function(object, source) {
+	  if (nonEnumShadows || isPrototype(source) || isArrayLike(source)) {
+	    copyObject(source, keys(source), object);
+	    return;
+	  }
+	  for (var key in source) {
+	    if (hasOwnProperty.call(source, key)) {
+	      assignValue(object, key, source[key]);
+	    }
+	  }
+	});
+
+	/**
+	 * Creates an array of the own enumerable property names of `object`.
+	 *
+	 * **Note:** Non-object values are coerced to objects. See the
+	 * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+	 * for more details.
+	 *
+	 * @static
+	 * @since 0.1.0
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.keys(new Foo);
+	 * // => ['a', 'b'] (iteration order is not guaranteed)
+	 *
+	 * _.keys('hi');
+	 * // => ['0', '1']
+	 */
+	function keys(object) {
+	  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+	}
+
+	module.exports = assign;
+
+
+/***/ },
+/* 660 */
+/***/ function(module, exports) {
+
+	var _element = typeof document !== 'undefined' ? document.body : null;
+
+	function setElement(element) {
+	  if (typeof element === 'string') {
+	    var el = document.querySelectorAll(element);
+	    element = 'length' in el ? el[0] : el;
+	  }
+	  _element = element || _element;
+	  return _element;
+	}
+
+	function hide(appElement) {
+	  validateElement(appElement);
+	  (appElement || _element).setAttribute('aria-hidden', 'true');
+	}
+
+	function show(appElement) {
+	  validateElement(appElement);
+	  (appElement || _element).removeAttribute('aria-hidden');
+	}
+
+	function toggle(shouldHide, appElement) {
+	  if (shouldHide)
+	    hide(appElement);
+	  else
+	    show(appElement);
+	}
+
+	function validateElement(appElement) {
+	  if (!appElement && !_element)
+	    throw new Error('react-modal: You must set an element with `Modal.setAppElement(el)` to make this accessible');
+	}
+
+	function resetForTesting() {
+	  _element = document.body;
+	}
+
+	exports.toggle = toggle;
+	exports.setElement = setElement;
+	exports.show = show;
+	exports.hide = hide;
+	exports.resetForTesting = resetForTesting;
+
+
+/***/ },
+/* 661 */
+/***/ function(module, exports) {
+
+	module.exports = function(opts) {
+	  return new ElementClass(opts)
+	}
+
+	function indexOf(arr, prop) {
+	  if (arr.indexOf) return arr.indexOf(prop)
+	  for (var i = 0, len = arr.length; i < len; i++)
+	    if (arr[i] === prop) return i
+	  return -1
+	}
+
+	function ElementClass(opts) {
+	  if (!(this instanceof ElementClass)) return new ElementClass(opts)
+	  var self = this
+	  if (!opts) opts = {}
+
+	  // similar doing instanceof HTMLElement but works in IE8
+	  if (opts.nodeType) opts = {el: opts}
+
+	  this.opts = opts
+	  this.el = opts.el || document.body
+	  if (typeof this.el !== 'object') this.el = document.querySelector(this.el)
+	}
+
+	ElementClass.prototype.add = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  if (el.className === "") return el.className = className
+	  var classes = el.className.split(' ')
+	  if (indexOf(classes, className) > -1) return classes
+	  classes.push(className)
+	  el.className = classes.join(' ')
+	  return classes
+	}
+
+	ElementClass.prototype.remove = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  if (el.className === "") return
+	  var classes = el.className.split(' ')
+	  var idx = indexOf(classes, className)
+	  if (idx > -1) classes.splice(idx, 1)
+	  el.className = classes.join(' ')
+	  return classes
+	}
+
+	ElementClass.prototype.has = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  var classes = el.className.split(' ')
+	  return indexOf(classes, className) > -1
+	}
+
+	ElementClass.prototype.toggle = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  if (this.has(className)) this.remove(className)
+	  else this.add(className)
+	}
+
+
+/***/ },
+/* 662 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -60809,11 +62272,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageList = __webpack_require__(653);
+	var _MessageList = __webpack_require__(663);
 
 	var _MessageList2 = _interopRequireDefault(_MessageList);
 
-	var _MessageBoard = __webpack_require__(655);
+	var _MessageBoard = __webpack_require__(665);
 
 	var _MessageBoard2 = _interopRequireDefault(_MessageBoard);
 
@@ -60847,7 +62310,7 @@
 	});
 
 /***/ },
-/* 653 */
+/* 663 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60864,7 +62327,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MessageItem = __webpack_require__(654);
+	var _MessageItem = __webpack_require__(664);
 
 	var _MessageItem2 = _interopRequireDefault(_MessageItem);
 
@@ -60889,7 +62352,7 @@
 	});
 
 /***/ },
-/* 654 */
+/* 664 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60950,7 +62413,7 @@
 	});
 
 /***/ },
-/* 655 */
+/* 665 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60975,7 +62438,7 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageChatItem = __webpack_require__(656);
+	var _MessageChatItem = __webpack_require__(666);
 
 	var _MessageChatItem2 = _interopRequireDefault(_MessageChatItem);
 
@@ -61029,7 +62492,7 @@
 	});
 
 /***/ },
-/* 656 */
+/* 666 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61071,7 +62534,7 @@
 	});
 
 /***/ },
-/* 657 */
+/* 667 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61096,11 +62559,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MapsList = __webpack_require__(658);
+	var _MapsList = __webpack_require__(668);
 
 	var _MapsList2 = _interopRequireDefault(_MapsList);
 
-	var _MapsContainer = __webpack_require__(660);
+	var _MapsContainer = __webpack_require__(670);
 
 	var _MapsContainer2 = _interopRequireDefault(_MapsContainer);
 
@@ -61134,7 +62597,7 @@
 	});
 
 /***/ },
-/* 658 */
+/* 668 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61151,7 +62614,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MapsItem = __webpack_require__(659);
+	var _MapsItem = __webpack_require__(669);
 
 	var _MapsItem2 = _interopRequireDefault(_MapsItem);
 
@@ -61176,7 +62639,7 @@
 	});
 
 /***/ },
-/* 659 */
+/* 669 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61237,7 +62700,7 @@
 	});
 
 /***/ },
-/* 660 */
+/* 670 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61288,7 +62751,7 @@
 	});
 
 /***/ },
-/* 661 */
+/* 671 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61380,7 +62843,7 @@
 	});
 
 /***/ },
-/* 662 */
+/* 672 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61413,7 +62876,7 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _checkbox = __webpack_require__(663);
+	var _checkbox = __webpack_require__(673);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
@@ -61457,7 +62920,7 @@
 	});
 
 /***/ },
-/* 663 */
+/* 673 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var babelHelpers = __webpack_require__(285);
@@ -61561,13 +63024,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 664 */
+/* 674 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(665);
+	var content = __webpack_require__(675);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -61587,7 +63050,7 @@
 	}
 
 /***/ },
-/* 665 */
+/* 675 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -61595,7 +63058,7 @@
 
 
 	// module
-	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 5%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 310px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
+	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  width: 100%;\n  margin: 5px; }\n\n.solicitationModalButtons {\n  margin-top: 50px; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 5%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 310px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
 
 	// exports
 
