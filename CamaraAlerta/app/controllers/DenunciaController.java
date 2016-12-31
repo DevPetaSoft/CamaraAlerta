@@ -62,14 +62,13 @@ public class DenunciaController extends Controller {
         Denuncia d = dDTO.getDenuncia();
         d.mensagem = "Mensagem";
         d.relatorio = "Relatorio";
+        Logger.info("Paths" + d.fotos);
         //d.vereador = vereador;
         //d.coordenadas = c;
 
         //Salvando coordenadas no banco
         Coordenadas c = d.coordenadas;
         c.save();
-
-        d.save();
 
         //salvando fotos
         for(int i = 0; i<listaDeFotos.size(); i++){
@@ -84,6 +83,8 @@ public class DenunciaController extends Controller {
                 e.printStackTrace();
             }
         }
+        d.fotosServidor = photoPaths;
+        d.save();
 
         Logger.info("Sucesso incluindo denuncia!");
         renderJSON(d);
