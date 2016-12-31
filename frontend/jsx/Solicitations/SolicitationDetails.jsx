@@ -18,7 +18,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     defaultCenter={{ lat:-21.232756, lng: -44.995004 }}
     onClick={props.onMapClick}
   >
-  <Marker position={pos} />
+  <Marker position={props.pos} />
 
   </GoogleMap>
 ));
@@ -110,7 +110,7 @@ export default class SolicitationDetails extends React.Component{
 						    mapElement={
 						      <div style={{ height: `100%` }} />
 						    }
-						    
+						    pos={(this.state)?({ lat:this.state.solicitacao.coordenadas.latitude, lng: this.state.solicitacao.coordenadas.longitude }):("")}
 						  />
 		     		</div>
 

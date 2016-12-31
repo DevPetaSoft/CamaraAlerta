@@ -60624,7 +60624,7 @@
 				defaultCenter: { lat: -21.232756, lng: -44.995004 },
 				onClick: props.onMapClick
 			},
-			_react2.default.createElement(_reactGoogleMaps.Marker, { position: pos })
+			_react2.default.createElement(_reactGoogleMaps.Marker, { position: props.pos })
 		);
 	});
 
@@ -60769,8 +60769,8 @@
 							{ className: "col-sm-12 marginTop10" },
 							_react2.default.createElement(GettingStartedGoogleMap, {
 								containerElement: _react2.default.createElement("div", { style: { height: "200px" } }),
-								mapElement: _react2.default.createElement("div", { style: { height: "100%" } })
-
+								mapElement: _react2.default.createElement("div", { style: { height: "100%" } }),
+								pos: this.state ? { lat: this.state.solicitacao.coordenadas.latitude, lng: this.state.solicitacao.coordenadas.longitude } : ""
 							})
 						)
 					)
