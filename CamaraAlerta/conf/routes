@@ -16,6 +16,7 @@ POST    /user/numeroDenuncias                   UserController.numeroDenuncias
 # Denuncias
 POST    /denuncia/novaDenuncia                  DenunciaController.novaDenuncia
 POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenuncias
+GET     /denuncia/{idVereador}/{idSolicitacao}  DenunciaController.find
 
 
 # Vereador
@@ -23,6 +24,7 @@ POST    /vereador/login                         VereadorController.login
 GET     /vereador/listPorCidade                 VereadorController.listVereadoresPorCidade
 GET     /vereador/{id}/listSolicitacoes         VereadorController.listDenunciasPorVereador
 GET     /vereador/{id}/listNovasSolicitacoes    VereadorController.listNovasDenunciasPorVereador
+GET     /vereador/{id}/listNumerosMenu          VereadorController.listNumerosMenu
 
 
 # Ignore favicon requests

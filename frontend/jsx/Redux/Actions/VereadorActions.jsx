@@ -16,3 +16,17 @@ export function vereadorLogin(email, senha){
 			})
 	}
 }
+
+export function listagemNovaSolicitacao(id){
+	return function (dispatch){
+
+		dispatch({type: "FETCHING_NUMBERS_START"})
+		axios.get("http://localhost:9000/vereador/"+id+"/listNumerosMenu")
+			.then((response) => {
+				dispatch({type: "FETCHING_NUMBERS_FINISH", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}

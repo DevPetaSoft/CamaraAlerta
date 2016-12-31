@@ -16,6 +16,16 @@ export default function reducer(state={
 			state.solicitacoes = action.payload;
 			return state;
 		}
+		case "FETCHING_SOLICITATION_ONE_START":{
+			state.fetching = true;
+			return state;
+		}
+		case "FETCHING_SOLICITATION_ONE_FINISH":{
+			state.fetching = false;
+			state.fetched = true;
+			state.solicitacaoSelecionada = action.payload;
+			return state;
+		}
 	}
 
 	return state;

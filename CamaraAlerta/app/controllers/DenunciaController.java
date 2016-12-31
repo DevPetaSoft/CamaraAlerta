@@ -99,4 +99,35 @@ public class DenunciaController extends Controller {
             renderJSON(minhasDenunciaDTO);
         }
     }
+
+    /**
+     * Listagem de uma solicitacao
+     * @param idVereador
+     * @param idSolicitacao
+     */
+    public void find(Integer idVereador, Integer idSolicitacao){
+
+        if(idVereador == null){
+            renderJSON(new String("Não foi passado um vereador como parametro"));
+        }
+
+        if(idSolicitacao == null){
+            renderJSON(new String("Não foi passado um id de solicitacao como parametro"));
+        }
+
+        Vereador vereador = Vereador.findById(idVereador);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi possivel encontrar um vereador com o id passado"));
+        }
+
+        Denuncia solicitacao = Denuncia.findById(idSolicitacao);
+
+        if(solicitacao.vereador.id == vereador.id){
+            renderJSON(solicitacao);
+        }
+
+        renderJSON("Não foi possivel buscar a solicitacao");
+
+    }
 }

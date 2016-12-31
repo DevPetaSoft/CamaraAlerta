@@ -3,7 +3,9 @@ package controllers;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dto.NumerosMenuDTO;
 import models.Denuncia;
+import models.MensagemChat;
 import models.Vereador;
 import play.Logger;
 import play.mvc.Controller;
@@ -105,5 +107,31 @@ public class VereadorController extends Controller {
 
         //TODO: Criar serializer
         renderJSON(list);
+    }
+
+
+    /**
+     * Listagem dos numeros de solicitações e mensagens novas
+     * @param id
+     */
+    public void listNumerosMenu(Integer id){
+        Logger.info("Listagens dos numeros de solicitacoes e mensagens novas");
+
+        if(id == null){
+            renderJSON(new String("Não foi passado o vereador para buscar as denuncias"));
+        }
+
+        Vereador vereador = Vereador.findById(id);
+
+        if(vereador == null){
+            renderJSON(new String("Não exista vereador com o id passado"));
+        }
+
+        NumerosMenuDTO dto = new NumerosMenuDTO();
+        dto.setNumerosDeSolicitacoesNovas((int) Denuncia.count("vereador = ? AND novo = ?", vereador, true));
+
+        //TODO: Arrumar os Warnings vindo dessa linha
+        dto.setNumerosDeMensagensNovas((int) MensagemChat.count("denuncia.vereador = ?1 AND novo = ?2",vereador,true));
+        renderJSON(dto);
     }
 }

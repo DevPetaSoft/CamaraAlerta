@@ -26,6 +26,9 @@ public class MensagemChat extends GenericModel implements Serializable {
     @Column(nullable=false,unique=false)
     public int ordem;
 
+    @Column(nullable=false, unique=false)
+    public boolean novo;
+
     @ManyToOne(targetEntity=Denuncia.class, fetch=FetchType.EAGER, optional=false)
     public Denuncia denuncia;
 }

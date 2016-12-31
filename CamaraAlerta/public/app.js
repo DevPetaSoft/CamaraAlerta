@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	__webpack_require__(663);
+	__webpack_require__(664);
 
 /***/ },
 /* 1 */
@@ -9677,19 +9677,19 @@
 
 	var _Solicitations2 = _interopRequireDefault(_Solicitations);
 
-	var _Messages = __webpack_require__(651);
+	var _Messages = __webpack_require__(652);
 
 	var _Messages2 = _interopRequireDefault(_Messages);
 
-	var _MapsBoard = __webpack_require__(656);
+	var _MapsBoard = __webpack_require__(657);
 
 	var _MapsBoard2 = _interopRequireDefault(_MapsBoard);
 
-	var _EditProfile = __webpack_require__(660);
+	var _EditProfile = __webpack_require__(661);
 
 	var _EditProfile2 = _interopRequireDefault(_EditProfile);
 
-	var _ConfigurationBoard = __webpack_require__(661);
+	var _ConfigurationBoard = __webpack_require__(662);
 
 	var _ConfigurationBoard2 = _interopRequireDefault(_ConfigurationBoard);
 
@@ -38335,6 +38335,8 @@
 			vereador: null,
 			fetching: false,
 			fetched: false,
+			numeroDeNovasSolicitacoes: 0,
+			numeroDeNovasMensagens: 0,
 			error: null
 		};
 		var action = arguments[1];
@@ -38344,6 +38346,20 @@
 			case "VEREADOR_LOGIN":
 				{
 					state.vereador = action.payload;
+					return state;
+				}
+			case "FETCHING_NUMBERS_START":
+				{
+					state.fetching = true;
+					state.fetched = false;
+					return state;
+				}
+			case "FETCHING_NUMBERS_FINISH":
+				{
+					state.fetching = false;
+					state.fetched = true;
+					state.numeroDeNovasSolicitacoes = action.payload.numerosDeSolicitacoesNovas;
+					state.numeroDeNovasMensagens = action.payload.numerosDeMensagensNovas;
 					return state;
 				}
 		}
@@ -38382,6 +38398,18 @@
 					state.fetching = false;
 					state.fetched = true;
 					state.solicitacoes = action.payload;
+					return state;
+				}
+			case "FETCHING_SOLICITATION_ONE_START":
+				{
+					state.fetching = true;
+					return state;
+				}
+			case "FETCHING_SOLICITATION_ONE_FINISH":
+				{
+					state.fetching = false;
+					state.fetched = true;
+					state.solicitacaoSelecionada = action.payload;
 					return state;
 				}
 		}
@@ -39847,6 +39875,7 @@
 		value: true
 	});
 	exports.vereadorLogin = vereadorLogin;
+	exports.listagemNovaSolicitacao = listagemNovaSolicitacao;
 
 	var _axios = __webpack_require__(293);
 
@@ -39866,6 +39895,18 @@
 		return function (dispatch) {
 			_axios2.default.post("http://localhost:9000/vereador/login", params).then(function (response) {
 				dispatch({ type: "VEREADOR_LOGIN", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function listagemNovaSolicitacao(id) {
+		return function (dispatch) {
+
+			dispatch({ type: "FETCHING_NUMBERS_START" });
+			_axios2.default.get("http://localhost:9000/vereador/" + id + "/listNumerosMenu").then(function (response) {
+				dispatch({ type: "FETCHING_NUMBERS_FINISH", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -41726,7 +41767,7 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _NewSolicitationList = __webpack_require__(665);
+	var _NewSolicitationList = __webpack_require__(325);
 
 	var _NewSolicitationList2 = _interopRequireDefault(_NewSolicitationList);
 
@@ -41838,6 +41879,8 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _dec, _class;
+
 	var _react = __webpack_require__(12);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -41848,6 +41891,14 @@
 
 	var _reactRouter = __webpack_require__(170);
 
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	var _VereadorActions = __webpack_require__(292);
+
+	var _reactRedux = __webpack_require__(233);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41856,7 +41907,12 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Menu = function (_React$Component) {
+	var Menu = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			numeroDeNovasSolicitacoes: store.vereador.numeroDeNovasSolicitacoes,
+			numeroDeNovasMensagens: store.vereador.numeroDeNovasMensagens
+		};
+	}), _dec(_class = function (_React$Component) {
 		_inherits(Menu, _React$Component);
 
 		function Menu() {
@@ -41866,6 +41922,26 @@
 		}
 
 		_createClass(Menu, [{
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					var storeState = _Store2.default.getState();
+					_this2.setState({
+						numeroDeNovasSolicitacoes: storeState.vereador.numeroDeNovasSolicitacoes,
+						numeroDeNovasMensagens: storeState.vereador.numeroDeNovasMensagens
+					});
+				});
+
+				this.setState({
+					numeroDeNovasSolicitacoes: this.props.numeroDeNovasSolicitacoes,
+					numeroDeNovasMensagens: this.props.numeroDeNovasMensagens
+				});
+
+				this.props.dispatch((0, _VereadorActions.listagemNovaSolicitacao)(localStorage.vereadorId));
+			}
+		}, {
 			key: "render",
 			value: function render() {
 				return _react2.default.createElement(
@@ -41923,7 +41999,7 @@
 								_react2.default.createElement(
 									"span",
 									{ className: "sideMenuItensNumber" },
-									"2"
+									this.state ? this.state.numeroDeNovasSolicitacoes : "0"
 								)
 							)
 						),
@@ -41937,7 +42013,7 @@
 								_react2.default.createElement(
 									"span",
 									{ className: "sideMenuItensNumber" },
-									"3"
+									this.state ? this.state.numeroDeNovasMensagens : "0"
 								)
 							)
 						),
@@ -41974,8 +42050,7 @@
 		}]);
 
 		return Menu;
-	}(_react2.default.Component);
-
+	}(_react2.default.Component)) || _class);
 	exports.default = Menu;
 
 /***/ },
@@ -42083,7 +42158,7 @@
 					});
 				});
 
-				this.props.dispatch((0, _SolicitacaoActions.listagemSolicitacao)(localStorage.vereadorId));
+				this.props.dispatch((0, _SolicitacaoActions.listagemNovaSolicitacao)(localStorage.vereadorId));
 			}
 		}, {
 			key: "render",
@@ -42192,6 +42267,7 @@
 	});
 	exports.listagemSolicitacao = listagemSolicitacao;
 	exports.listagemNovaSolicitacao = listagemNovaSolicitacao;
+	exports.listagemUnicaSolicitacao = listagemUnicaSolicitacao;
 
 	var _axios = __webpack_require__(293);
 
@@ -42219,6 +42295,19 @@
 			_axios2.default.get("http://localhost:9000/vereador/" + id + "/listNovasSolicitacoes").then(function (response) {
 
 				dispatch({ type: "FETCHING_SOLICITATION_FINISH", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function listagemUnicaSolicitacao(idSolicitacao, idVereador) {
+		return function (dispatch) {
+
+			dispatch({ type: "FETCHING_SOLICITATION_ONE_START" });
+			_axios2.default.get("http://localhost:9000/denuncia/" + idVereador + "/" + idSolicitacao).then(function (response) {
+
+				dispatch({ type: "FETCHING_SOLICITATION_ONE_FINISH", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -60337,11 +60426,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _SolicitationList = __webpack_require__(325);
+	var _SolicitationList = __webpack_require__(650);
 
 	var _SolicitationList2 = _interopRequireDefault(_SolicitationList);
 
-	var _SolicitationDetails = __webpack_require__(650);
+	var _SolicitationDetails = __webpack_require__(651);
 
 	var _SolicitationDetails2 = _interopRequireDefault(_SolicitationDetails);
 
@@ -60383,6 +60472,115 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(169);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _SolicitationListItem = __webpack_require__(326);
+
+	var _SolicitationListItem2 = _interopRequireDefault(_SolicitationListItem);
+
+	var _SolicitacaoActions = __webpack_require__(327);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SolicitationList = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			solicitacoes: store.solicitacao
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(SolicitationList, _React$Component);
+
+		function SolicitationList() {
+			_classCallCheck(this, SolicitationList);
+
+			return _possibleConstructorReturn(this, (SolicitationList.__proto__ || Object.getPrototypeOf(SolicitationList)).apply(this, arguments));
+		}
+
+		_createClass(SolicitationList, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					_this2.setState({
+						solicitacoes: _Store2.default.getState().solicitacao.solicitacoes
+					});
+				});
+
+				this.props.dispatch((0, _SolicitacaoActions.listagemSolicitacao)(localStorage.vereadorId));
+			}
+		}, {
+			key: "onClickHandler",
+			value: function onClickHandler(id) {
+
+				this.props.dispatch((0, _SolicitacaoActions.listagemUnicaSolicitacao)(id, localStorage.vereadorId));
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this3 = this;
+
+				return _react2.default.createElement(
+					"div",
+					{ className: "dashboardWidgetList" },
+					_react2.default.createElement(
+						"h4",
+						{ className: "dashboardWidgetTitle" },
+						"Lista de solicita\xE7\xF5es"
+					),
+					this.state.solicitacoes ? this.state.solicitacoes.map(function (solicitacao) {
+						return _react2.default.createElement(
+							"div",
+							{ onClick: _this3.onClickHandler.bind(_this3, solicitacao.id) },
+							_react2.default.createElement(_SolicitationListItem2.default, { key: solicitacao.id, solicitacao: solicitacao })
+						);
+					}) : ""
+				);
+			}
+		}]);
+
+		return SolicitationList;
+	}(_react2.default.Component)) || _class);
+	exports.default = SolicitationList;
+	;
+
+/***/ },
+/* 651 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
 
 	var _react = __webpack_require__(12);
 
@@ -60400,108 +60598,183 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _SolicitationList = __webpack_require__(325);
+	var _reactRedux = __webpack_require__(233);
 
-	var _SolicitationList2 = _interopRequireDefault(_SolicitationList);
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	var _reactGoogleMaps = __webpack_require__(343);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _react2.default.createClass({
-		displayName: "SolicitationDetails",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-		render: function render() {
-			return _react2.default.createElement(
-				"div",
-				{ className: "solicitationBackground" },
-				_react2.default.createElement(
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var GettingStartedGoogleMap = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
+		return _react2.default.createElement(_reactGoogleMaps.GoogleMap, {
+			ref: props.onMapLoad,
+			defaultZoom: 12,
+			defaultCenter: { lat: -21.232756, lng: -44.995004 },
+			onClick: props.onMapClick
+		});
+	});
+
+	var SolicitationDetails = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			solicitacao: store.solicitacao.solicitacaoSelecionada
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(SolicitationDetails, _React$Component);
+
+		function SolicitationDetails() {
+			_classCallCheck(this, SolicitationDetails);
+
+			return _possibleConstructorReturn(this, (SolicitationDetails.__proto__ || Object.getPrototypeOf(SolicitationDetails)).apply(this, arguments));
+		}
+
+		_createClass(SolicitationDetails, [{
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					var solicitacao = _Store2.default.getState().solicitacao.solicitacaoSelecionada;
+					_this2.setState({
+						solicitacao: solicitacao
+
+					});
+				});
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				if (!this.state) {
+					return _react2.default.createElement(
+						"div",
+						{ className: "solicitationBackground" },
+						_react2.default.createElement(
+							"h4",
+							null,
+							"Nenhuma solicita\xE7\xE3o selecionada"
+						)
+					);
+				}
+				if (!this.state.solicitacao) {
+					return _react2.default.createElement(
+						"div",
+						{ className: "solicitationBackground" },
+						_react2.default.createElement(
+							"h4",
+							null,
+							"Nenhuma solicita\xE7\xE3o selecionada"
+						)
+					);
+				}
+				return _react2.default.createElement(
 					"div",
-					{ className: "col-sm-6" },
+					{ className: "solicitationBackground" },
 					_react2.default.createElement(
-						"h4",
-						null,
-						"Titulo"
-					),
-					_react2.default.createElement(
-						"p",
-						null,
-						"Titulo solicita\xE7\xE3o"
-					),
-					_react2.default.createElement(
-						"h4",
-						null,
-						"Descri\xE7\xE3o"
-					),
-					_react2.default.createElement(
-						"p",
-						{ className: "solicitationDescription" },
-						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt efficitur pellentesque. Ut eu orci id sapien viverra elementum. Morbi tristique nisi vel tellus cursus, sit amet interdum ligula suscipit. Donec elit turpis, condimentum a lacus ut, laoreet imperdiet ex. Duis vitae dolor tempus, finibus tellus a, sollicitudin augue. Nullam in ullamcorper velit, et accumsan turpis. Nunc suscipit imperdiet sagittis. Etiam quis felis est. Aenean ut velit elit. Ut aliquam lectus non libero vulputate, a facilisis nisl mattis. Nunc id neque sed mi ultricies scelerisque. Phasellus consectetur tortor a mauris malesuada, at ultrices neque ullamcorper."
-					),
-					_react2.default.createElement(
-						"h4",
-						null,
-						"Autor"
-					),
-					_react2.default.createElement(
-						"p",
-						null,
-						"Autor",
+						"div",
+						{ className: "col-sm-6" },
+						_react2.default.createElement(
+							"h4",
+							null,
+							"Titulo"
+						),
+						_react2.default.createElement(
+							"p",
+							null,
+							this.state.solicitacao.titulo
+						),
+						_react2.default.createElement(
+							"h4",
+							null,
+							"Descri\xE7\xE3o"
+						),
+						_react2.default.createElement(
+							"p",
+							{ className: "solicitationDescription" },
+							this.state.solicitacao.descricao
+						),
+						_react2.default.createElement(
+							"h4",
+							null,
+							"Autor"
+						),
+						_react2.default.createElement(
+							"p",
+							null,
+							this.state.solicitacao.cidadao.nome,
+							_react2.default.createElement(
+								"button",
+								{ className: "contactButton" },
+								"Entrar em contato"
+							)
+						),
+						_react2.default.createElement(
+							"h4",
+							null,
+							"Status"
+						),
+						_react2.default.createElement(
+							"p",
+							null,
+							this.state.solicitacao.status == 0 ? "Pendente" : ""
+						),
 						_react2.default.createElement(
 							"button",
-							{ className: "contactButton" },
-							"Entrar em contato"
+							{ className: "col-sm-offset-3 col-sm-6" },
+							"Responder"
 						)
 					),
 					_react2.default.createElement(
-						"h4",
-						null,
-						"Status"
-					),
-					_react2.default.createElement(
-						"p",
-						null,
-						"Pendente"
-					),
-					_react2.default.createElement(
-						"button",
-						{ className: "col-sm-offset-3 col-sm-6" },
-						"Responder"
+						"div",
+						{ className: "col-sm-6" },
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-12" },
+							_react2.default.createElement("img", { className: "solicitationImage", src: "public/images/buracos-na-rua.jpeg" })
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-4" },
+							_react2.default.createElement("img", { className: "solicitationImageSecundary", src: "public/images/buracos-na-rua.jpeg" })
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-4" },
+							_react2.default.createElement("img", { className: "solicitationImageSecundary", src: "public/images/buracos-na-rua.jpeg" })
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-4" },
+							_react2.default.createElement("img", { className: "solicitationImageSecundary", src: "public/images/buracos-na-rua.jpeg" })
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-12 marginTop10" },
+							_react2.default.createElement(GettingStartedGoogleMap, {
+								containerElement: _react2.default.createElement("div", { style: { height: "200px" } }),
+								mapElement: _react2.default.createElement("div", { style: { height: "100%" } })
+
+							})
+						)
 					)
-				),
-				_react2.default.createElement(
-					"div",
-					{ className: "col-sm-6" },
-					_react2.default.createElement(
-						"div",
-						{ className: "col-sm-12" },
-						_react2.default.createElement("img", { className: "solicitationImage", src: "public/images/buracos-na-rua.jpeg" })
-					),
-					_react2.default.createElement(
-						"div",
-						{ className: "col-sm-4" },
-						_react2.default.createElement("img", { className: "solicitationImageSecundary", src: "public/images/buracos-na-rua.jpeg" })
-					),
-					_react2.default.createElement(
-						"div",
-						{ className: "col-sm-4" },
-						_react2.default.createElement("img", { className: "solicitationImageSecundary", src: "public/images/buracos-na-rua.jpeg" })
-					),
-					_react2.default.createElement(
-						"div",
-						{ className: "col-sm-4" },
-						_react2.default.createElement("img", { className: "solicitationImageSecundary", src: "public/images/buracos-na-rua.jpeg" })
-					),
-					_react2.default.createElement(
-						"div",
-						{ className: "col-sm-12" },
-						_react2.default.createElement("img", { className: "solicitationImage", src: "public/images/google-maps-ios.png" })
-					)
-				)
-			);
-		}
-	});
+				);
+			}
+		}]);
+
+		return SolicitationDetails;
+	}(_react2.default.Component)) || _class);
+	exports.default = SolicitationDetails;
+	;
 
 /***/ },
-/* 651 */
+/* 652 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60526,11 +60799,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageList = __webpack_require__(652);
+	var _MessageList = __webpack_require__(653);
 
 	var _MessageList2 = _interopRequireDefault(_MessageList);
 
-	var _MessageBoard = __webpack_require__(654);
+	var _MessageBoard = __webpack_require__(655);
 
 	var _MessageBoard2 = _interopRequireDefault(_MessageBoard);
 
@@ -60564,7 +60837,7 @@
 	});
 
 /***/ },
-/* 652 */
+/* 653 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60581,7 +60854,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MessageItem = __webpack_require__(653);
+	var _MessageItem = __webpack_require__(654);
 
 	var _MessageItem2 = _interopRequireDefault(_MessageItem);
 
@@ -60606,7 +60879,7 @@
 	});
 
 /***/ },
-/* 653 */
+/* 654 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60667,7 +60940,7 @@
 	});
 
 /***/ },
-/* 654 */
+/* 655 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60692,7 +60965,7 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageChatItem = __webpack_require__(655);
+	var _MessageChatItem = __webpack_require__(656);
 
 	var _MessageChatItem2 = _interopRequireDefault(_MessageChatItem);
 
@@ -60746,7 +61019,7 @@
 	});
 
 /***/ },
-/* 655 */
+/* 656 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60788,7 +61061,7 @@
 	});
 
 /***/ },
-/* 656 */
+/* 657 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60813,11 +61086,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MapsList = __webpack_require__(657);
+	var _MapsList = __webpack_require__(658);
 
 	var _MapsList2 = _interopRequireDefault(_MapsList);
 
-	var _MapsContainer = __webpack_require__(659);
+	var _MapsContainer = __webpack_require__(660);
 
 	var _MapsContainer2 = _interopRequireDefault(_MapsContainer);
 
@@ -60851,7 +61124,7 @@
 	});
 
 /***/ },
-/* 657 */
+/* 658 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60868,7 +61141,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MapsItem = __webpack_require__(658);
+	var _MapsItem = __webpack_require__(659);
 
 	var _MapsItem2 = _interopRequireDefault(_MapsItem);
 
@@ -60893,7 +61166,7 @@
 	});
 
 /***/ },
-/* 658 */
+/* 659 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60954,7 +61227,7 @@
 	});
 
 /***/ },
-/* 659 */
+/* 660 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61005,7 +61278,7 @@
 	});
 
 /***/ },
-/* 660 */
+/* 661 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61097,7 +61370,7 @@
 	});
 
 /***/ },
-/* 661 */
+/* 662 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61130,7 +61403,7 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _checkbox = __webpack_require__(662);
+	var _checkbox = __webpack_require__(663);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
@@ -61174,7 +61447,7 @@
 	});
 
 /***/ },
-/* 662 */
+/* 663 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var babelHelpers = __webpack_require__(285);
@@ -61278,13 +61551,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 663 */
+/* 664 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(664);
+	var content = __webpack_require__(665);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -61304,7 +61577,7 @@
 	}
 
 /***/ },
-/* 664 */
+/* 665 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -61312,102 +61585,10 @@
 
 
 	// module
-	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 510px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px; }\n  .solicitationBackground .solicitationDescription {\n    max-height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 5%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 310px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
+	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 510px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 5%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 310px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
 
 	// exports
 
-
-/***/ },
-/* 665 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _dec, _class;
-
-	var _react = __webpack_require__(12);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(169);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _SolicitationListItem = __webpack_require__(326);
-
-	var _SolicitationListItem2 = _interopRequireDefault(_SolicitationListItem);
-
-	var _SolicitacaoActions = __webpack_require__(327);
-
-	var _reactRedux = __webpack_require__(233);
-
-	var _Store = __webpack_require__(269);
-
-	var _Store2 = _interopRequireDefault(_Store);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SolicitationList = (_dec = (0, _reactRedux.connect)(function (store) {
-		return {
-			solicitacoes: store.solicitacao
-		};
-	}), _dec(_class = function (_React$Component) {
-		_inherits(SolicitationList, _React$Component);
-
-		function SolicitationList() {
-			_classCallCheck(this, SolicitationList);
-
-			return _possibleConstructorReturn(this, (SolicitationList.__proto__ || Object.getPrototypeOf(SolicitationList)).apply(this, arguments));
-		}
-
-		_createClass(SolicitationList, [{
-			key: "componentWillMount",
-			value: function componentWillMount() {
-				var _this2 = this;
-
-				_Store2.default.subscribe(function () {
-					_this2.setState({
-						solicitacoes: _Store2.default.getState().solicitacao.solicitacoes
-					});
-				});
-
-				this.props.dispatch((0, _SolicitacaoActions.listagemNovaSolicitacao)(localStorage.vereadorId));
-			}
-		}, {
-			key: "render",
-			value: function render() {
-				return _react2.default.createElement(
-					"div",
-					{ className: "dashboardWidgetList" },
-					_react2.default.createElement(
-						"h4",
-						{ className: "dashboardWidgetTitle" },
-						"Lista de solicita\xE7\xF5es"
-					),
-					this.state.solicitacoes ? this.state.solicitacoes.map(function (solicitacao) {
-						return _react2.default.createElement(_SolicitationListItem2.default, { key: solicitacao.id, solicitacao: solicitacao });
-					}) : ""
-				);
-			}
-		}]);
-
-		return SolicitationList;
-	}(_react2.default.Component)) || _class);
-	exports.default = SolicitationList;
-	;
 
 /***/ }
 /******/ ]);

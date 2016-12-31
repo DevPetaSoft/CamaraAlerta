@@ -3,34 +3,71 @@ import ReactDOM from "react-dom";
 
 import Menu from "./../Dashboard/Menu.jsx";
 import TopMenu from "./../Dashboard/TopMenu.jsx";
-import SolicitationList from "./../Dashboard/Widgets/SolicitationList.jsx";
+
+import { connect } from "react-redux";
+
+import store from "./../Redux/Store.jsx";
+
+import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
 
-export default React.createClass({
-  	render: function() {
+const GettingStartedGoogleMap = withGoogleMap(props => (
+  <GoogleMap
+    ref={props.onMapLoad}
+    defaultZoom={12}
+    defaultCenter={{ lat:-21.232756, lng: -44.995004 }}
+    onClick={props.onMapClick}
+  >
+
+  </GoogleMap>
+));
+
+@connect((store) => {
+	return {
+		solicitacao: store.solicitacao.solicitacaoSelecionada
+	};
+})
+export default class SolicitationDetails extends React.Component{
+	componentDidMount(){
+		store.subscribe(()=>{
+			var solicitacao = store.getState().solicitacao.solicitacaoSelecionada;
+			this.setState({
+				solicitacao: solicitacao
+			
+			});
+		});
+	}
+  	render() {
+  		if(!this.state){
+  			return(
+	     	<div className="solicitationBackground">
+	     	<h4>Nenhuma solicitação selecionada</h4>
+	     	</div>)
+  		}
+  		if(!this.state.solicitacao){
+  			return(
+	     	<div className="solicitationBackground">
+	     	<h4>Nenhuma solicitação selecionada</h4>
+	     	</div>)
+  		}
 	    return (
 	     	<div className="solicitationBackground">
 
 	     		<div className="col-sm-6">
 
 		     		<h4>Titulo</h4>
-		     		<p>Titulo solicitação</p>
+		     		<p>{this.state.solicitacao.titulo}</p>
 
 		     		<h4>Descrição</h4>
 		     		<p className="solicitationDescription">
-		     		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt efficitur pellentesque. 
-		     		Ut eu orci id sapien viverra elementum. Morbi tristique nisi vel tellus cursus, sit amet interdum ligula
-		     		suscipit. Donec elit turpis, condimentum a lacus ut, laoreet imperdiet ex. Duis vitae dolor tempus, finibus
-		     		tellus a, sollicitudin augue. Nullam in ullamcorper velit, et accumsan turpis. Nunc suscipit imperdiet sagittis. 
-		     		Etiam quis felis est. Aenean ut velit elit. Ut aliquam lectus non libero vulputate, a facilisis nisl mattis. Nunc id 
-		     		neque sed mi ultricies scelerisque. Phasellus consectetur tortor a mauris malesuada, at ultrices neque ullamcorper. 
+		     		{this.state.solicitacao.descricao}
 		     		</p>
 
 		     		<h4>Autor</h4>
-		     		<p>Autor<button className="contactButton">Entrar em contato</button></p>
+		     		<p>{this.state.solicitacao.cidadao.nome}<button className="contactButton">Entrar em contato</button></p>
 
 		     		<h4>Status</h4>
-		     		<p>Pendente</p>
+		     		<p>{(this.state.solicitacao.status == 0) ?("Pendente"):("")}</p>
 
 		     		<button className="col-sm-offset-3 col-sm-6">Responder</button>
 
@@ -39,28 +76,36 @@ export default React.createClass({
 
 	     		<div className="col-sm-6">
 
-	     		<div className="col-sm-12">
-	     			<img className="solicitationImage" src="public/images/buracos-na-rua.jpeg" />
-	     		</div>
+		     		<div className="col-sm-12">
+		     			<img className="solicitationImage" src="public/images/buracos-na-rua.jpeg" />
+		     		</div>
 
-	     		<div className="col-sm-4">
-	     			<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
-	     		</div>
+		     		<div className="col-sm-4">
+		     			<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
+		     		</div>
 
-	     		<div className="col-sm-4">
-		     		<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
-	     		</div>
+		     		<div className="col-sm-4">
+			     		<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
+		     		</div>
 
-	     		<div className="col-sm-4">
-		     		<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
-	     		</div>
+		     		<div className="col-sm-4">
+			     		<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
+		     		</div>
 
-	     		<div className="col-sm-12">
-	     			<img className="solicitationImage" src="public/images/google-maps-ios.png" />
-	     		</div>
+		     		<div className="col-sm-12 marginTop10">
+		     			<GettingStartedGoogleMap
+						    containerElement={
+						      <div style={{ height: `200px` }} />
+						    }
+						    mapElement={
+						      <div style={{ height: `100%` }} />
+						    }
+						    
+						  />
+		     		</div>
 
 	     		</div>
 	      	</div>
 	    );
   	}
-});
+};
