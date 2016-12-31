@@ -10,7 +10,7 @@ import store from "./../Redux/Store.jsx";
 
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
-
+const pos = { lat:-21.232756, lng: -44.995004 };
 const GettingStartedGoogleMap = withGoogleMap(props => (
   <GoogleMap
     ref={props.onMapLoad}
@@ -18,6 +18,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     defaultCenter={{ lat:-21.232756, lng: -44.995004 }}
     onClick={props.onMapClick}
   >
+  <Marker position={pos} />
 
   </GoogleMap>
 ));
@@ -50,6 +51,7 @@ export default class SolicitationDetails extends React.Component{
 	     	<h4>Nenhuma solicitação selecionada</h4>
 	     	</div>)
   		}
+  		console.log(this.state);
 	    return (
 	     	<div className="solicitationBackground">
 
@@ -77,19 +79,27 @@ export default class SolicitationDetails extends React.Component{
 	     		<div className="col-sm-6">
 
 		     		<div className="col-sm-12">
-		     			<img className="solicitationImage" src="public/images/buracos-na-rua.jpeg" />
+		     			<img className="solicitationImage" 
+		     			src={this.state.solicitacao.fotosServidor[0]}/>
 		     		</div>
 
 		     		<div className="col-sm-4">
-		     			<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
+		     			{(this.state.solicitacao.fotosServidor.length >= 2)?(
+		     			<img className="solicitationImageSecundary" 
+			     		src={this.state.solicitacao.fotosServidor[1]}  />):("")}
 		     		</div>
 
 		     		<div className="col-sm-4">
-			     		<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
+		     		{(this.state.solicitacao.fotosServidor.length >= 3)?(
+		     			<img className="solicitationImageSecundary" 
+			     		src={this.state.solicitacao.fotosServidor[2]}  />):("")}
+			     		
 		     		</div>
 
 		     		<div className="col-sm-4">
-			     		<img className="solicitationImageSecundary" src="public/images/buracos-na-rua.jpeg" />
+			     		{(this.state.solicitacao.fotosServidor.length >= 4)?(
+		     			<img className="solicitationImageSecundary" 
+			     		src={this.state.solicitacao.fotosServidor[3]}  />):("")}
 		     		</div>
 
 		     		<div className="col-sm-12 marginTop10">

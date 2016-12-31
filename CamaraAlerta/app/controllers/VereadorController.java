@@ -81,6 +81,7 @@ public class VereadorController extends Controller {
             renderJSON(new String("Não exista vereador com o id passado"));
         }
 
+
         List<Denuncia> list = Denuncia.find("byVereador", vereador).fetch();
 
         //TODO: Criar serializer

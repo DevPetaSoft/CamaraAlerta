@@ -77,7 +77,7 @@ public class DenunciaController extends Controller {
                 InputStream in2 = new ByteArrayInputStream(decoded);
                 BufferedImage bImageFromConvert = ImageIO.read(in2);
                 ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + d.id + "_" + i + ".png"));
-                photoPaths.add(Play.applicationPath+"/public/denounce_image/" + i + ".png");
+                photoPaths.add("public/denounce_image/" + d.id + "_" + i + ".png");
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
