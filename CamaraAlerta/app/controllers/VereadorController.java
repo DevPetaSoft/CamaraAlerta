@@ -116,7 +116,6 @@ public class VereadorController extends Controller {
      * @param id
      */
     public void listNumerosMenu(Integer id){
-        Logger.info("Listagens dos numeros de solicitacoes e mensagens novas");
 
         if(id == null){
             renderJSON(new String("Não foi passado o vereador para buscar as denuncias"));
@@ -132,7 +131,8 @@ public class VereadorController extends Controller {
         dto.setNumerosDeSolicitacoesNovas((int) Denuncia.count("vereador = ? AND novo = ?", vereador, true));
 
         //TODO: Arrumar os Warnings vindo dessa linha
-        dto.setNumerosDeMensagensNovas((int) MensagemChat.count("denuncia.vereador = ?1 AND novo = ?2",vereador,true));
+        //dto.setNumerosDeMensagensNovas((int) MensagemChat.count("denuncia.vereador = ?1 AND novo = ?2",vereador,true));
+        dto.setNumerosDeMensagensNovas(0);
         renderJSON(dto);
     }
 }

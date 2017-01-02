@@ -62,8 +62,8 @@ public class DenunciaController extends Controller {
         }*/
 
         Denuncia d = dDTO.getDenuncia();
-        d.mensagem = "Mensagem";
-        d.relatorio = "Relatorio";
+        d.mensagem = "";
+        d.relatorio = "";
         Logger.info("Paths" + d.fotos);
         //d.vereador = vereador;
         //d.coordenadas = c;
@@ -125,6 +125,12 @@ public class DenunciaController extends Controller {
         }
 
         Denuncia solicitacao = Denuncia.findById(idSolicitacao);
+
+        // Verifica se a solicitacao buscada é nova, caso for ela é marcada como lida
+        if(solicitacao.novo == true){
+            solicitacao.novo = false;
+            solicitacao.save();
+        }
 
         if(solicitacao.vereador.id == vereador.id){
             renderJSON(solicitacao);

@@ -20,6 +20,7 @@ public class MensagemChat extends GenericModel implements Serializable {
     @Column(nullable=false,unique=false, length=4000)
     public String mensagem;
 
+    // 0 - Vereador 1 - Cidadao
     @Column(nullable=false,unique=false)
     public int enviadoPor;
 
@@ -29,6 +30,6 @@ public class MensagemChat extends GenericModel implements Serializable {
     @Column(nullable=false, unique=false)
     public boolean novo;
 
-    @ManyToOne(targetEntity=Denuncia.class, fetch=FetchType.EAGER, optional=false)
-    public Denuncia denuncia;
+    @ManyToOne(targetEntity=CanalDeComunicacao.class, fetch=FetchType.EAGER, optional=false)
+    public CanalDeComunicacao canal;
 }

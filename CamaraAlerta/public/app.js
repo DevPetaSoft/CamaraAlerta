@@ -38312,13 +38312,19 @@
 
 	var _SolicitacaoReducer2 = _interopRequireDefault(_SolicitacaoReducer);
 
+	var _CanalDeComunicacaoReducer = __webpack_require__(677);
+
+	var _CanalDeComunicacaoReducer2 = _interopRequireDefault(_CanalDeComunicacaoReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//Import reducers
 	exports.default = (0, _redux.combineReducers)({
 		vereador: _VereadorReducer2.default,
-		solicitacao: _SolicitacaoReducer2.default
+		solicitacao: _SolicitacaoReducer2.default,
+		canalComunicacao: _CanalDeComunicacaoReducer2.default
 	});
+
+	//Import reducers
 
 /***/ },
 /* 280 */
@@ -42078,6 +42084,8 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _reactRouter = __webpack_require__(170);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -42091,8 +42099,12 @@
 							_react2.default.createElement(
 									"div",
 									{ className: "logout" },
-									"Sair ",
-									_react2.default.createElement("img", { src: "public/icons/login-variant.svg" })
+									_react2.default.createElement(
+											_reactRouter.Link,
+											{ to: "/" },
+											"Sair ",
+											_react2.default.createElement("img", { src: "public/icons/login-variant.svg" })
+									)
 							)
 					);
 			}
@@ -42176,7 +42188,7 @@
 					_react2.default.createElement(
 						"h4",
 						{ className: "dashboardWidgetTitle" },
-						"Lista de solicita\xE7\xF5es"
+						"Solicita\xE7\xF5es novas"
 					),
 					this.state.solicitacoes ? this.state.solicitacoes.map(function (solicitacao) {
 						return _react2.default.createElement(_SolicitationListItem2.default, { key: solicitacao.id, solicitacao: solicitacao });
@@ -60627,7 +60639,13 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
+	var _button = __webpack_require__(676);
+
+	var _button2 = _interopRequireDefault(_button);
+
 	var _SolicitacaoActions = __webpack_require__(327);
+
+	var _CanalDeComunicacaoActions = __webpack_require__(678);
 
 	var _reactRedux = __webpack_require__(233);
 
@@ -60716,6 +60734,19 @@
 				this.props.dispatch((0, _SolicitacaoActions.mudancaEstado)(id, relatorio, status));
 			}
 		}, {
+			key: "criarCanalComunicacao",
+			value: function criarCanalComunicacao() {
+				var mensagem = this.refs.mensagem.value;
+				var vereadorId = localStorage.vereadorId;
+				var id = this.state.solicitacao.id;
+
+				this.props.dispatch((0, _CanalDeComunicacaoActions.novoCanal)(id, vereadorId, mensagem));
+
+				this.setState({
+					modalMessageOpen: false
+				});
+			}
+		}, {
 			key: "openModal",
 			value: function openModal() {
 				this.setState({
@@ -60727,6 +60758,20 @@
 			value: function closeModal() {
 				this.setState({
 					modalOpen: false
+				});
+			}
+		}, {
+			key: "openModalMessage",
+			value: function openModalMessage() {
+				this.setState({
+					modalMessageOpen: true
+				});
+			}
+		}, {
+			key: "closeModalMessage",
+			value: function closeModalMessage() {
+				this.setState({
+					modalMessageOpen: false
 				});
 			}
 		}, {
@@ -60762,7 +60807,8 @@
 						{
 							isOpen: this.state.modalOpen,
 							contentLabel: "Resposta da solicita\xE7\xE3o",
-							style: modalStyle
+							style: modalStyle,
+							shouldCloseOnOverlayClick: false
 						},
 						_react2.default.createElement(
 							"h4",
@@ -60774,7 +60820,7 @@
 							null,
 							"Relat\xF3rio:"
 						),
-						_react2.default.createElement("textarea", { className: "solicitationModalTextArea", ref: "relatorio" }),
+						_react2.default.createElement("textarea", { className: "solicitationModalTextArea", ref: "relatorio", defaultValue: this.state.solicitacao ? this.state.solicitacao.relatorio : "" }),
 						_react2.default.createElement(
 							"p",
 							null,
@@ -60782,7 +60828,7 @@
 						),
 						_react2.default.createElement(
 							"select",
-							{ ref: "status" },
+							{ ref: "status", defaultValue: this.state.solicitacao ? this.state.solicitacao.status : "" },
 							_react2.default.createElement(
 								"option",
 								{ value: "0" },
@@ -60809,13 +60855,47 @@
 							"div",
 							{ className: "solicitationModalButtons" },
 							_react2.default.createElement(
-								"button",
-								{ onClick: this.closeModal.bind(this) },
+								_button2.default,
+								{ variant: "raised", onClick: this.closeModal.bind(this) },
 								"Fechar"
 							),
 							_react2.default.createElement(
-								"button",
-								{ className: "solicitationModalSendButton", onClick: this.enviarRelatorio.bind(this) },
+								_button2.default,
+								{ className: "solicitationModalSendButton", onClick: this.enviarRelatorio.bind(this), variant: "raised", color: "primary" },
+								"Enviar"
+							)
+						)
+					),
+					_react2.default.createElement(
+						_reactModal2.default,
+						{
+							isOpen: this.state.modalMessageOpen,
+							contentLabel: "Mandar mensagem para solicitante",
+							style: modalStyle,
+							shouldCloseOnOverlayClick: false
+						},
+						_react2.default.createElement(
+							"h4",
+							{ className: "solicitationModalTitle" },
+							"Mandar mensagem para solicitante"
+						),
+						_react2.default.createElement(
+							"p",
+							null,
+							"Mensagem:"
+						),
+						_react2.default.createElement("textarea", { className: "solicitationModalTextArea", ref: "mensagem" }),
+						_react2.default.createElement(
+							"div",
+							{ className: "solicitationModalButtons" },
+							_react2.default.createElement(
+								_button2.default,
+								{ variant: "raised", onClick: this.closeModalMessage.bind(this) },
+								"Fechar"
+							),
+							_react2.default.createElement(
+								_button2.default,
+								{ className: "solicitationModalSendButton", onClick: this.criarCanalComunicacao.bind(this), variant: "raised", color: "primary" },
 								"Enviar"
 							)
 						)
@@ -60854,7 +60934,7 @@
 							this.state.solicitacao.cidadao.nome,
 							_react2.default.createElement(
 								"button",
-								{ className: "contactButton" },
+								{ className: "contactButton", onClick: this.openModalMessage.bind(this) },
 								"Entrar em contato"
 							)
 						),
@@ -63058,10 +63138,314 @@
 
 
 	// module
-	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  width: 100%;\n  margin: 5px; }\n\n.solicitationModalButtons {\n  margin-top: 50px; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 5%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 310px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
+	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  max-width: 100%;\n  min-width: 100%;\n  max-height: 300px; }\n\n.solicitationModalButtons {\n  bottom: 0;\n  position: absolute;\n  width: 90%; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 5%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 310px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
 
 	// exports
 
+
+/***/ },
+/* 676 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var babelHelpers = __webpack_require__(285);
+	/**
+	 * MUI React button module
+	 * @module react/button
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = babelHelpers.interopRequireDefault(_react);
+
+	var _jqLite = __webpack_require__(290);
+
+	var jqLite = babelHelpers.interopRequireWildcard(_jqLite);
+
+	var _util = __webpack_require__(288);
+
+	var util = babelHelpers.interopRequireWildcard(_util);
+
+
+	var PropTypes = _react2.default.PropTypes,
+	    btnClass = 'mui-btn',
+	    btnAttrs = { color: 1, variant: 1, size: 1 };
+
+	/**
+	 * Button element
+	 * @class
+	 */
+
+	var Button = function (_React$Component) {
+	  babelHelpers.inherits(Button, _React$Component);
+
+	  function Button(props) {
+	    babelHelpers.classCallCheck(this, Button);
+
+	    var _this = babelHelpers.possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).call(this, props));
+
+	    _this.state = {
+	      ripple: null
+	    };
+
+
+	    var cb = util.callback;
+	    _this.onMouseDownCB = cb(_this, 'onMouseDown');
+	    _this.onMouseUpCB = cb(_this, 'onMouseUp');
+	    _this.onMouseLeaveCB = cb(_this, 'onMouseLeave');
+	    _this.onTouchStartCB = cb(_this, 'onTouchStart');
+	    _this.onTouchEndCB = cb(_this, 'onTouchEnd');
+	    return _this;
+	  }
+
+	  babelHelpers.createClass(Button, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // disable MUI js
+	      var el = this.refs.buttonEl;
+	      el._muiDropdown = true;
+	      el._muiRipple = true;
+	    }
+	  }, {
+	    key: 'onMouseDown',
+	    value: function onMouseDown(ev) {
+	      this.showRipple(ev);
+
+	      // execute callback
+	      var fn = this.props.onMouseDown;
+	      fn && fn(ev);
+	    }
+	  }, {
+	    key: 'onMouseUp',
+	    value: function onMouseUp(ev) {
+	      this.hideRipple(ev);
+
+	      // execute callback
+	      var fn = this.props.onMouseUp;
+	      fn && fn(ev);
+	    }
+	  }, {
+	    key: 'onMouseLeave',
+	    value: function onMouseLeave(ev) {
+	      this.hideRipple(ev);
+
+	      // execute callback
+	      var fn = this.props.onMouseLeave;
+	      fn && fn(ev);
+	    }
+	  }, {
+	    key: 'onTouchStart',
+	    value: function onTouchStart(ev) {
+	      this.showRipple(ev);
+
+	      // execute callback
+	      var fn = this.props.onTouchStart;
+	      fn && fn(ev);
+	    }
+	  }, {
+	    key: 'onTouchEnd',
+	    value: function onTouchEnd(ev) {
+	      this.hideRipple(ev);
+
+	      // execute callback
+	      var fn = this.props.onTouchEnd;
+	      fn && fn(ev);
+	    }
+	  }, {
+	    key: 'showRipple',
+	    value: function showRipple(ev) {
+	      var buttonEl = this.refs.buttonEl;
+
+	      // de-dupe touch events
+	      if ('ontouchstart' in buttonEl && ev.type === 'mousedown') return;
+
+	      // get (x, y) position of click
+	      var offset = jqLite.offset(this.refs.buttonEl),
+	          clickEv = void 0;
+
+	      if (ev.type === 'touchstart' && ev.touches) clickEv = ev.touches[0];else clickEv = ev;
+
+	      // calculate radius
+	      var radius = Math.sqrt(offset.width * offset.width + offset.height * offset.height);
+
+	      // add ripple to state
+	      this.setState({
+	        ripple: {
+	          top: Math.round(clickEv.pageY - offset.top - radius) + 'px',
+	          left: Math.round(clickEv.pageX - offset.left - radius) + 'px',
+	          diameter: radius * 2 + 'px'
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'hideRipple',
+	    value: function hideRipple(ev) {
+	      this.setState({
+	        ripple: null
+	      });
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps, prevState) {
+	      var _this2 = this;
+
+	      var ripple = this.state.ripple;
+
+	      // trigger ripple animation
+	      if (ripple && !prevState.ripple) {
+	        util.requestAnimationFrame(function () {
+	          ripple.isAnimating = true;
+	          _this2.setState({ ripple: ripple });
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var cls = btnClass,
+	          rippleCls = 'mui-ripple',
+	          rippleStyle = void 0,
+	          k = void 0,
+	          v = void 0;
+
+	      var ripple = this.state.ripple;
+	      var _props = this.props,
+	          color = _props.color,
+	          size = _props.size,
+	          variant = _props.variant,
+	          reactProps = babelHelpers.objectWithoutProperties(_props, ['color', 'size', 'variant']);
+
+	      // button attributes
+
+	      for (k in btnAttrs) {
+	        v = this.props[k];
+	        if (v !== 'default') cls += ' ' + btnClass + '--' + v;
+	      }
+
+	      // ripple attributes
+	      if (ripple) {
+	        rippleCls += ' mui--is-visible';
+
+	        // handle animation
+	        if (ripple.isAnimating) rippleCls += ' mui--is-animating';
+
+	        // style attrs
+	        rippleStyle = {
+	          width: ripple.diameter,
+	          height: ripple.diameter,
+	          top: ripple.top,
+	          left: ripple.left
+	        };
+	      }
+
+	      return _react2.default.createElement(
+	        'button',
+	        babelHelpers.extends({}, reactProps, {
+	          ref: 'buttonEl',
+	          className: cls + ' ' + this.props.className,
+	          onMouseUp: this.onMouseUpCB,
+	          onMouseDown: this.onMouseDownCB,
+	          onMouseLeave: this.onMouseLeaveCB,
+	          onTouchStart: this.onTouchStartCB,
+	          onTouchEnd: this.onTouchEndCB
+	        }),
+	        this.props.children,
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'mui-btn__ripple-container' },
+	          _react2.default.createElement('span', { ref: 'rippleEl', className: rippleCls, style: rippleStyle })
+	        )
+	      );
+	    }
+	  }]);
+	  return Button;
+	}(_react2.default.Component);
+
+	/** Define module API */
+
+
+	Button.propTypes = {
+	  color: PropTypes.oneOf(['default', 'primary', 'danger', 'dark', 'accent']),
+	  size: PropTypes.oneOf(['default', 'small', 'large']),
+	  variant: PropTypes.oneOf(['default', 'flat', 'raised', 'fab'])
+	};
+	Button.defaultProps = {
+	  className: '',
+	  color: 'default',
+	  size: 'default',
+	  variant: 'default'
+	};
+	exports.default = Button;
+	module.exports = exports['default'];
+
+/***/ },
+/* 677 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = reducer;
+	function reducer() {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+			canalComunicacao: null,
+			fetching: false,
+			fetched: false,
+			error: null
+		};
+		var action = arguments[1];
+
+
+		switch (action.type) {
+			case "NEW_CANAL_COMUNICACAO":
+				{
+					state.canalComunicacao = action.payload;
+					return state;
+				}
+
+		}
+
+		return state;
+	}
+
+/***/ },
+/* 678 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.novoCanal = novoCanal;
+
+	var _axios = __webpack_require__(293);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function novoCanal(solicitacaoId, vereadorId, mensagem) {
+		return function (dispatch) {
+			var params = {
+				solicitacaoId: solicitacaoId,
+				vereadorId: vereadorId,
+				mensagem: mensagem
+			};
+			_axios2.default.post("http://localhost:9000/canalComunicacao/entrarEmContato", params).then(function (response) {
+				dispatch({ type: "NEW_CANAL_COMUNICACAO", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
 
 /***/ }
 /******/ ]);

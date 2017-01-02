@@ -32,7 +32,7 @@ export default class SolicitationList extends React.Component{
   	render() {
 	    return (
 	     	<div className="dashboardWidgetList">
-	     		<h4 className="dashboardWidgetTitle">Lista de solicitações</h4>
+	     		<h4 className="dashboardWidgetTitle">Solicitações novas</h4>
 	     		{(this.state.solicitacoes)?(this.state.solicitacoes.map(solicitacao =>{
 	     			return (<SolicitationListItem key={solicitacao.id} solicitacao={solicitacao} />)
 	     		})):("")}

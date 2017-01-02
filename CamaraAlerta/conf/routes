@@ -19,13 +19,15 @@ POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenunci
 GET     /denuncia/{idVereador}/{idSolicitacao}  DenunciaController.find
 POST    /denuncia/mudarEstado                   DenunciaController.changeStatus
 
-
 # Vereador
 POST    /vereador/login                         VereadorController.login
 GET     /vereador/listPorCidade                 VereadorController.listVereadoresPorCidade
 GET     /vereador/{id}/listSolicitacoes         VereadorController.listDenunciasPorVereador
 GET     /vereador/{id}/listNovasSolicitacoes    VereadorController.listNovasDenunciasPorVereador
 GET     /vereador/{id}/listNumerosMenu          VereadorController.listNumerosMenu
+
+# Canal de comunicação
+POST    /canalComunicacao/entrarEmContato       CanalDeComunicacaoController.entrarEmContato
 
 
 # Ignore favicon requests

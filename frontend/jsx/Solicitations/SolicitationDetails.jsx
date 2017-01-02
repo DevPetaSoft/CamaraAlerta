@@ -5,7 +5,10 @@ import Modal from "react-modal";
 import Menu from "./../Dashboard/Menu.jsx";
 import TopMenu from "./../Dashboard/TopMenu.jsx";
 
+import Button from 'muicss/lib/react/button';
+
 import { mudancaEstado } from "./../Redux/Actions/SolicitacaoActions.jsx";
+import { novoCanal } from "./../Redux/Actions/CanalDeComunicacaoActions.jsx";
 
 import { connect } from "react-redux";
 
@@ -65,6 +68,7 @@ export default class SolicitationDetails extends React.Component{
 
 	}
 
+
 	enviarRelatorio(){
 
 		var relatorio = this.refs.relatorio.value;
@@ -72,6 +76,18 @@ export default class SolicitationDetails extends React.Component{
 		var id = this.state.solicitacao.id;
 
 		this.props.dispatch(mudancaEstado(id,relatorio, status));
+	}
+
+	criarCanalComunicacao(){
+		var mensagem = this.refs.mensagem.value;
+		var vereadorId = localStorage.vereadorId;
+		var id = this.state.solicitacao.id;
+
+		this.props.dispatch(novoCanal(id,vereadorId,mensagem));
+
+		this.setState({
+			modalMessageOpen:false
+		});
 	}
 
 	openModal(){
@@ -83,6 +99,18 @@ export default class SolicitationDetails extends React.Component{
 	closeModal(){
 		this.setState({
 			modalOpen:false
+		});
+	}
+
+	openModalMessage(){
+		this.setState({
+			modalMessageOpen:true
+		});
+	}
+
+	closeModalMessage(){
+		this.setState({
+			modalMessageOpen:false
 		});
 	}
   	render() {
@@ -101,27 +129,48 @@ export default class SolicitationDetails extends React.Component{
 	    return (
 	     	<div className="solicitationBackground">
 
+	     	{/* Modal de Resposta de solicitação*/}
 	     	<Modal
-			  isOpen={this.state.modalOpen}
-			  contentLabel="Resposta da solicitação"
-			  style={modalStyle}
+			    isOpen={this.state.modalOpen}
+			    contentLabel="Resposta da solicitação"
+   			    style={modalStyle}
+				shouldCloseOnOverlayClick={false}
 			>
 			  <h4 className="solicitationModalTitle	">Resposta da solicitação</h4>
 			  <p>Relatório:</p>
-			  <textarea className="solicitationModalTextArea"ref="relatorio" />
+			  <textarea className="solicitationModalTextArea"ref="relatorio" defaultValue={(this.state.solicitacao)?(this.state.solicitacao.relatorio):("") } />
 			  <p>Status: </p>
-			  <select ref="status">
+			  <select ref="status" defaultValue={(this.state.solicitacao)?(this.state.solicitacao.status):("")}>
 			  	<option value="0">Pendente</option>
 			  	<option value="1">Em andamento</option>
 			  	<option value="2">Finalizado com sucesso</option>
 			  	<option value="3">Recusado</option>
 			  </select>
 			  <br/>
+
 			  <div className="solicitationModalButtons">
-				  <button onClick={this.closeModal.bind(this)}>Fechar</button>
-				  <button className="solicitationModalSendButton" onClick={this.enviarRelatorio.bind(this)}>Enviar</button>
+
+				    <Button variant="raised" onClick={this.closeModal.bind(this)}>Fechar</Button>
+	          		<Button className="solicitationModalSendButton" onClick={this.enviarRelatorio.bind(this)} variant="raised" color="primary">Enviar</Button>
+				  
 			  </div>
 			</Modal>
+
+		{/* Modal de abertura de canal de conversa */}
+		<Modal
+			isOpen={this.state.modalMessageOpen}
+			contentLabel="Mandar mensagem para solicitante"
+			style={modalStyle}
+			shouldCloseOnOverlayClick={false}
+		>
+			<h4 className="solicitationModalTitle">Mandar mensagem para solicitante</h4>
+			<p>Mensagem:</p>
+			<textarea className="solicitationModalTextArea" ref="mensagem" />
+			<div className="solicitationModalButtons">
+				    <Button variant="raised" onClick={this.closeModalMessage.bind(this)}>Fechar</Button>
+	          		<Button className="solicitationModalSendButton" onClick={this.criarCanalComunicacao.bind(this)} variant="raised" color="primary">Enviar</Button>	  
+			 </div>
+		</Modal>
 
 	     		<div className="col-sm-6">
 
@@ -134,7 +183,7 @@ export default class SolicitationDetails extends React.Component{
 		     		</p>
 
 		     		<h4>Autor</h4>
-		     		<p>{this.state.solicitacao.cidadao.nome}<button className="contactButton">Entrar em contato</button></p>
+		     		<p>{this.state.solicitacao.cidadao.nome}<button className="contactButton" onClick={this.openModalMessage.bind(this)}>Entrar em contato</button></p>
 
 		     		<h4>Status</h4>
 		     		<p>{this.getStatus(this.state.solicitacao.status)}</p>
