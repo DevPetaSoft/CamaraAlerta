@@ -28,8 +28,7 @@ public class CanalDeComunicacao extends GenericModel implements Serializable {
     @ManyToOne(targetEntity=Vereador.class, fetch=FetchType.EAGER, optional=false)
     public Vereador vereador;
 
-    @OneToMany
-    @JoinColumn(name="mensagens")
+    @Transient
     public List<MensagemChat> mensagens;
 
 

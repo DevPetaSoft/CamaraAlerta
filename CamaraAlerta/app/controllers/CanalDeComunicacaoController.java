@@ -2,6 +2,7 @@ package controllers;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dto.MensagensDTO;
 import models.CanalDeComunicacao;
 import models.Denuncia;
 import models.MensagemChat;
@@ -10,6 +11,7 @@ import play.Logger;
 import play.mvc.Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gudominguete on 02/01/17.
@@ -71,6 +73,101 @@ public class CanalDeComunicacaoController extends Controller {
 
         renderJSON(canal);
 
+
+    }
+
+
+    /**
+     * Função para listar todos os canais de comunicação de um vereador
+     * @param idVereador
+     */
+    public void listCanais(Integer idVereador){
+
+        if(idVereador == null){
+            renderJSON(new String("Não foi passado um id como parametro"));
+        }
+
+        Vereador vereador = Vereador.findById(idVereador);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi possivel encontrar um vereador com esse id"));
+        }
+
+        List<CanalDeComunicacao> list = CanalDeComunicacao.find("byVereador", vereador).fetch();
+
+        renderJSON(list);
+
+    }
+
+
+    /**
+     * Função para listar todas as mensagens de um canal de mensagens
+     * @param idCanal
+     */
+    public void listarMensagensCanal(Integer idCanal){
+
+        if(idCanal == null){
+            renderJSON(new String("Não foi passado um id do canal de comunicação"));
+        }
+
+        CanalDeComunicacao canal = CanalDeComunicacao.findById(idCanal);
+
+        if(canal == null){
+            renderJSON(new String("N"));
+        }
+
+        List<MensagemChat> list = MensagemChat.find("byCanal", canal).fetch();
+
+        MensagensDTO dto = new MensagensDTO();
+
+        dto.setList(list);
+        dto.setCanal(canal);
+
+        renderJSON(dto);
+    }
+
+
+    /**
+     * Função para adicionar uma nova mensagem no canal de comunicação de uma denuncia
+     * @param body
+     */
+    public void novaMensagemVereador(String body){
+
+        JsonParser parser = new JsonParser();
+        JsonObject json =(JsonObject) parser.parse(body);
+
+        String mensagem = json.get("mensagem").getAsString();
+
+        if(mensagem == null){
+            renderJSON(new String("Não foi passada uma mensagem como parametro"));
+        }
+
+        Integer canalId = json.get("canalId").getAsInt();
+
+        if(mensagem == null){
+            renderJSON(new String("Não foi passado um id do canal de comunicação"));
+        }
+
+        CanalDeComunicacao canal = CanalDeComunicacao.findById(canalId);
+
+        if(canal == null){
+            renderJSON(new String("Não foi possivel encontrar um canal de comunicação"));
+        }
+
+        MensagemChat mensagemChat = new MensagemChat();
+        mensagemChat.mensagem = mensagem;
+        mensagemChat.enviadoPor = 0;
+        mensagemChat.novo = true;
+        mensagemChat.ordem = (int) MensagemChat.count("canal = ?", canal);
+        mensagemChat.canal = canal;
+
+        mensagemChat.save();
+
+        MensagensDTO dto = new MensagensDTO();
+        dto.setCanal(canal);
+        dto.setList(MensagemChat.find("byCanal",canal).<MensagemChat>fetch());
+
+        renderJSON(dto);
 
     }
 }

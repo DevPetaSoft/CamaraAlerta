@@ -28,6 +28,10 @@ GET     /vereador/{id}/listNumerosMenu          VereadorController.listNumerosMe
 
 # Canal de comunicação
 POST    /canalComunicacao/entrarEmContato       CanalDeComunicacaoController.entrarEmContato
+GET     /canalComunicacao/vereador/{idVereador} CanalDeComunicacaoController.listCanais
+GET     /canalComunicacao/mensagem/{idCanal}    CanalDeComunicacaoController.listarMensagensCanal
+POST    /canalComunicacao/novaMensagem          CanalDeComunicacaoController.novaMensagemVereador
+
 
 
 # Ignore favicon requests

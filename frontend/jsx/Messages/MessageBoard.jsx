@@ -9,26 +9,75 @@ import MessageChatItem from "./MessageChatItem.jsx";
 import Form from 'muicss/lib/react/form';
 import Input from 'muicss/lib/react/input';
 
+import { connect } from "react-redux";
 
-export default React.createClass({
+
+import { novaMensagem } from "./../Redux/Actions/CanalDeComunicacaoActions.jsx";
+
+import store from "./../Redux/Store.jsx";
 
 
-  	render: function() {
+
+@connect((store) => {
+	return {
+		solicitacoes: store.solicitacao
+	};
+})
+export default class SolicitationList extends React.Component{
+	componentDidMount(){
+
+		store.subscribe(()=>{
+			var storeState = store.getState();
+			this.setState({
+				listaMensagens : storeState.canalComunicacao.listaDeMensagens,
+				canalComunicacao: storeState.canalComunicacao.canalComunicacaoSelecionado
+			});
+		});
+	}
+
+	sendMessage(){
+		var mensagem = "";
+		if(this.refs.message.state){		
+			mensagem = this.refs.message.state.innerValue;
+		}
+		this.props.dispatch(novaMensagem(this.state.canalComunicacao.id, mensagem));
+	}
+
+	handleEvent(code,event){
+		
+		//Preenche os valores dos inputs
+		this.refs[code].setState({
+		    innerValue: event.target.value
+		});
+
+	}
+
+  	render() {
+  		if(!this.state){
+  			return(<div className="messageBoardBackground">
+  				Nenhuma mensagem selecionada
+  				</div>)
+  		}
+  		if(!this.state.canalComunicacao ){
+  			return(<div className="messageBoardBackground">
+  				Nenhuma mensagem selecionada
+  				</div>)
+  		}
 	    return (
 	     	<div className="messageBoardBackground">
-	     		<h4>Titulo da solicitação</h4>
+	     		<h4>{this.state.canalComunicacao.denuncia.titulo}</h4>
 	     		<div className="messageBoardBackgroundContainer">
 
 		     		<div className="messageInputBlock">
 		     			<div className="messagesBlock">
-			     			<MessageChatItem yoursefl={false}/>
-			     			<MessageChatItem yoursefl={true}/>
-			     			<MessageChatItem yoursefl={false}/>
-			     			<MessageChatItem yoursefl={true}/>
+		     				{this.state.listaMensagens.map((mensagem,idx) =>{
+		     					return(<MessageChatItem key={idx} yoursefl={(mensagem.enviadoPor == 0)?(true):(false)} mensagem={mensagem}/>)
+		     				})
+		     				}
 		     			</div>
 		     			
-			     		<Input hint="Digite sua mensagem aqui..." className="messageInput col-md-10"/>
-			     		<button className="messageButton col-md-2"><img src="public/icons/send.svg" /></button>
+			     		<Input onChange={this.handleEvent.bind(this,"message")} ref="message" hint="Digite sua mensagem aqui..." className="messageInput col-md-10"/>
+			     		<button onClick={this.sendMessage.bind(this)} className="messageButton col-md-2"><img src="public/icons/send.svg" /></button>
 		     		</div>
 
 	     		</div>
@@ -36,4 +85,4 @@ export default React.createClass({
 	      	</div>
 	    );
   	}
-});
+}

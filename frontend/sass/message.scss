@@ -31,6 +31,7 @@
 
 			bottom: 0;
 			position: absolute;
+			width:100%;
 			.messagesBlock{
 				overflow-y: auto;
 				height: 390px;
@@ -72,7 +73,7 @@
 .messageItemChatBackgroundClient{
 	width: 75%;
 	float: right;
-	margin-right: 5%;
+	margin-right: 7%;
 	border: 1px solid #ccc;
 	padding: 5px;
 	border-radius: 10px;
