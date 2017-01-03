@@ -104,6 +104,40 @@ public class DenunciaController extends Controller {
     }
 
     /**
+     * Listagem de uma solicitação por cidadão
+     * @param idCidadao
+     * @param idSolicitacao
+     */
+    public void findSolicitacaoUsuario(String idCidadao, String idSolicitacao){
+        Integer idCidadaoInt = Integer.parseInt(idCidadao);
+        Integer idSolicitacaoInt = Integer.parseInt(idSolicitacao);
+
+        if(idCidadaoInt == null){
+            renderJSON(new String("Não foi passado um cidadão como parametro"));
+        }
+
+        if(idSolicitacaoInt == null){
+            renderJSON(new String("Não foi passado um id de solicitacao como parametro"));
+        }
+
+        Cidadao cidadao = Cidadao.findById(idCidadaoInt);
+
+        if(cidadao == null){
+            renderJSON(new String("Não foi possivel encontrar um cidadao com o id passado"));
+        }
+
+        Denuncia solicitacao = Denuncia.findById(idSolicitacaoInt);
+
+        if(solicitacao == null){
+            renderJSON(new String("Não foi possivel encontrar uma solicitação com o id passado"));
+        }
+
+        if(solicitacao.cidadao.id == cidadao.id){
+            renderJSON(solicitacao);
+        }
+    }
+
+    /**
      * Listagem de uma solicitacao
      * @param idVereador
      * @param idSolicitacao
