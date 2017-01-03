@@ -24,6 +24,21 @@ export default function reducer(state={
 			state.numeroDeNovasMensagens = action.payload.numerosDeMensagensNovas;
 			return state;
 		}
+		case "FETCHING_PROFILE_START":{
+			state.fetching = true;
+			state.fetched = false;
+			return state;
+		}
+		case "FETCHING_PROFILE_FINISH":{
+			state.fetching = false;
+			state.fetched = true;
+			state.vereador = action.payload;
+			return state;
+		}
+		case "EDIT_PROFILE":{
+			state.vereador = action.payload;
+			return state;
+		}
 	}
 
 	return state;

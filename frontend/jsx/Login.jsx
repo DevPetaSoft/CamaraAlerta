@@ -36,7 +36,6 @@ export default class Login extends React.Component {
 			}else{
 				console.log("error");
 			}
-			console.log(store.getState())
 			}
 		);
 

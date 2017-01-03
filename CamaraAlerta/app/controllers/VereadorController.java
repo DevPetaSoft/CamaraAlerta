@@ -135,4 +135,61 @@ public class VereadorController extends Controller {
         dto.setNumerosDeMensagensNovas(0);
         renderJSON(dto);
     }
+
+
+    /**
+     * Lista o perfil de um vereador
+     * @param id
+     */
+    public void listPerfilVereador(Integer id){
+
+        if(id == null){
+            renderJSON("Não foi passado um id para realizar a busca");
+        }
+
+        Vereador vereador = Vereador.findById(id);
+
+        if(vereador == null){
+            renderJSON("Não foi possivel encontrar um vereador com esse Id");
+        }
+
+        renderJSON(vereador);
+
+    }
+
+    /**
+     * Função para editar o perfil de um usuário
+     * @param body
+     */
+    public void editProfile(String body){
+        Logger.info("Edit profile");
+        JsonParser parser = new JsonParser();
+        JsonObject json =(JsonObject) parser.parse(body);
+
+
+        Integer vereadorId = json.get("id").getAsInt();
+
+        if(vereadorId == null){
+            renderJSON(new String("Não foi passado um id de vereador"));
+        }
+
+        Vereador vereador = Vereador.findById(vereadorId);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi possivel encontrar um vereador com esse ID"));
+        }
+
+        String nome = json.get("nome").getAsString();
+        String telefone = json.get("telefone").getAsString();
+        String cpf = json.get("cpf").getAsString();
+
+        vereador.nome = nome;
+        vereador.telefone = telefone;
+        vereador.cpf = cpf;
+        vereador.save();
+
+        renderJSON(vereador);
+    }
+
+    
 }

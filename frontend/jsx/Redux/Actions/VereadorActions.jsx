@@ -30,3 +30,35 @@ export function listagemNovaSolicitacao(id){
 			})
 	}
 }
+
+
+export function listVereadorProfile(id){
+	return function (dispatch){
+		dispatch({type: "FETCHING_PROFILE_START"})
+		axios.get("http://localhost:9000/vereador/"+id+"/profile")
+			.then((response) => {
+				dispatch({type: "FETCHING_PROFILE_FINISH", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}
+
+export function editProfile(id, nome, telefone, cpf){
+	return function (dispatch){
+		var params = {
+			id:id,
+			nome:nome,
+			telefone:telefone,
+			cpf:cpf
+		};
+		axios.post("http://localhost:9000/vereador/editProfile", params)
+			.then((response) => {
+				dispatch({type: "EDIT_PROFILE", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}
