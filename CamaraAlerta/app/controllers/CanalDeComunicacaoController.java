@@ -58,7 +58,11 @@ public class CanalDeComunicacaoController extends Controller {
             canal.denuncia = denuncia;
             canal.cidadao = denuncia.cidadao;
             canal.save();
-
+            /**
+            Mudar o atributo da denuncia que permite comunicação
+             */
+            denuncia.comunicacaoPermitida = true;
+            denuncia.save();
         }
 
 
@@ -73,6 +77,31 @@ public class CanalDeComunicacaoController extends Controller {
 
         renderJSON(canal);
 
+
+    }
+
+    /**
+     * Função para listar as mensagens de um canatal pelo id da denuncia
+     * @param idDenuncia
+     */
+    public void listarMensagensCanalPorIdDenuncia(Integer idDenuncia){
+        if(idDenuncia == null){
+            renderJSON(new String("Não foi passado um id da solicitação"));
+        }
+
+        CanalDeComunicacao canal = CanalDeComunicacao.find("byDenuncia_id", idDenuncia).first();
+        if(canal == null){
+            renderJSON(new String("N"));
+        }
+
+        List<MensagemChat> list = MensagemChat.find("byCanal", canal).fetch();
+
+        MensagensDTO dto = new MensagensDTO();
+
+        dto.setList(list);
+        dto.setCanal(canal);
+
+        renderJSON(dto);
 
     }
 
@@ -169,5 +198,38 @@ public class CanalDeComunicacaoController extends Controller {
 
         renderJSON(dto);
 
+    }
+
+    /**
+     * Função para adicionar uma nova mensagem vinda de cidadão no canal de comunicação de uma denuncia
+     * @param mensagem
+     * @param canal
+     */
+    public void novaMensagemCidadao(String mensagem, String canal){
+        if(mensagem == null){
+            renderJSON(new String("Não foi passada uma mensagem como parametro"));
+        }
+        if(canal == null){
+            renderJSON(new String("Não foi passado um id do canal de comunicação"));
+        }
+        Integer intCanal = Integer.parseInt(canal);
+        CanalDeComunicacao canalCom = CanalDeComunicacao.findById(intCanal);
+
+        if(canalCom == null){
+            renderJSON(new String("Não foi possivel encontrar um canal de comunicação"));
+        }
+
+        MensagemChat mensagemChat = new MensagemChat();
+        mensagemChat.mensagem = mensagem;
+        mensagemChat.enviadoPor = 1;
+        mensagemChat.novo = true;
+        mensagemChat.ordem = (int) MensagemChat.count("canal = ?", canalCom);
+        mensagemChat.canal = canalCom;
+
+        mensagemChat.save();
+
+        //enviar todas mensagens de volta??
+
+        renderJSON(new String("S"));
     }
 }

@@ -32,7 +32,9 @@ POST    /vereador/editProfile                   VereadorController.editProfile
 POST    /canalComunicacao/entrarEmContato       CanalDeComunicacaoController.entrarEmContato
 GET     /canalComunicacao/vereador/{idVereador} CanalDeComunicacaoController.listCanais
 GET     /canalComunicacao/mensagem/{idCanal}    CanalDeComunicacaoController.listarMensagensCanal
+GET     /canalComunicacao/mensPorD/{idDenuncia} CanalDeComunicacaoController.listarMensagensCanalPorIdDenuncia
 POST    /canalComunicacao/novaMensagem          CanalDeComunicacaoController.novaMensagemVereador
+POST    /canalComunicacao/novaMensagemCidadao   CanalDeComunicacaoController.novaMensagemCidadao
 
 
 
