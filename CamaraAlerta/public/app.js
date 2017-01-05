@@ -38386,6 +38386,11 @@
 					state.vereador = action.payload;
 					return state;
 				}
+			case "EDIT_CONFIGURATION":
+				{
+					state.vereador = action.payload;
+					return state;
+				}
 		}
 
 		return state;
@@ -39977,6 +39982,7 @@
 	exports.listagemNovaSolicitacao = listagemNovaSolicitacao;
 	exports.listVereadorProfile = listVereadorProfile;
 	exports.editProfile = editProfile;
+	exports.editConfiguration = editConfiguration;
 
 	var _axios = __webpack_require__(294);
 
@@ -40035,6 +40041,22 @@
 			};
 			_axios2.default.post("http://localhost:9000/vereador/editProfile", params).then(function (response) {
 				dispatch({ type: "EDIT_PROFILE", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function editConfiguration(id, solicitationNotification, messageNotification) {
+		return function (dispatch) {
+			var params = {
+				id: id,
+				solicitationNotification: solicitationNotification,
+				messageNotification: messageNotification
+			};
+			_axios2.default.post("http://localhost:9000/vereador/editConfiguration", params).then(function (response) {
+				console.log(response);
+				dispatch({ type: "EDIT_CONFIGURATION", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -63252,8 +63274,13 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
 
 	var _react = __webpack_require__(12);
 
@@ -63267,25 +63294,79 @@
 
 	var _MapsItem2 = _interopRequireDefault(_MapsItem);
 
+	var _SolicitacaoActions = __webpack_require__(328);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _react2.default.createClass({
-			displayName: "MapsList",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-			render: function render() {
-					return _react2.default.createElement(
-							"div",
-							{ className: "dashboardWidgetList" },
-							_react2.default.createElement(
-									"h4",
-									{ className: "dashboardWidgetTitle" },
-									"Lista de pontos de solicita\xE7\xF5es"
-							),
-							_react2.default.createElement(_MapsItem2.default, null),
-							_react2.default.createElement(_MapsItem2.default, null)
-					);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var MapsList = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			solicitacoes: store.solicitacao
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(MapsList, _React$Component);
+
+		function MapsList() {
+			_classCallCheck(this, MapsList);
+
+			return _possibleConstructorReturn(this, (MapsList.__proto__ || Object.getPrototypeOf(MapsList)).apply(this, arguments));
+		}
+
+		_createClass(MapsList, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					_this2.setState({
+						solicitacoes: _Store2.default.getState().solicitacao.solicitacoes
+					});
+				});
+
+				this.props.dispatch((0, _SolicitacaoActions.listagemSolicitacao)(localStorage.vereadorId));
 			}
-	});
+		}, {
+			key: "render",
+			value: function render() {
+				if (!this.state) {
+					return _react2.default.createElement("div", { className: "dashboardWidgetList" });
+				}
+				if (!this.state.solicitacoes) {
+					return _react2.default.createElement("div", { className: "dashboardWidgetList" });
+				}
+				return _react2.default.createElement(
+					"div",
+					{ className: "dashboardWidgetList" },
+					_react2.default.createElement(
+						"h4",
+						{ className: "dashboardWidgetTitle" },
+						"Lista de pontos de solicita\xE7\xF5es"
+					),
+					this.state.solicitacoes.map(function (solicitacao, idx) {
+						return _react2.default.createElement(
+							"div",
+							null,
+							_react2.default.createElement(_MapsItem2.default, { key: idx, solicitacao: solicitacao })
+						);
+					})
+				);
+			}
+		}]);
+
+		return MapsList;
+	}(_react2.default.Component)) || _class);
+	exports.default = MapsList;
 
 /***/ },
 /* 672 */
@@ -63322,7 +63403,7 @@
 											null,
 											"Solicitante:"
 									),
-									"Gustavo"
+									this.props.solicitacao.cidadao.nome
 							),
 							_react2.default.createElement(
 									"div",
@@ -63332,7 +63413,8 @@
 											null,
 											"Titulo:"
 									),
-									"Solicita\xE7\xE3o teste"
+									" ",
+									this.props.solicitacao.titulo
 							),
 							_react2.default.createElement(
 									"div",
@@ -63340,9 +63422,9 @@
 									_react2.default.createElement(
 											"span",
 											null,
-											"Ultima mensagem:"
+											"Data cria\xE7\xE3o:"
 									),
-									" 24/12/2016"
+									this.props.solicitacao.data
 							)
 					);
 			}
@@ -63357,6 +63439,11 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
 
 	var _react = __webpack_require__(12);
 
@@ -63366,38 +63453,91 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _SolicitacaoActions = __webpack_require__(328);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
 	var _reactGoogleMaps = __webpack_require__(344);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var GettingStartedGoogleMap = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
-		return _react2.default.createElement(_reactGoogleMaps.GoogleMap, {
-			ref: props.onMapLoad,
-			defaultZoom: 3,
-			defaultCenter: { lat: -23, lng: -45 },
-			onClick: props.onMapClick
-		});
+		return _react2.default.createElement(
+			_reactGoogleMaps.GoogleMap,
+			{
+				ref: props.onMapLoad,
+				defaultZoom: 3,
+				defaultCenter: { lat: -23, lng: -45 },
+				onClick: props.onMapClick
+			},
+			props.markers.map(function (marker, idx) {
+				return _react2.default.createElement(_reactGoogleMaps.Marker, { key: idx, position: { lat: marker.coordenadas.latitude, lng: marker.coordenadas.longitude } });
+			})
+		);
 	});
 
-	exports.default = _react2.default.createClass({
-		displayName: "MapsContainer",
-		getInitialState: function getInitialState() {
-			return {};
-		},
+	var MapsList = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			solicitacoes: store.solicitacao
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(MapsList, _React$Component);
 
+		function MapsList() {
+			_classCallCheck(this, MapsList);
 
-		render: function render() {
-			return _react2.default.createElement(
-				"div",
-				{ className: "mapsBackground" },
-				_react2.default.createElement(GettingStartedGoogleMap, {
-					containerElement: _react2.default.createElement("div", { style: { height: "100%" } }),
-					mapElement: _react2.default.createElement("div", { style: { height: "100%" } })
-
-				})
-			);
+			return _possibleConstructorReturn(this, (MapsList.__proto__ || Object.getPrototypeOf(MapsList)).apply(this, arguments));
 		}
-	});
+
+		_createClass(MapsList, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					_this2.setState({
+						solicitacoes: _Store2.default.getState().solicitacao.solicitacoes
+					});
+				});
+
+				this.props.dispatch((0, _SolicitacaoActions.listagemSolicitacao)(localStorage.vereadorId));
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				if (!this.state) {
+					return _react2.default.createElement("div", { className: "mapsBackground" });
+				}
+				if (!this.state.solicitacoes) {
+					return _react2.default.createElement("div", { className: "mapsBackground" });
+				}
+
+				console.log(this.state.solicitacoes);
+				return _react2.default.createElement(
+					"div",
+					{ className: "mapsBackground" },
+					_react2.default.createElement(GettingStartedGoogleMap, {
+						containerElement: _react2.default.createElement("div", { style: { height: "100%" } }),
+						mapElement: _react2.default.createElement("div", { style: { height: "100%" } }),
+						markers: this.state.solicitacoes
+					})
+				);
+			}
+		}]);
+
+		return MapsList;
+	}(_react2.default.Component)) || _class);
+	exports.default = MapsList;
 
 /***/ },
 /* 674 */
@@ -63586,6 +63726,11 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
 
 	var _react = __webpack_require__(12);
 
@@ -63615,44 +63760,126 @@
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
+	var _VereadorActions = __webpack_require__(293);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Store = __webpack_require__(269);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _react2.default.createClass({
-		displayName: "ConfigurationBoard",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-		render: function render() {
-			return _react2.default.createElement(
-				"div",
-				{ className: "dashboardBody" },
-				_react2.default.createElement(_TopMenu2.default, null),
-				_react2.default.createElement(_Menu2.default, null),
-				_react2.default.createElement(
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ConfigurationBoard = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			vereador: store.vereador
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(ConfigurationBoard, _React$Component);
+
+		function ConfigurationBoard() {
+			_classCallCheck(this, ConfigurationBoard);
+
+			return _possibleConstructorReturn(this, (ConfigurationBoard.__proto__ || Object.getPrototypeOf(ConfigurationBoard)).apply(this, arguments));
+		}
+
+		_createClass(ConfigurationBoard, [{
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					_this2.setState({
+						vereador: _Store2.default.getState().vereador.vereador
+					});
+				});
+				this.props.dispatch((0, _VereadorActions.listVereadorProfile)(localStorage.vereadorId));
+			}
+		}, {
+			key: "handleEvent",
+			value: function handleEvent(code, event) {
+				//Preenche os valores dos inputs
+				this.refs[code].setState({
+					innerValue: event.target.checked
+				});
+			}
+		}, {
+			key: "sendProfile",
+			value: function sendProfile() {
+				var solicitationNotification, messageNotification;
+				if (this.refs.solicitationNotification.state == null) {
+					solicitationNotification = this.state.vereador.notificacaoSolicitacao;
+				} else {
+					solicitationNotification = this.refs.solicitationNotification.state.innerValue;
+				}
+				if (this.refs.messageNotification.state == null) {
+					messageNotification = this.state.vereador.notificacaoMensagem;
+				} else {
+					messageNotification = this.refs.messageNotification.state.innerValue;
+				}
+				this.props.dispatch((0, _VereadorActions.editConfiguration)(localStorage.vereadorId, solicitationNotification, messageNotification));
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				if (!this.state) {
+					return _react2.default.createElement("div", null);
+				}
+				if (!this.state.vereador) {
+					return _react2.default.createElement("div", null);
+				}
+				return _react2.default.createElement(
 					"div",
-					{ className: "dashboardContainder" },
+					{ className: "dashboardBody" },
+					_react2.default.createElement(_TopMenu2.default, null),
+					_react2.default.createElement(_Menu2.default, null),
 					_react2.default.createElement(
 						"div",
-						{ className: "col-sm-offset-3 col-sm-6 configurationBackground" },
+						{ className: "dashboardContainder" },
 						_react2.default.createElement(
-							"h4",
-							{ className: "profileTitle" },
-							"Configura\xE7\xF5es"
-						),
-						_react2.default.createElement(
-							_form2.default,
-							{ className: "loginPanel" },
-							_react2.default.createElement(_checkbox2.default, { name: "solicitationNotification", label: "Habilitar notifica\xE7\xE3o por nova solicita\xE7\xE3o", defaultChecked: true }),
-							_react2.default.createElement(_checkbox2.default, { name: "messageNotification", label: "Habilitar notifica\xE7\xE3o por nova mensagem", defaultChecked: true }),
+							"div",
+							{ className: "col-sm-offset-3 col-sm-6 configurationBackground" },
 							_react2.default.createElement(
-								"button",
-								{ className: "configurationButton" },
-								_react2.default.createElement("img", { src: "public/icons/send.svg" })
+								"h4",
+								{ className: "profileTitle" },
+								"Configura\xE7\xF5es"
+							),
+							_react2.default.createElement(
+								"div",
+								{ className: "loginPanel" },
+								_react2.default.createElement(_checkbox2.default, {
+									name: "solicitationNotification",
+									label: "Habilitar notifica\xE7\xE3o por nova solicita\xE7\xE3o",
+									ref: "solicitationNotification",
+									onChange: this.handleEvent.bind(this, "solicitationNotification"),
+									defaultChecked: this.state.vereador.notificacaoSolicitacao }),
+								_react2.default.createElement(_checkbox2.default, {
+									name: "messageNotification",
+									label: "Habilitar notifica\xE7\xE3o por nova mensagem",
+									ref: "messageNotification",
+									onChange: this.handleEvent.bind(this, "messageNotification"),
+									defaultChecked: this.state.vereador.notificacaoMensagem }),
+								_react2.default.createElement(
+									"button",
+									{ className: "configurationButton", onClick: this.sendProfile.bind(this) },
+									_react2.default.createElement("img", { src: "public/icons/send.svg" })
+								)
 							)
 						)
 					)
-				)
-			);
-		}
-	});
+				);
+			}
+		}]);
+
+		return ConfigurationBoard;
+	}(_react2.default.Component)) || _class);
+	exports.default = ConfigurationBoard;
 
 /***/ },
 /* 676 */

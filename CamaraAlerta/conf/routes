@@ -27,6 +27,7 @@ GET     /vereador/{id}/listNovasSolicitacoes    VereadorController.listNovasDenu
 GET     /vereador/{id}/listNumerosMenu          VereadorController.listNumerosMenu
 GET     /vereador/{id}/profile                  VereadorController.listPerfilVereador
 POST    /vereador/editProfile                   VereadorController.editProfile
+POST    /vereador/editConfiguration             VereadorController.editConfigurations
 
 # Canal de comunicação
 POST    /canalComunicacao/entrarEmContato       CanalDeComunicacaoController.entrarEmContato

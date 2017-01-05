@@ -39,6 +39,10 @@ export default function reducer(state={
 			state.vereador = action.payload;
 			return state;
 		}
+		case "EDIT_CONFIGURATION":{
+			state.vereador = action.payload;
+			return state;
+		}
 	}
 
 	return state;

@@ -60,6 +60,7 @@ export default class EditProfile extends React.Component{
 		localStorage.setItem("vereadorNome",nome);
 		this.props.dispatch(editProfile(localStorage.vereadorId, nome, telefone, cpf));
 	}
+	
   	render() {
 		if(!this.state){
 			return(<div></div>);

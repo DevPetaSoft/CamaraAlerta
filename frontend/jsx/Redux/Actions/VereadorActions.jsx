@@ -62,3 +62,21 @@ export function editProfile(id, nome, telefone, cpf){
 			})
 	}
 }
+
+export function editConfiguration(id, solicitationNotification, messageNotification){
+	return function (dispatch){
+		var params = {
+			id:id,
+			solicitationNotification:solicitationNotification,
+			messageNotification:messageNotification
+		};
+		axios.post("http://localhost:9000/vereador/editConfiguration", params)
+			.then((response) => {
+				console.log(response);
+				dispatch({type: "EDIT_CONFIGURATION", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}

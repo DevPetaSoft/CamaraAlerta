@@ -191,5 +191,32 @@ public class VereadorController extends Controller {
         renderJSON(vereador);
     }
 
-    
+    public void editConfigurations(String body){
+        Logger.info("Edit configurations");
+        JsonParser parser = new JsonParser();
+        JsonObject json =(JsonObject) parser.parse(body);
+
+
+        Integer vereadorId = json.get("id").getAsInt();
+
+        if(vereadorId == null){
+            renderJSON(new String("Não foi passado um id de vereador"));
+        }
+
+        Vereador vereador = Vereador.findById(vereadorId);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi possivel encontrar um vereador com esse ID"));
+        }
+
+        boolean solicitationNotification = json.get("solicitationNotification").getAsBoolean();
+        boolean messageNotification = json.get("messageNotification").getAsBoolean();
+
+        vereador.notificacaoSolicitacao = solicitationNotification;
+        vereador.notificacaoMensagem = messageNotification;
+        vereador.save();
+
+        renderJSON(vereador);
+    }
+
 }
