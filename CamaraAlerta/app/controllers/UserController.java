@@ -33,6 +33,15 @@ public class UserController extends Controller {
         }
     }
 
+    public void facebookJaLogado(String email){
+        Cidadao cidadao = Cidadao.find("byEmail", email).first();
+        if(cidadao == null){
+            renderJSON(new String("Erro"));
+        } else {
+            renderJSON(cidadao);
+        }
+    }
+
     // Cria um novo cadastro de um cidadao contendo nome, login, email e senha
     public void novoCadastroCidadao(String nome, String email, String senha){
         try{
