@@ -40000,7 +40000,7 @@
 		params.email = email;
 		params.senha = (0, _md2.default)(senha);
 		return function (dispatch) {
-			_axios2.default.post("http://localhost:9000/vereador/login", params).then(function (response) {
+			_axios2.default.post(window.location.origin + "/vereador/login", params).then(function (response) {
 				dispatch({ type: "VEREADOR_LOGIN", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -40012,7 +40012,7 @@
 		return function (dispatch) {
 
 			dispatch({ type: "FETCHING_NUMBERS_START" });
-			_axios2.default.get("http://localhost:9000/vereador/" + id + "/listNumerosMenu").then(function (response) {
+			_axios2.default.get(window.location.origin + "/vereador/" + id + "/listNumerosMenu").then(function (response) {
 				dispatch({ type: "FETCHING_NUMBERS_FINISH", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -40023,7 +40023,7 @@
 	function listVereadorProfile(id) {
 		return function (dispatch) {
 			dispatch({ type: "FETCHING_PROFILE_START" });
-			_axios2.default.get("http://localhost:9000/vereador/" + id + "/profile").then(function (response) {
+			_axios2.default.get(window.location.origin + "/vereador/" + id + "/profile").then(function (response) {
 				dispatch({ type: "FETCHING_PROFILE_FINISH", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -40039,7 +40039,7 @@
 				telefone: telefone,
 				cpf: cpf
 			};
-			_axios2.default.post("http://localhost:9000/vereador/editProfile", params).then(function (response) {
+			_axios2.default.post(window.location.origin + "/vereador/editProfile", params).then(function (response) {
 				dispatch({ type: "EDIT_PROFILE", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -40054,7 +40054,7 @@
 				solicitationNotification: solicitationNotification,
 				messageNotification: messageNotification
 			};
-			_axios2.default.post("http://localhost:9000/vereador/editConfiguration", params).then(function (response) {
+			_axios2.default.post(window.location.origin + "/vereador/editConfiguration", params).then(function (response) {
 				console.log(response);
 				dispatch({ type: "EDIT_CONFIGURATION", payload: response.data });
 			}).catch(function (err) {
@@ -42436,7 +42436,7 @@
 		return function (dispatch) {
 
 			dispatch({ type: "FETCHING_SOLICITATION_START" });
-			_axios2.default.get("http://localhost:9000/vereador/" + id + "/listSolicitacoes").then(function (response) {
+			_axios2.default.get(window.location.origin + "/vereador/" + id + "/listSolicitacoes").then(function (response) {
 
 				dispatch({ type: "FETCHING_SOLICITATION_FINISH", payload: response.data });
 			}).catch(function (err) {
@@ -42449,7 +42449,7 @@
 		return function (dispatch) {
 
 			dispatch({ type: "FETCHING_SOLICITATION_START" });
-			_axios2.default.get("http://localhost:9000/vereador/" + id + "/listNovasSolicitacoes").then(function (response) {
+			_axios2.default.get(window.location.origin + "/vereador/" + id + "/listNovasSolicitacoes").then(function (response) {
 
 				dispatch({ type: "FETCHING_SOLICITATION_FINISH", payload: response.data });
 			}).catch(function (err) {
@@ -42462,7 +42462,7 @@
 		return function (dispatch) {
 
 			dispatch({ type: "FETCHING_SOLICITATION_ONE_START" });
-			_axios2.default.get("http://localhost:9000/denuncia/" + idVereador + "/" + idSolicitacao).then(function (response) {
+			_axios2.default.get(window.location.origin + "/denuncia/" + idVereador + "/" + idSolicitacao).then(function (response) {
 
 				dispatch({ type: "FETCHING_SOLICITATION_ONE_FINISH", payload: response.data });
 			}).catch(function (err) {
@@ -42478,7 +42478,7 @@
 				relatorio: relatorio,
 				status: status
 			};
-			_axios2.default.post("http://localhost:9000/denuncia/mudarEstado", params).then(function (response) {
+			_axios2.default.post(window.location.origin + "/denuncia/mudarEstado", params).then(function (response) {
 				console.log(response);
 
 				dispatch({ type: "CHANGING_SOLICITATION_STATE", payload: response.data });
@@ -62730,7 +62730,7 @@
 				vereadorId: vereadorId,
 				mensagem: mensagem
 			};
-			_axios2.default.post("http://localhost:9000/canalComunicacao/entrarEmContato", params).then(function (response) {
+			_axios2.default.post(window.location.origin + "/canalComunicacao/entrarEmContato", params).then(function (response) {
 				dispatch({ type: "NEW_CANAL_COMUNICACAO", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -62741,7 +62741,7 @@
 	function listarCanais(vereadorId) {
 		return function (dispatch) {
 			dispatch({ type: "FETCHING_LIST_COMUNICACAO" });
-			_axios2.default.get("http://localhost:9000/canalComunicacao/vereador/" + vereadorId).then(function (response) {
+			_axios2.default.get(window.location.origin + "/canalComunicacao/vereador/" + vereadorId).then(function (response) {
 				dispatch({ type: "FETCHED_LIST_COMUNICACAO", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -62752,7 +62752,7 @@
 	function listarMensagens(canalId) {
 		return function (dispatch) {
 			dispatch({ type: "FETCHING_LIST_MENSAGEM" });
-			_axios2.default.get("http://localhost:9000/canalComunicacao/mensagem/" + canalId).then(function (response) {
+			_axios2.default.get(window.location.origin + "/canalComunicacao/mensagem/" + canalId).then(function (response) {
 				dispatch({ type: "FETCHED_LIST_MENSAGEM", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
@@ -62766,7 +62766,7 @@
 				canalId: canalId,
 				mensagem: mensagem
 			};
-			_axios2.default.post("http://localhost:9000/canalComunicacao/novaMensagem", params).then(function (response) {
+			_axios2.default.post(window.location.origin + "/canalComunicacao/novaMensagem", params).then(function (response) {
 				dispatch({ type: "NEW_MESSAGE", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);

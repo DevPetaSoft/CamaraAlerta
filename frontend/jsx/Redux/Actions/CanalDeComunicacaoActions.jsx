@@ -7,7 +7,7 @@ export function novoCanal(solicitacaoId, vereadorId, mensagem){
 			vereadorId : vereadorId,
 			mensagem : mensagem
 		};
-		axios.post("http://localhost:9000/canalComunicacao/entrarEmContato",params)
+		axios.post(window.location.origin+"/canalComunicacao/entrarEmContato",params)
 			.then((response) => {
 				dispatch({type: "NEW_CANAL_COMUNICACAO", payload:response.data})
 			})
@@ -20,7 +20,7 @@ export function novoCanal(solicitacaoId, vereadorId, mensagem){
 export function listarCanais(vereadorId){
 	return function (dispatch){
 		dispatch({type:"FETCHING_LIST_COMUNICACAO"});
-		axios.get("http://localhost:9000/canalComunicacao/vereador/"+vereadorId)
+		axios.get(window.location.origin+"/canalComunicacao/vereador/"+vereadorId)
 			.then((response) => {
 				dispatch({type: "FETCHED_LIST_COMUNICACAO", payload:response.data})
 			})
@@ -33,7 +33,7 @@ export function listarCanais(vereadorId){
 export function listarMensagens(canalId){
 	return function (dispatch){
 		dispatch({type:"FETCHING_LIST_MENSAGEM"});
-		axios.get("http://localhost:9000/canalComunicacao/mensagem/"+canalId)
+		axios.get(window.location.origin+"/canalComunicacao/mensagem/"+canalId)
 			.then((response) => {
 				dispatch({type: "FETCHED_LIST_MENSAGEM", payload:response.data})
 			})
@@ -50,7 +50,7 @@ export function novaMensagem(canalId, mensagem){
 			canalId : canalId,
 			mensagem : mensagem
 		};
-		axios.post("http://localhost:9000/canalComunicacao/novaMensagem",params)
+		axios.post(window.location.origin+"/canalComunicacao/novaMensagem",params)
 			.then((response) => {
 				dispatch({type: "NEW_MESSAGE", payload:response.data})
 			})

@@ -4,7 +4,7 @@ export function listagemSolicitacao(id){
 	return function (dispatch){
 
 		dispatch({type: "FETCHING_SOLICITATION_START"})
-		axios.get("http://localhost:9000/vereador/"+id+"/listSolicitacoes")
+		axios.get(window.location.origin+"/vereador/"+id+"/listSolicitacoes")
 			.then((response) => {
 
 				dispatch({type: "FETCHING_SOLICITATION_FINISH", payload:response.data})
@@ -19,7 +19,7 @@ export function listagemNovaSolicitacao(id){
 	return function (dispatch){
 
 		dispatch({type: "FETCHING_SOLICITATION_START"})
-		axios.get("http://localhost:9000/vereador/"+id+"/listNovasSolicitacoes")
+		axios.get(window.location.origin+"/vereador/"+id+"/listNovasSolicitacoes")
 			.then((response) => {
 
 				dispatch({type: "FETCHING_SOLICITATION_FINISH", payload:response.data})
@@ -34,7 +34,7 @@ export function listagemUnicaSolicitacao(idSolicitacao, idVereador){
 	return function (dispatch){
 
 		dispatch({type: "FETCHING_SOLICITATION_ONE_START"})
-		axios.get("http://localhost:9000/denuncia/"+idVereador+"/"+idSolicitacao)
+		axios.get(window.location.origin+"/denuncia/"+idVereador+"/"+idSolicitacao)
 			.then((response) => {
 
 				dispatch({type: "FETCHING_SOLICITATION_ONE_FINISH", payload:response.data})
@@ -52,7 +52,7 @@ export function mudancaEstado(idSolicitacao, relatorio, status){
 			relatorio: relatorio,
 			status:status
 		}
-		axios.post("http://localhost:9000/denuncia/mudarEstado",params)
+		axios.post(window.location.origin+"/denuncia/mudarEstado",params)
 			.then((response) => {
 				console.log(response);
 

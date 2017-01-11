@@ -7,7 +7,7 @@ export function vereadorLogin(email, senha){
 	params.email = email;
 	params.senha = md5(senha);
 	return function (dispatch){
-		axios.post("http://localhost:9000/vereador/login",params)
+		axios.post(window.location.origin+"/vereador/login",params)
 			.then((response) => {
 				dispatch({type: "VEREADOR_LOGIN", payload:response.data})
 			})
@@ -21,7 +21,7 @@ export function listagemNovaSolicitacao(id){
 	return function (dispatch){
 
 		dispatch({type: "FETCHING_NUMBERS_START"})
-		axios.get("http://localhost:9000/vereador/"+id+"/listNumerosMenu")
+		axios.get(window.location.origin+"/vereador/"+id+"/listNumerosMenu")
 			.then((response) => {
 				dispatch({type: "FETCHING_NUMBERS_FINISH", payload:response.data})
 			})
@@ -35,7 +35,7 @@ export function listagemNovaSolicitacao(id){
 export function listVereadorProfile(id){
 	return function (dispatch){
 		dispatch({type: "FETCHING_PROFILE_START"})
-		axios.get("http://localhost:9000/vereador/"+id+"/profile")
+		axios.get(window.location.origin+"/vereador/"+id+"/profile")
 			.then((response) => {
 				dispatch({type: "FETCHING_PROFILE_FINISH", payload:response.data})
 			})
@@ -53,7 +53,7 @@ export function editProfile(id, nome, telefone, cpf){
 			telefone:telefone,
 			cpf:cpf
 		};
-		axios.post("http://localhost:9000/vereador/editProfile", params)
+		axios.post(window.location.origin+"/vereador/editProfile", params)
 			.then((response) => {
 				dispatch({type: "EDIT_PROFILE", payload:response.data})
 			})
@@ -70,7 +70,7 @@ export function editConfiguration(id, solicitationNotification, messageNotificat
 			solicitationNotification:solicitationNotification,
 			messageNotification:messageNotification
 		};
-		axios.post("http://localhost:9000/vereador/editConfiguration", params)
+		axios.post(window.location.origin+"/vereador/editConfiguration", params)
 			.then((response) => {
 				console.log(response);
 				dispatch({type: "EDIT_CONFIGURATION", payload:response.data})

@@ -1,0 +1,4 @@
+Listening for transport dt_socket at address: 8000
+18:46:12,108 INFO  ~ Starting /Users/gudominguete/Projects/CamaraAlerta/CamaraAlerta
+18:46:13,448 WARN  ~ You're running Play! in DEV mode
+18:46:13,555 ERROR ~ Could not bind on port 9000
