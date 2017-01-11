@@ -36,7 +36,7 @@ public class UserController extends Controller {
     public void facebookJaLogado(String email){
         Cidadao cidadao = Cidadao.find("byEmail", email).first();
         if(cidadao == null){
-            renderJSON(new String("Erro"));
+            renderJSON(new String("Login com Facebook falhou!"));
         } else {
             renderJSON(cidadao);
         }
