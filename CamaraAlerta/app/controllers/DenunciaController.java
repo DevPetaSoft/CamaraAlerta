@@ -64,6 +64,7 @@ public class DenunciaController extends Controller {
         Denuncia d = dDTO.getDenuncia();
         d.mensagem = "";
         d.relatorio = "";
+        d.data = new Date();
         Logger.info("Paths" + d.fotos);
         //d.vereador = vereador;
         //d.coordenadas = c;
