@@ -33,7 +33,8 @@ public class DenunciaController extends Controller {
         ArrayList<String> listaDeFotos = (ArrayList<String>) dDTO.getListaFotos();
         ArrayList<String> photoPaths = new ArrayList<String>();
 
-
+        Denuncia dAnterior = Denuncia.find("order by id desc").first();
+        int lastId = dAnterior.id;
 
         //Adm
         /*Administrador a = Administrador.find("byEmail", "adm@email.com").first();
@@ -79,8 +80,8 @@ public class DenunciaController extends Controller {
             try {
                 InputStream in2 = new ByteArrayInputStream(decoded);
                 BufferedImage bImageFromConvert = ImageIO.read(in2);
-                ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + d.id + "_" + i + ".png"));
-                photoPaths.add("public/denounce_image/" + d.id + "_" + i + ".png");
+                ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + (lastId+1) + "_" + i + ".png"));
+                photoPaths.add("public/denounce_image/" + (lastId+1) + "_" + i + ".png");
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
