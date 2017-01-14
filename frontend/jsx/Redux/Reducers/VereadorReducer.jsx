@@ -43,6 +43,28 @@ export default function reducer(state={
 			state.vereador = action.payload;
 			return state;
 		}
+		case "FETCHING_SOLICITATION_NUMBERS":{	
+			state.fetching = true;
+			state.fetched = false;
+			return state;
+		}
+		case "FETCHED_SOLICITATION_NUMBERS":{
+			state.fetching = false;
+			state.fetched = true;
+			state.numbers = action.payload;
+			return state;
+		}
+		case "FETCHING_GRAPH_NUMBERS":{	
+			state.fetching = true;
+			state.fetched = false;
+			return state;
+		}
+		case "FETCHED_GRAPH_NUMBERS":{
+			state.fetching = false;
+			state.fetched = true;
+			state.graphNumbers = action.payload;
+			return state;
+		}
 	}
 
 	return state;

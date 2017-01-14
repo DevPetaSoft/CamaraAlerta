@@ -4,13 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.NumerosMenuDTO;
+import dto.NumerosSolicitacoesDTO;
 import models.Denuncia;
 import models.MensagemChat;
+import models.SolicitacaoPorMes;
 import models.Vereador;
 import play.Logger;
 import play.mvc.Controller;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -217,6 +221,49 @@ public class VereadorController extends Controller {
         vereador.save();
 
         renderJSON(vereador);
+    }
+
+    /**
+     * Listagem do numero de solicitações que o vereador possui, quantas foram resolvidas e quantas estao pendentes
+     * @param vereadorId
+     */
+    public void listNumbersSolicitations(Integer vereadorId){
+
+        if(vereadorId == null){
+            renderJSON(new String("Não foi passado um id de um vereador"));
+        }
+
+        Vereador vereador = Vereador.findById(vereadorId);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi encontrado esse vereador"));
+        }
+
+        NumerosSolicitacoesDTO dto = new NumerosSolicitacoesDTO();
+
+        dto.setNumeroSolicitacoes((int) Denuncia.count("vereador = ?", vereador));
+        dto.setNumeroSolicitacoesResolvidas((int) Denuncia.count("vereador = ? AND status = ?", vereador, 2));
+        dto.setNuemroSolicitacoesPendentes((int) Denuncia.count("vereador = ? AND status = ?", vereador, 0));
+
+        renderJSON(dto);
+    }
+
+    public void listSolicitacoesPorMesList(Integer vereadorId){
+        if(vereadorId == null){
+            renderJSON(new String("Não foi passado um id de um vereador"));
+        }
+
+        Vereador vereador = Vereador.findById(vereadorId);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi encontrado esse vereador"));
+        }
+
+        // TODO: Implementar serializer
+
+        List<SolicitacaoPorMes> list = SolicitacaoPorMes.find("byVereador",vereador).fetch(0,12);
+
+        renderJSON(list);
     }
 
 }
