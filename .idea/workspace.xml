@@ -2,9 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c26f95c7-7372-4821-b4af-26df9be0bb16" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/CamaraAlerta/app/dto/NumerosSolicitacoesDTO.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/CamaraAlerta/app/models/SolicitacaoPorMes.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/CamaraAlerta/db/InsercaoUsuario.sql" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/frontend/jsx/Utils/DateUtils.jsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CamaraAlerta/app/controllers/DenunciaController.java" afterPath="$PROJECT_DIR$/CamaraAlerta/app/controllers/DenunciaController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CamaraAlerta/app/controllers/VereadorController.java" afterPath="$PROJECT_DIR$/CamaraAlerta/app/controllers/VereadorController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CamaraAlerta/conf/routes" afterPath="$PROJECT_DIR$/CamaraAlerta/conf/routes" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CamaraAlerta/public/app.js" afterPath="$PROJECT_DIR$/CamaraAlerta/public/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/ReceivedSolicitation.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/ReceivedSolicitation.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/SolicitationMap.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/SolicitationMap.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/SolicitationNumbers.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/SolicitationNumbers.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/SolicitationSolved.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Dashboard/Widgets/SolicitationSolved.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Maps/MapsContainer.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Maps/MapsContainer.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Redux/Actions/VereadorActions.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Redux/Actions/VereadorActions.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/jsx/Redux/Reducers/VereadorReducer.jsx" afterPath="$PROJECT_DIR$/frontend/jsx/Redux/Reducers/VereadorReducer.jsx" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,8 +38,8 @@
       <file leaf-file-name="VereadorController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/VereadorController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="111" column="0" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
+            <state relative-caret-position="187">
+              <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="false" />
               </folding>
@@ -46,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DenunciaController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DenunciaController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/DenunciaController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="93" column="22" lean-forward="true" selection-start-line="93" selection-start-column="22" selection-end-line="93" selection-end-column="22" />
+            <state relative-caret-position="850">
+              <caret line="115" column="22" lean-forward="false" selection-start-line="115" selection-start-column="22" selection-end-line="115" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -73,9 +86,17 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
               <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="routes" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="10" lean-forward="true" selection-start-line="23" selection-start-column="10" selection-end-line="23" selection-end-column="10" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -624,46 +645,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/VereadorController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1887">
-          <caret line="111" column="0" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/UserController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/CanalDeComunicacaoController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3400">
-          <caret line="211" column="26" lean-forward="false" selection-start-line="211" selection-start-column="26" selection-end-line="211" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/models/MensagemChat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -706,9 +687,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -754,9 +733,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -802,9 +779,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="16" column="19" lean-forward="true" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1007,8 +982,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/VereadorController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="111" column="0" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
+        <state relative-caret-position="187">
+          <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
@@ -1042,10 +1017,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes">
+    <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/DenunciaController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="87" lean-forward="true" selection-start-line="17" selection-start-column="87" selection-end-line="17" selection-end-column="87" />
+        <state relative-caret-position="850">
+          <caret line="115" column="22" lean-forward="false" selection-start-line="115" selection-start-column="22" selection-end-line="115" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes_BACKUP_2664">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="73" lean-forward="true" selection-start-line="5" selection-start-column="73" selection-end-line="5" selection-end-column="73" />
           <folding />
         </state>
       </provider>
@@ -1054,16 +1037,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CamaraAlerta/app/controllers/DenunciaController.java">
+    <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes_BASE_2664">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="93" column="22" lean-forward="true" selection-start-line="93" selection-start-column="22" selection-end-line="93" selection-end-column="22" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes_LOCAL_2664">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes_REMOTE_2664">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CamaraAlerta/conf/routes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="10" lean-forward="true" selection-start-line="23" selection-start-column="10" selection-end-line="23" selection-end-column="10" />
           <folding />
         </state>
       </provider>

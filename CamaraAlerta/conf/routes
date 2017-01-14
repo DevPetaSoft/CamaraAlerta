@@ -22,14 +22,16 @@ POST    /denuncia/mudarEstado                           DenunciaController.chang
 GET     /denuncia/solUsu/{idCidadao}/{idSolicitacao}    DenunciaController.findSolicitacaoUsuario
 
 # Vereador
-POST    /vereador/login                                 VereadorController.login
-GET     /vereador/listPorCidade                         VereadorController.listVereadoresPorCidade
-GET     /vereador/{id}/listSolicitacoes                 VereadorController.listDenunciasPorVereador
-GET     /vereador/{id}/listNovasSolicitacoes            VereadorController.listNovasDenunciasPorVereador
-GET     /vereador/{id}/listNumerosMenu                  VereadorController.listNumerosMenu
-GET     /vereador/{id}/profile                          VereadorController.listPerfilVereador
-POST    /vereador/editProfile                           VereadorController.editProfile
-POST    /vereador/editConfiguration                     VereadorController.editConfigurations
+POST    /vereador/login                                     VereadorController.login
+GET     /vereador/listPorCidade                             VereadorController.listVereadoresPorCidade
+GET     /vereador/{id}/listSolicitacoes                     VereadorController.listDenunciasPorVereador
+GET     /vereador/{id}/listNovasSolicitacoes                VereadorController.listNovasDenunciasPorVereador
+GET     /vereador/{id}/listNumerosMenu                      VereadorController.listNumerosMenu
+GET     /vereador/{id}/profile                              VereadorController.listPerfilVereador
+POST    /vereador/editProfile                               VereadorController.editProfile
+POST    /vereador/editConfiguration                         VereadorController.editConfigurations
+GET     /vereador/{vereadorId}/listSolicitationNumbers      VereadorController.listNumbersSolicitations
+GET     /vereador/{vereadorId}/listSolicitacoesPorMesList   VereadorController.listSolicitacoesPorMesList
 
 # Canal de comunicação
 POST    /canalComunicacao/entrarEmContato               CanalDeComunicacaoController.entrarEmContato

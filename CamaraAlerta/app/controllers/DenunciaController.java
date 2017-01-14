@@ -90,6 +90,28 @@ public class DenunciaController extends Controller {
         dAtual.fotosServidor = photoPaths;
         dAtual.save();
 
+
+        SolicitacaoPorMes solicitacaoPorMes = SolicitacaoPorMes.find("byVereadorAndMesAndAno",d.vereador,d.data.getMonth(), d.data.getYear()).first();
+
+        // Criar uma nova solicitacao por mes
+        if(solicitacaoPorMes == null){
+            solicitacaoPorMes = new SolicitacaoPorMes();
+            solicitacaoPorMes.ano = d.data.getYear();
+            solicitacaoPorMes.mes = d.data.getMonth();
+            solicitacaoPorMes.data = new Date();
+            solicitacaoPorMes.vereador = d.vereador;
+            solicitacaoPorMes.numeroDeSolicitacoesRecebidas = 1;
+            solicitacaoPorMes.numeroDeSolicitacoesResolvidas = 0;
+            solicitacaoPorMes.save();
+        }
+        // Edita a solicitacao daquele mes
+        else{
+            solicitacaoPorMes.numeroDeSolicitacoesRecebidas += 1;
+            solicitacaoPorMes.save();
+
+        }
+
+
         Logger.info("Sucesso incluindo denuncia!");
         renderJSON(d);
     }
@@ -206,11 +228,21 @@ public class DenunciaController extends Controller {
         if(solicitacao == null){
             renderJSON(new String("Não foi encotnrado nenhuma solicitacao com esse id"));
         }
+        int statusAntigo = solicitacao.status;
 
         solicitacao.relatorio = relatorio;
         solicitacao.status = status;
 
+        SolicitacaoPorMes solicitacaoPorMes = SolicitacaoPorMes.find("byVereadorAndMesAndAno",solicitacao.vereador,solicitacao.data.getMonth(), solicitacao.data.getYear()).first();
+
+        if(statusAntigo != 2 && status == 2) {
+            solicitacaoPorMes.numeroDeSolicitacoesResolvidas += 1;
+        }else if (statusAntigo == 2 && status != 2){
+            solicitacaoPorMes.numeroDeSolicitacoesResolvidas -=1;
+        }
+
         solicitacao.save();
+        solicitacaoPorMes.save();
 
         renderJSON(solicitacao);
 

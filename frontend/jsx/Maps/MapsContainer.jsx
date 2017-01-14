@@ -49,7 +49,6 @@ export default class MapsList extends React.Component{
   			return(<div className="mapsBackground"></div>);
   		}
 
-  		console.log(this.state.solicitacoes);
 	    return (
 	     	<div className="mapsBackground">
 	     		<GettingStartedGoogleMap

@@ -80,3 +80,29 @@ export function editConfiguration(id, solicitationNotification, messageNotificat
 			})
 	}
 }
+
+export function listSolicitationNumbers(id){
+	return function (dispatch){
+		dispatch({type: "FETCHING_SOLICITATION_NUMBERS"})
+		axios.get(window.location.origin+"/vereador/"+id+"/listSolicitationNumbers")
+			.then((response) => {
+				dispatch({type: "FETCHED_SOLICITATION_NUMBERS", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}
+
+export function listSolicitacoesPorMesList(id){
+	return function (dispatch){
+		dispatch({type: "FETCHING_GRAPH_NUMBERS"})
+		axios.get(window.location.origin+"/vereador/"+id+"/listSolicitacoesPorMesList")
+			.then((response) => {
+				dispatch({type: "FETCHED_GRAPH_NUMBERS", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}
