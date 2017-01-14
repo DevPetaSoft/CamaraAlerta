@@ -34,7 +34,12 @@ public class DenunciaController extends Controller {
         ArrayList<String> photoPaths = new ArrayList<String>();
 
         Denuncia dAnterior = Denuncia.find("order by id desc").first();
-        int lastId = dAnterior.id;
+        int lastId;
+        if(dAnterior!=null) {
+            lastId = dAnterior.id;
+        } else {
+            lastId = 0;
+        }
 
         //Adm
         /*Administrador a = Administrador.find("byEmail", "adm@email.com").first();
