@@ -3,49 +3,50 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
+GET     /                                               Application.index
 
 
 # Usuarios
-POST    /user/facebookLogin                     UserController.facebookLogin
-POST    /user/novoCidadao                       UserController.novoCadastroCidadao
-POST    /user/login                             UserController.cidadaoLogin
-POST    /user/recuperarSenha                    UserController.recuperarSenha
-POST    /user/numeroDenuncias                   UserController.numeroDenuncias
-POST    /user/facebookJaLogado                  UserController.facebookJaLogado
+POST    /user/facebookLogin                             UserController.facebookLogin
+POST    /user/novoCidadao                               UserController.novoCadastroCidadao
+POST    /user/login                                     UserController.cidadaoLogin
+POST    /user/recuperarSenha                            UserController.recuperarSenha
+POST    /user/numeroDenuncias                           UserController.numeroDenuncias
+POST    /user/facebookJaLogado                          UserController.facebookJaLogado
 
 # Denuncias
-POST    /denuncia/novaDenuncia                  DenunciaController.novaDenuncia
-POST    /denuncia/minhasDenuncias               DenunciaController.minhasDenuncias
-GET     /denuncia/{idVereador}/{idSolicitacao}  DenunciaController.find
-POST    /denuncia/mudarEstado                   DenunciaController.changeStatus
+POST    /denuncia/novaDenuncia                          DenunciaController.novaDenuncia
+GET     /denuncia/minhasDenunciasUsu/{idUsuario}        DenunciaController.minhasDenuncias
+GET     /denuncia/{idVereador}/{idSolicitacao}          DenunciaController.find
+POST    /denuncia/mudarEstado                           DenunciaController.changeStatus
+GET     /denuncia/solUsu/{idCidadao}/{idSolicitacao}    DenunciaController.findSolicitacaoUsuario
 
 # Vereador
-POST    /vereador/login                         VereadorController.login
-GET     /vereador/listPorCidade                 VereadorController.listVereadoresPorCidade
-GET     /vereador/{id}/listSolicitacoes         VereadorController.listDenunciasPorVereador
-GET     /vereador/{id}/listNovasSolicitacoes    VereadorController.listNovasDenunciasPorVereador
-GET     /vereador/{id}/listNumerosMenu          VereadorController.listNumerosMenu
-GET     /vereador/{id}/profile                  VereadorController.listPerfilVereador
-POST    /vereador/editProfile                   VereadorController.editProfile
-POST    /vereador/editConfiguration             VereadorController.editConfigurations
+POST    /vereador/login                                 VereadorController.login
+GET     /vereador/listPorCidade                         VereadorController.listVereadoresPorCidade
+GET     /vereador/{id}/listSolicitacoes                 VereadorController.listDenunciasPorVereador
+GET     /vereador/{id}/listNovasSolicitacoes            VereadorController.listNovasDenunciasPorVereador
+GET     /vereador/{id}/listNumerosMenu                  VereadorController.listNumerosMenu
+GET     /vereador/{id}/profile                          VereadorController.listPerfilVereador
+POST    /vereador/editProfile                           VereadorController.editProfile
+POST    /vereador/editConfiguration                     VereadorController.editConfigurations
 
 # Canal de comunicação
-POST    /canalComunicacao/entrarEmContato       CanalDeComunicacaoController.entrarEmContato
-GET     /canalComunicacao/vereador/{idVereador} CanalDeComunicacaoController.listCanais
-GET     /canalComunicacao/mensagem/{idCanal}    CanalDeComunicacaoController.listarMensagensCanal
-GET     /canalComunicacao/mensPorD/{idDenuncia} CanalDeComunicacaoController.listarMensagensCanalPorIdDenuncia
-POST    /canalComunicacao/novaMensagem          CanalDeComunicacaoController.novaMensagemVereador
-POST    /canalComunicacao/novaMensagemCidadao   CanalDeComunicacaoController.novaMensagemCidadao
+POST    /canalComunicacao/entrarEmContato               CanalDeComunicacaoController.entrarEmContato
+GET     /canalComunicacao/vereador/{idVereador}         CanalDeComunicacaoController.listCanais
+GET     /canalComunicacao/mensagem/{idCanal}            CanalDeComunicacaoController.listarMensagensCanal
+GET     /canalComunicacao/mensPorD/{idDenuncia}         CanalDeComunicacaoController.listarMensagensCanalPorIdDenuncia
+POST    /canalComunicacao/novaMensagem                  CanalDeComunicacaoController.novaMensagemVereador
+POST    /canalComunicacao/novaMensagemCidadao           CanalDeComunicacaoController.novaMensagemCidadao
 
 
 
 # Ignore favicon requests
-GET     /favicon.ico                            404
+GET     /favicon.ico                                    404
 
 # Map static resources from the /app/public folder to the /public path
-GET     /public/                                staticDir:public
+GET     /public/                                        staticDir:public
 
 # Catch all
-*       /{controller}/{action}                  Application.index
-*       /{controller}                           Application.index
+*       /{controller}/{action}                          Application.index
+*       /{controller}                                   Application.index

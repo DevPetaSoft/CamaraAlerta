@@ -33,14 +33,6 @@ public class DenunciaController extends Controller {
         ArrayList<String> listaDeFotos = (ArrayList<String>) dDTO.getListaFotos();
         ArrayList<String> photoPaths = new ArrayList<String>();
 
-        Denuncia dAnterior = Denuncia.find("order by id desc").first();
-        int lastId;
-        if(dAnterior!=null) {
-            lastId = dAnterior.id;
-        } else {
-            lastId = 0;
-        }
-
         //Adm
         /*Administrador a = Administrador.find("byEmail", "adm@email.com").first();
         if(a==null) {
@@ -78,28 +70,31 @@ public class DenunciaController extends Controller {
         //Salvando coordenadas no banco
         Coordenadas c = d.coordenadas;
         c.save();
+        d.fotosServidor = photoPaths;
+        d.save();
 
+        Denuncia dAtual = Denuncia.find("order by id desc").first();
         //salvando fotos
         for(int i = 0; i<listaDeFotos.size(); i++){
             byte[] decoded = org.apache.commons.codec.binary.Base64.decodeBase64(listaDeFotos.get(i).getBytes());
             try {
                 InputStream in2 = new ByteArrayInputStream(decoded);
                 BufferedImage bImageFromConvert = ImageIO.read(in2);
-                ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + (lastId+1) + "_" + i + ".png"));
-                photoPaths.add("public/denounce_image/" + (lastId+1) + "_" + i + ".png");
+                ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + (dAtual.id) + "_" + i + ".png"));
+                photoPaths.add("public/denounce_image/" + (dAtual.id) + "_" + i + ".png");
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        d.fotosServidor = photoPaths;
-        d.save();
+        dAtual.fotosServidor = photoPaths;
+        dAtual.save();
 
         Logger.info("Sucesso incluindo denuncia!");
         renderJSON(d);
     }
 
-    public void minhasDenuncias(String idUsuario){
+    public void minhasDenuncias(Integer idUsuario){
         ArrayList<Denuncia> denunciasUsuario = (ArrayList) Denuncia.find("byCidadao_id", idUsuario).fetch();
         if(denunciasUsuario == null){
             renderJSON(new String("Usuário não tem denuncias!"));
@@ -115,25 +110,23 @@ public class DenunciaController extends Controller {
      * @param idCidadao
      * @param idSolicitacao
      */
-    public void findSolicitacaoUsuario(String idCidadao, String idSolicitacao){
-        Integer idCidadaoInt = Integer.parseInt(idCidadao);
-        Integer idSolicitacaoInt = Integer.parseInt(idSolicitacao);
+    public void findSolicitacaoUsuario(Integer idCidadao, Integer idSolicitacao){
 
-        if(idCidadaoInt == null){
+        if(idCidadao == null){
             renderJSON(new String("Não foi passado um cidadão como parametro"));
         }
 
-        if(idSolicitacaoInt == null){
+        if(idSolicitacao == null){
             renderJSON(new String("Não foi passado um id de solicitacao como parametro"));
         }
 
-        Cidadao cidadao = Cidadao.findById(idCidadaoInt);
+        Cidadao cidadao = Cidadao.findById(idCidadao);
 
         if(cidadao == null){
             renderJSON(new String("Não foi possivel encontrar um cidadao com o id passado"));
         }
 
-        Denuncia solicitacao = Denuncia.findById(idSolicitacaoInt);
+        Denuncia solicitacao = Denuncia.findById(idSolicitacao);
 
         if(solicitacao == null){
             renderJSON(new String("Não foi possivel encontrar uma solicitação com o id passado"));
