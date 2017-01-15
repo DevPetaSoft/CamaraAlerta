@@ -12,6 +12,12 @@ import Input from 'muicss/lib/react/input';
 
 import { vereadorLogin } from "./Redux/Actions/VereadorActions.jsx";
 
+var ReactToastr = require("react-toastr");
+var {ToastContainer} = ReactToastr; // This is a React Element.
+// For Non ES6...
+// var ToastContainer = ReactToastr.ToastContainer;
+var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
+
 
 import store from "./Redux/Store.jsx";
 
@@ -26,13 +32,17 @@ export default class Login extends React.Component {
 		
 		store.subscribe(()=>{
 			var state = store.getState();
-			console.log(localStorage);
 			if(typeof state.vereador.vereador === "object" ){
-				
+				this.refs.container.success(
+			      "Login realizado com sucesso!!",
+			      "", {
+			      timeOut: 30000,
+			      extendedTimeOut: 10000
+			    });
 				localStorage.setItem("vereadorNome",state.vereador.vereador.nome);
 				localStorage.setItem("vereadorEmail",state.vereador.vereador.email);
 				localStorage.setItem("vereadorId",state.vereador.vereador.id);
-				location.assign("/dashboard");
+				//location.assign("/dashboard");
 			}else{
 				console.log("error");
 			}
@@ -71,6 +81,9 @@ export default class Login extends React.Component {
   		}
 	    return (
 	     	<div className="loginBackground">
+		     	<ToastContainer ref="container"
+	                        toastMessageFactory={ToastMessageFactory}
+	                        className="toast-top-right" />
 
 	     		<div className="col-sm-offset-3 col-sm-6">
 
