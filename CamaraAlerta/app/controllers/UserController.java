@@ -81,11 +81,14 @@ public class UserController extends Controller {
         }
     }
 
-    public void numeroDenuncias(String idUsuario){
+    public void numeroDenuncias(int idUsuario){
         long count = Denuncia.count("byCidadao_id", idUsuario);
+        int codResolvido = 2;
+        long countResolvidas = Denuncia.count("cidadao_id = ? and status = ?", idUsuario, codResolvido);
         String message = "Numero de denuncias = " + count;
         Logger.info(message);
-        renderJSON(""+count);
+        int[] contador = {(int)count, (int)countResolvidas};
+        renderJSON(contador);
     }
 
     public void recuperarSenha(String email){
