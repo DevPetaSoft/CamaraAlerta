@@ -1,6 +1,5 @@
 package models;
 
-import javafx.scene.control.Pagination;
 import play.db.jpa.GenericModel;
 
 import javax.persistence.*;
