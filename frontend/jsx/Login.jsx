@@ -42,7 +42,7 @@ export default class Login extends React.Component {
 				localStorage.setItem("vereadorNome",state.vereador.vereador.nome);
 				localStorage.setItem("vereadorEmail",state.vereador.vereador.email);
 				localStorage.setItem("vereadorId",state.vereador.vereador.id);
-				//location.assign("/dashboard");
+				location.assign("/dashboard");
 			}else{
 				console.log("error");
 			}
