@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {Router, Route, Link, browserHistory} from 'react-router';
 
+// Toastr
+import Toastr from "./Toastr.jsx";
+
 // Redux
 import { Provider } from "react-redux";
 
@@ -22,15 +25,18 @@ import Configuration from "./Configuration/ConfigurationBoard.jsx";
 ReactDOM.render(
 	(
 		<Provider store={ store } >
-			<Router history={browserHistory}>
-			    <Route path="/" component={Login} />
-			    <Route path="/dashboard" component={Dashboard} />
-			    <Route path="/solicitations" component={Solicitations} />
-			    <Route path="/messages" component={Messages}/>
-			    <Route path="/maps" component={MapsBoard}/>
-			    <Route path="/editProfile" component={EditProfile}/>
-			    <Route path="/configuration" component={Configuration}/>
-			</Router>
+			<div>
+				<Toastr/>
+				<Router history={browserHistory}>
+				    <Route path="/" component={Login} />
+				    <Route path="/dashboard" component={Dashboard} />
+				    <Route path="/solicitations" component={Solicitations} />
+				    <Route path="/messages" component={Messages}/>
+				    <Route path="/maps" component={MapsBoard}/>
+				    <Route path="/editProfile" component={EditProfile}/>
+				    <Route path="/configuration" component={Configuration}/>
+				</Router>
+			</div>
 		</Provider>
 		),
     document.getElementById('content')

@@ -44,7 +44,12 @@ export default class Login extends React.Component {
 				localStorage.setItem("vereadorId",state.vereador.vereador.id);
 				location.assign("/dashboard");
 			}else{
-				console.log("error");
+				this.refs.container.error(
+			      "Não foi possível realizar o login !!",
+			      "", {
+			      timeOut: 30000,
+			      extendedTimeOut: 10000
+			    });
 			}
 			}
 		);

@@ -36,7 +36,7 @@ export default class SolicitationSolved extends React.Component{
 
 	formatarNumerosParaGrafico(numbers){
 		var vetor = [['Mês', 'Solicitações']];
-		console.log(numbers);
+		
 		for(var i =0;i<numbers.length;i++){
 			var item = [verificarMes(numbers[i].mes), numbers[i].numeroDeSolicitacoesResolvidas];
 			vetor.push(item);	

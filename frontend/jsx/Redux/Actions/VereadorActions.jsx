@@ -5,6 +5,9 @@ export function vereadorLogin(email, senha){
 
 	var params = {};
 	params.email = email;
+	if(senha == undefined){
+		senha = "";
+	}
 	params.senha = md5(senha);
 	return function (dispatch){
 		axios.post(window.location.origin+"/vereador/login",params)
