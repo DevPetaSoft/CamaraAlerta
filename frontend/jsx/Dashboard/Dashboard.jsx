@@ -27,8 +27,7 @@ export default class Dashboard extends React.Component{
 	     		<Menu/>
 
 	     		<div className="dashboardContainder">
-	     			<div className="col-sm-3"><NewSolicitationList/></div>
-	     			<div className="col-sm-4">
+	     			<div className="col-sm-6">
 	     				<div className="row">
 	     					<SolicitationNumbers/>
 	     				</div>
@@ -37,7 +36,7 @@ export default class Dashboard extends React.Component{
 	     					<SolicitationSolved/>
 	     				</div>
 	     			</div>
-	     			<div className="col-sm-4 marginLeft20">
+	     			<div className="col-sm-6">
 	     				<div className="row">
 	     					<ReceivedSolicitation/>
 	     				</div>

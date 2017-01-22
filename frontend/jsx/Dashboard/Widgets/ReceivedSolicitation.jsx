@@ -61,9 +61,11 @@ export default class ReceivedSolicitation extends React.Component{
 	     	<div className="dashboardWidget">
 	     		<h4 className="dashboardWidgetTitle">Solicitações recebidas</h4>
 				<Chart
-			        chartType="LineChart" 
+			        chartType="ColumnChart" 
 			        data={this.state.items}
-			        options={{}}
+			        options={{
+			        	legend:'bottom'
+			        }}
 			        graph_id="LineChart1"
 			        width="100%"
 			        height="150px"

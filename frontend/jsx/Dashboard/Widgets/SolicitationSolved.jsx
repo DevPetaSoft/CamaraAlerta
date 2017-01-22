@@ -62,9 +62,11 @@ export default class SolicitationSolved extends React.Component{
 	     	<div className="dashboardWidget">
 	     		<h4 className="dashboardWidgetTitle">Solicitações resolvidas</h4>
 				<Chart
-			        chartType="LineChart" 
+			        chartType="ColumnChart" 
 			        data={this.state.items}
-			        options={{}}
+			        options={{
+			        	legend:'bottom'
+			        }}
 			        graph_id="LineChart2"
 			        width="100%"
 			        height="150px"
