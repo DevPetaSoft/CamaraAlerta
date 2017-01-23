@@ -62,7 +62,7 @@ export default class SolicitationDetails extends React.Component{
 		}else if(status === 2){
 			return "Finalizada com sucesso";
 		}else if(status === 3){
-			return "Recusado";
+			return "Não resolvida(ou recusada)";
 		}
 
 
@@ -117,13 +117,13 @@ export default class SolicitationDetails extends React.Component{
   		if(!this.state){
   			return(
 	     	<div className="solicitationBackground">
-	     	<h4>Nenhuma solicitação selecionada</h4>
+	     		<h4 className="emptySolicitationLabel">Nenhuma solicitação selecionada</h4>
 	     	</div>)
   		}
   		if(!this.state.solicitacao){
   			return(
 	     	<div className="solicitationBackground">
-	     	<h4>Nenhuma solicitação selecionada</h4>
+	     		<h4 className="emptySolicitationLabel">Nenhuma solicitação selecionada</h4>
 	     	</div>)
   		}
 	    return (
@@ -144,7 +144,7 @@ export default class SolicitationDetails extends React.Component{
 			  	<option value="0">Pendente</option>
 			  	<option value="1">Em andamento</option>
 			  	<option value="2">Finalizado com sucesso</option>
-			  	<option value="3">Recusado</option>
+			  	<option value="3">Não resolvida(ou recusada)</option>
 			  </select>
 			  <br/>
 
@@ -183,13 +183,24 @@ export default class SolicitationDetails extends React.Component{
 		     		</p>
 
 		     		<h4>Autor</h4>
-		     		<p>{this.state.solicitacao.cidadao.nome}<button className="contactButton" onClick={this.openModalMessage.bind(this)}>Entrar em contato</button></p>
+		     		<p>{this.state.solicitacao.cidadao.nome}
+		     			<Button className="solicitationModalSendButton contactButton" 
+		     					onClick={this.openModalMessage.bind(this)} 
+		     					variant="raised" 
+		     					color="primary">Bate-papo</Button>
+ 					</p>
+
+	          		
+				  
 
 		     		<h4>Status</h4>
 		     		<p>{this.getStatus(this.state.solicitacao.status)}</p>
-
-		     		<button className="col-sm-offset-3 col-sm-6" onClick={this.openModal.bind(this)}>Responder</button>
-
+					
+					<Button className="col-sm-offset-3 col-sm-6" 
+		     					onClick={this.openModal.bind(this)} 
+		     					variant="raised" 
+		     					color="primary">Responder</Button>
+		     		
 	     		</div>
 
 
