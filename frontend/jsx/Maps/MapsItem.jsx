@@ -6,7 +6,7 @@ export default React.createClass({
 	    return (
 	     	<div className="mapsListItemBackground">
 	     		<div><span>Solicitante:</span>{this.props.solicitacao.cidadao.nome}</div>
-	     		<div><span>Titulo:</span> {this.props.solicitacao.titulo}</div>
+	     		<div><span>Assunto:</span> {this.props.solicitacao.titulo}</div>
 	     		<div><span>Data criação:</span>{this.props.solicitacao.data}</div>
 	      	</div>
 	    );

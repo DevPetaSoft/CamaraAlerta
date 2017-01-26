@@ -174,7 +174,7 @@ export default class SolicitationDetails extends React.Component{
 
 	     		<div className="col-sm-6">
 
-		     		<h4>Titulo</h4>
+		     		<h4>Assunto</h4>
 		     		<p>{this.state.solicitacao.titulo}</p>
 
 		     		<h4>Descrição</h4>

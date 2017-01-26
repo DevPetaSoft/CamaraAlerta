@@ -48052,7 +48052,7 @@
 					_react2.default.createElement(
 						"span",
 						null,
-						"Titulo:"
+						"Assunto:"
 					),
 					this.props.solicitacao.titulo
 				),
@@ -63751,7 +63751,7 @@
 						_react2.default.createElement(
 							"h4",
 							null,
-							"Titulo"
+							"Assunto"
 						),
 						_react2.default.createElement(
 							"p",
@@ -65635,7 +65635,7 @@
 									_react2.default.createElement(
 											"span",
 											null,
-											"Titulo:"
+											"Assunto:"
 									),
 									" ",
 									this.props.canal.denuncia.titulo
@@ -66060,7 +66060,7 @@
 									_react2.default.createElement(
 											"span",
 											null,
-											"Titulo:"
+											"Assunto:"
 									),
 									" ",
 									this.props.solicitacao.titulo

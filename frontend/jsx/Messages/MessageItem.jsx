@@ -6,7 +6,7 @@ export default React.createClass({
 	    return (
 	     	<div className="messageListItemBackground">
 	     		<div><span>Solicitante:</span>{this.props.canal.cidadao.nome}</div>
-	     		<div><span>Titulo:</span> {this.props.canal.denuncia.titulo}</div>
+	     		<div><span>Assunto:</span> {this.props.canal.denuncia.titulo}</div>
 	     		<div><span>Data da solicitação:</span>{this.props.canal.denuncia.data}</div>
 	      	</div>
 	    );

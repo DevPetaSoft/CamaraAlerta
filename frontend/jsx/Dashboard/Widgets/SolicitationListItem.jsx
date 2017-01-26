@@ -9,7 +9,7 @@ export default React.createClass({
 	     	<div className="solicitationListItemBackground">
 	     		<div><span>Id:</span>{this.props.solicitacao.id}</div>
 	     		<div><span>Solicitante:</span>{this.props.solicitacao.cidadao.nome}</div>
-	     		<div><span>Titulo:</span>{this.props.solicitacao.titulo}</div>
+	     		<div><span>Assunto:</span>{this.props.solicitacao.titulo}</div>
 	     		<div><span>Data:</span> {this.props.solicitacao.data}</div>
 	      	</div>
 	    );
