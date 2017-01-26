@@ -129,14 +129,14 @@ export default class SolicitationDetails extends React.Component{
 	    return (
 	     	<div className="solicitationBackground">
 
-	     	{/* Modal de Resposta de solicitação*/}
+	     	{/* Modal de Relatório de solicitação*/}
 	     	<Modal
 			    isOpen={this.state.modalOpen}
-			    contentLabel="Resposta da solicitação"
+			    contentLabel="Relatório da solicitação"
    			    style={modalStyle}
 				shouldCloseOnOverlayClick={false}
 			>
-			  <h4 className="solicitationModalTitle	">Resposta da solicitação</h4>
+			  <h4 className="solicitationModalTitle	">Relatório da solicitação</h4>
 			  <p>Relatório:</p>
 			  <textarea className="solicitationModalTextArea"ref="relatorio" defaultValue={(this.state.solicitacao)?(this.state.solicitacao.relatorio):("") } />
 			  <p>Status: </p>
@@ -199,7 +199,7 @@ export default class SolicitationDetails extends React.Component{
 					<Button className="col-sm-offset-3 col-sm-6" 
 		     					onClick={this.openModal.bind(this)} 
 		     					variant="raised" 
-		     					color="primary">Responder</Button>
+		     					color="primary">Enviar relatório</Button>
 		     		
 	     		</div>
 

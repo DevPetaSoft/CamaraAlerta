@@ -48,11 +48,10 @@ export function listVereadorProfile(id){
 	}
 }
 
-export function editProfile(id, nome, telefone, cpf){
+export function editProfile(id, telefone, cpf){
 	return function (dispatch){
 		var params = {
 			id:id,
-			nome:nome,
 			telefone:telefone,
 			cpf:cpf
 		};

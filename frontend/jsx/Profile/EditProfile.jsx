@@ -40,12 +40,8 @@ export default class EditProfile extends React.Component{
 
 
 	sendProfile(){
-		var nome, telefone, cpf;
-		if(this.refs.nome.state == null){
-			nome = this.state.vereador.nome;
-		}else{
-			nome = this.refs.nome.state.innerValue;
-		}
+		var telefone, cpf;
+
 		if(this.refs.telefone.state == null){
 			telefone = this.state.vereador.telefone;
 		}else{
@@ -56,9 +52,7 @@ export default class EditProfile extends React.Component{
 		}else{
 			cpf = this.refs.cpf.state.innerValue;
 		}
-		//Mudar o local da alteracao
-		localStorage.setItem("vereadorNome",nome);
-		this.props.dispatch(editProfile(localStorage.vereadorId, nome, telefone, cpf));
+		this.props.dispatch(editProfile(localStorage.vereadorId,  telefone, cpf));
 	}
 	
   	render() {
@@ -77,8 +71,6 @@ export default class EditProfile extends React.Component{
 	     			<div className="col-sm-offset-3 col-sm-6 profileBackground">
 	     				<h4 className="profileTitle">Editar Perfil</h4>
 	     				<div className="loginPanel">
-		     				<label>Nome:</label><br/>
-		     				<Input hint="Nome" defaultValue={this.state.vereador.nome} ref="nome" onChange={this.handleEvent.bind(this,"nome")}/>
 		     				<label>CPF:</label><br/>
 		     				<Input hint="CPF" defaultValue={this.state.vereador.cpf} ref="cpf" onChange={this.handleEvent.bind(this,"cpf")}/>
 		     				<label>Telefone:</label><br/>

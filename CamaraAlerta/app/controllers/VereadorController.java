@@ -183,11 +183,9 @@ public class VereadorController extends Controller {
             renderJSON(new String("Não foi possivel encontrar um vereador com esse ID"));
         }
 
-        String nome = json.get("nome").getAsString();
         String telefone = json.get("telefone").getAsString();
         String cpf = json.get("cpf").getAsString();
 
-        vereador.nome = nome;
         vereador.telefone = telefone;
         vereador.cpf = cpf;
         vereador.save();
