@@ -86,7 +86,7 @@ public class VereadorController extends Controller {
         }
 
 
-        List<Denuncia> list = Denuncia.find("byVereador", vereador).fetch();
+        List<Denuncia> list = Denuncia.find("vereador = ? order by data desc", vereador).fetch();
 
         //TODO: Criar serializer
         renderJSON(list);
