@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	__webpack_require__(722);
+	__webpack_require__(723);
 
 /***/ },
 /* 1 */
@@ -9681,19 +9681,19 @@
 
 	var _Solicitations2 = _interopRequireDefault(_Solicitations);
 
-	var _Messages = __webpack_require__(710);
+	var _Messages = __webpack_require__(711);
 
 	var _Messages2 = _interopRequireDefault(_Messages);
 
-	var _MapsBoard = __webpack_require__(715);
+	var _MapsBoard = __webpack_require__(716);
 
 	var _MapsBoard2 = _interopRequireDefault(_MapsBoard);
 
-	var _EditProfile = __webpack_require__(719);
+	var _EditProfile = __webpack_require__(720);
 
 	var _EditProfile2 = _interopRequireDefault(_EditProfile);
 
-	var _ConfigurationBoard = __webpack_require__(720);
+	var _ConfigurationBoard = __webpack_require__(721);
 
 	var _ConfigurationBoard2 = _interopRequireDefault(_ConfigurationBoard);
 
@@ -35102,6 +35102,8 @@
 
 	var _reactRedux = __webpack_require__(234);
 
+	var _ToastrActions = __webpack_require__(710);
+
 	var _Store = __webpack_require__(270);
 
 	var _Store2 = _interopRequireDefault(_Store);
@@ -35137,9 +35139,27 @@
 		_createClass(Toastr, [{
 			key: "componentDidMount",
 			value: function componentDidMount() {
+				var _this2 = this;
 
 				_Store2.default.subscribe(function () {
 					var state = _Store2.default.getState();
+
+					// Verifica se a store Toastr recebeu uma mensagem de sucesso
+					if (state.toastr.success) {
+						_this2.refs.toastr.success(state.toastr.message, "", {
+							timeOut: 30000,
+							extendedTimeOut: 10000
+						});
+						_this2.props.dispatch((0, _ToastrActions.clearMessage)());
+					} else if (state.toastr.error) {
+						// Verifica se a store Toastr recebeu uma mensagem de erro
+						_this2.refs.container.error(state.toastr.message, "", {
+							timeOut: 30000,
+							extendedTimeOut: 10000
+						});
+
+						_this2.props.dispatch((0, _ToastrActions.clearMessage)());
+					}
 				});
 			}
 		}, {
@@ -63491,6 +63511,8 @@
 
 	var _CanalDeComunicacaoActions = __webpack_require__(709);
 
+	var _ToastrActions = __webpack_require__(710);
+
 	var _reactRedux = __webpack_require__(234);
 
 	var _Store = __webpack_require__(270);
@@ -63576,6 +63598,9 @@
 				var id = this.state.solicitacao.id;
 
 				this.props.dispatch((0, _SolicitacaoActions.mudancaEstado)(id, relatorio, status));
+
+				this.props.dispatch((0, _ToastrActions.successMessage)("Relatório enviado com sucesso!"));
+				this.closeModal();
 			}
 		}, {
 			key: "criarCanalComunicacao",
@@ -65424,6 +65449,54 @@
 
 /***/ },
 /* 710 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.successMessage = successMessage;
+	exports.errorMessage = errorMessage;
+	exports.clearMessage = clearMessage;
+	exports.listagemSolicitacao = listagemSolicitacao;
+	function successMessage(message) {
+		return function (dispatch) {
+
+			dispatch({ type: "CREATE_SUCCESS_MESSAGE", payload: message });
+		};
+	}
+
+	function errorMessage(message) {
+
+		return function (dispatch) {
+
+			dispatch({ type: "CREATE_ERROR_MESSAGE", payload: message });
+		};
+	}
+
+	function clearMessage() {
+
+		return function (dispatch) {
+			dispatch({ type: "CLEAR_MESSAGE" });
+		};
+	}
+
+	function listagemSolicitacao(id) {
+		return function (dispatch) {
+
+			dispatch({ type: "FETCHING_SOLICITATION_START" });
+			axios.get(window.location.origin + "/vereador/" + id + "/listSolicitacoes").then(function (response) {
+
+				dispatch({ type: "FETCHING_SOLICITATION_FINISH", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+/***/ },
+/* 711 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65448,11 +65521,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageList = __webpack_require__(711);
+	var _MessageList = __webpack_require__(712);
 
 	var _MessageList2 = _interopRequireDefault(_MessageList);
 
-	var _MessageBoard = __webpack_require__(713);
+	var _MessageBoard = __webpack_require__(714);
 
 	var _MessageBoard2 = _interopRequireDefault(_MessageBoard);
 
@@ -65486,7 +65559,7 @@
 	});
 
 /***/ },
-/* 711 */
+/* 712 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65508,7 +65581,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MessageItem = __webpack_require__(712);
+	var _MessageItem = __webpack_require__(713);
 
 	var _MessageItem2 = _interopRequireDefault(_MessageItem);
 
@@ -65592,7 +65665,7 @@
 	exports.default = MessageList;
 
 /***/ },
-/* 712 */
+/* 713 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65654,7 +65727,7 @@
 	});
 
 /***/ },
-/* 713 */
+/* 714 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65684,7 +65757,7 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageChatItem = __webpack_require__(714);
+	var _MessageChatItem = __webpack_require__(715);
 
 	var _MessageChatItem2 = _interopRequireDefault(_MessageChatItem);
 
@@ -65811,7 +65884,7 @@
 	exports.default = SolicitationList;
 
 /***/ },
-/* 714 */
+/* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65853,7 +65926,7 @@
 	});
 
 /***/ },
-/* 715 */
+/* 716 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65878,11 +65951,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MapsList = __webpack_require__(716);
+	var _MapsList = __webpack_require__(717);
 
 	var _MapsList2 = _interopRequireDefault(_MapsList);
 
-	var _MapsContainer = __webpack_require__(718);
+	var _MapsContainer = __webpack_require__(719);
 
 	var _MapsContainer2 = _interopRequireDefault(_MapsContainer);
 
@@ -65916,7 +65989,7 @@
 	});
 
 /***/ },
-/* 716 */
+/* 717 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65938,7 +66011,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MapsItem = __webpack_require__(717);
+	var _MapsItem = __webpack_require__(718);
 
 	var _MapsItem2 = _interopRequireDefault(_MapsItem);
 
@@ -66017,7 +66090,7 @@
 	exports.default = MapsList;
 
 /***/ },
-/* 717 */
+/* 718 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66079,7 +66152,7 @@
 	});
 
 /***/ },
-/* 718 */
+/* 719 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66187,7 +66260,7 @@
 	exports.default = MapsList;
 
 /***/ },
-/* 719 */
+/* 720 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66352,7 +66425,7 @@
 	exports.default = EditProfile;
 
 /***/ },
-/* 720 */
+/* 721 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66390,7 +66463,7 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _checkbox = __webpack_require__(721);
+	var _checkbox = __webpack_require__(722);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
@@ -66516,7 +66589,7 @@
 	exports.default = ConfigurationBoard;
 
 /***/ },
-/* 721 */
+/* 722 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var babelHelpers = __webpack_require__(438);
@@ -66620,13 +66693,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 722 */
+/* 723 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(723);
+	var content = __webpack_require__(724);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -66646,7 +66719,7 @@
 	}
 
 /***/ },
-/* 723 */
+/* 724 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();

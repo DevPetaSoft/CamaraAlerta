@@ -9,6 +9,8 @@ var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation
 
 import { connect } from "react-redux";
 
+import { clearMessage } from "./Redux/Actions/ToastrActions.jsx";
+
 import store from "./Redux/Store.jsx";
 
 
@@ -25,6 +27,27 @@ export default class Toastr extends React.Component {
 		
 		store.subscribe(()=>{
 			var state = store.getState();
+
+			// Verifica se a store Toastr recebeu uma mensagem de sucesso
+			if(state.toastr.success){
+				this.refs.toastr.success(
+			      state.toastr.message,
+			      "", {
+			      timeOut: 30000,
+			      extendedTimeOut: 10000
+			    });
+			    this.props.dispatch(clearMessage());
+			}else if(state.toastr.error){
+				// Verifica se a store Toastr recebeu uma mensagem de erro
+				this.refs.container.error(
+			      state.toastr.message,
+			      "", {
+			      timeOut: 30000,
+			      extendedTimeOut: 10000
+			    });
+
+			    this.props.dispatch(clearMessage());
+			}
 
 		});
 	}

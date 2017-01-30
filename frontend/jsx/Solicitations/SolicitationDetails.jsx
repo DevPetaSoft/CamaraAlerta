@@ -9,6 +9,7 @@ import Button from 'muicss/lib/react/button';
 
 import { mudancaEstado } from "./../Redux/Actions/SolicitacaoActions.jsx";
 import { novoCanal } from "./../Redux/Actions/CanalDeComunicacaoActions.jsx";
+import { successMessage } from "./../Redux/Actions/ToastrActions.jsx";
 
 import { connect } from "react-redux";
 
@@ -76,6 +77,9 @@ export default class SolicitationDetails extends React.Component{
 		var id = this.state.solicitacao.id;
 
 		this.props.dispatch(mudancaEstado(id,relatorio, status));
+
+		this.props.dispatch(successMessage("Relatório enviado com sucesso!"));
+		this.closeModal();
 	}
 
 	criarCanalComunicacao(){
