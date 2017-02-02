@@ -13,6 +13,7 @@ POST    /user/login                                     UserController.cidadaoLo
 POST    /user/recuperarSenha                            UserController.recuperarSenha
 GET     /user/numeroDenuncias/{idUsuario}               UserController.numeroDenuncias
 POST    /user/facebookJaLogado                          UserController.facebookJaLogado
+POST    /user/facebookTelefone                          UserController.cadastrarSenhaFacebook
 
 # Denuncias
 POST    /denuncia/novaDenuncia                          DenunciaController.novaDenuncia

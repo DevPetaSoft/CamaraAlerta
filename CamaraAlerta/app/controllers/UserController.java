@@ -1,10 +1,16 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import dto.FacebookDTO;
 import models.Cidadao;
 import models.Denuncia;
 import play.Logger;
 import play.mvc.Controller;
 
+import java.io.StringReader;
 import java.util.Date;
 
 /**
@@ -18,6 +24,8 @@ public class UserController extends Controller {
      *  caso ao contrário, é enviada uma flag para realizar um novo cadastro.
      */
     public void facebookLogin(String token, String nome, String email){
+
+        // TODO: Verificar se ja existe um cidadao com o email utilizado
         Cidadao cidadao = Cidadao.find("byTokenFacebook",token).first();
         if(cidadao == null){
             cidadao = new Cidadao();
@@ -26,10 +34,12 @@ public class UserController extends Controller {
             cidadao.email = email;
             cidadao.dataCriacao = new Date();
             cidadao.save();
-            Logger.info(cidadao.nome);
-            renderJSON(cidadao);
+            FacebookDTO dto = new FacebookDTO(cidadao,true);
+            renderJSON(dto);
         }else{
-            renderJSON(cidadao);
+
+            FacebookDTO dto = new FacebookDTO(cidadao,false);
+            renderJSON(dto);
         }
     }
 
@@ -43,24 +53,21 @@ public class UserController extends Controller {
     }
 
     // Cria um novo cadastro de um cidadao contendo nome, login, email e senha
-    public void novoCadastroCidadao(String nome, String email, String senha){
+    public void novoCadastroCidadao(String nome, String email, String senha, String telefone){
         try{
             Logger.info("Tentando criar um novo cidadao");
             Cidadao cidadao = Cidadao.find("byEmail", email).first();
             if(cidadao==null){
-                //cidadao = Cidadao.find("byLogin",login).first();
-                if(cidadao==null){
-                    cidadao = new Cidadao();
-                    cidadao.nome = nome;
-                    //cidadao.login = login;
-                    cidadao.email = email;
-                    cidadao.senha = senha;
-                    cidadao.dataCriacao = new Date();
-                    cidadao.save();
-                    renderJSON(cidadao);
-                }else{
-                    //renderJSON(new String("Login já cadastrado no sistema !"));
-                }
+
+                cidadao = new Cidadao();
+                cidadao.nome = nome;
+                cidadao.telefone = telefone;
+                cidadao.email = email;
+                cidadao.senha = senha;
+                cidadao.dataCriacao = new Date();
+                cidadao.save();
+                renderJSON(cidadao);
+
             }else{
                 renderJSON(new String("E-mail já cadastrado no sistema!"));
             }
@@ -99,5 +106,36 @@ public class UserController extends Controller {
         } else {
             renderJSON(new String("Email não cadastrado no sistema!"));
         }
+    }
+
+    public void cadastrarSenhaFacebook(String id, String telefone){
+
+        if(id == null){
+
+            renderJSON(new String("É necessário passar um id"));
+        }
+
+        if(telefone == null){
+            renderJSON(new String("É necessário passar um telefone"));
+        }
+
+        Integer idt =Integer.parseInt(id);
+
+        if(idt == null){
+
+            renderJSON(new String("É necessário passar um id válido"));
+        }
+
+        Cidadao cidadao = Cidadao.findById(idt);
+
+        if(cidadao == null){
+            renderJSON(new String("Não foi possível encontrar o cidadao com esse email"));
+        }
+
+        cidadao.telefone = telefone;
+
+        cidadao.save();
+
+        renderJSON(cidadao);
     }
 }
