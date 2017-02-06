@@ -95,11 +95,15 @@ public class CanalDeComunicacaoController extends Controller {
         }
 
         List<MensagemChat> list = MensagemChat.find("byCanal", canal).fetch();
+        Integer numeroMensagensNaoLidasVereador = (int) MensagemChat.count("canal = ? and novo = true and enviadoPor = 0",canal);
+        Integer numeroMensagensNaoLidasCidadao = (int) MensagemChat.count("canal = ? and novo = true and enviadoPor = 1",canal);
 
         MensagensDTO dto = new MensagensDTO();
 
         dto.setList(list);
         dto.setCanal(canal);
+        dto.setnumeroMensagensNaoLidasCidadao(numeroMensagensNaoLidasCidadao);
+        dto.setNumeroMensagensNaoLidasVereador(numeroMensagensNaoLidasVereador);
 
         renderJSON(dto);
 
@@ -146,11 +150,15 @@ public class CanalDeComunicacaoController extends Controller {
         }
 
         List<MensagemChat> list = MensagemChat.find("byCanal", canal).fetch();
+        Integer numeroMensagensNaoLidasVereador = (int) MensagemChat.count("canal = ? and novo = true and enviadoPor = 0",canal);
+        Integer numeroMensagensNaoLidasCidadao = (int) MensagemChat.count("canal = ? and novo = true and enviadoPor = 1",canal);
 
         MensagensDTO dto = new MensagensDTO();
 
         dto.setList(list);
         dto.setCanal(canal);
+        dto.setNumeroMensagensNaoLidasVereador(numeroMensagensNaoLidasVereador);
+        dto.setnumeroMensagensNaoLidasCidadao(numeroMensagensNaoLidasCidadao);
 
         renderJSON(dto);
     }
@@ -231,5 +239,32 @@ public class CanalDeComunicacaoController extends Controller {
         //enviar todas mensagens de volta??
 
         renderJSON(new String("S"));
+    }
+
+    /**
+     * Função para setar as mensagens do canal de comunicacao como mensagens lidas
+     * @param idCanalComunicacao
+     */
+    public void lerMensagensCanalComunicacaoCidadao(Integer idCanalComunicacao){
+
+        Logger.info("Mensagens lidas");
+        if(idCanalComunicacao == null){
+            renderJSON(new String("É necessário enviar um id de canal de comunicação"));
+        }
+
+        CanalDeComunicacao canal = CanalDeComunicacao.findById(idCanalComunicacao);
+
+        if(canal == null){
+            renderJSON(new String("Não foi possível encontrar o canal de comunicação"));
+        }
+
+        List<MensagemChat> list = MensagemChat.find("byCanalAndNovoAndEnviadoPor",canal,true,0).fetch();
+
+        for(MensagemChat msg : list){
+            msg.novo = false;
+            msg.save();
+        }
+
+        renderJSON(list);
     }
 }

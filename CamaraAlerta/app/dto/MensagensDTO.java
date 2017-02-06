@@ -14,9 +14,28 @@ public class MensagensDTO implements Serializable{
 
     private List<MensagemChat> list;
     private CanalDeComunicacao canal;
+    private Integer numeroMensagensNaoLidasVereador;
+    private Integer numeroMensagensNaoLidasCidadao;
+
 
     public MensagensDTO() {
         this.list = new ArrayList<MensagemChat>();
+    }
+
+    public Integer getNumeroMensagensNaoLidasVereador() {
+        return numeroMensagensNaoLidasVereador;
+    }
+
+    public void setNumeroMensagensNaoLidasVereador(Integer numeroMensagensNaoLidasVereador) {
+        this.numeroMensagensNaoLidasVereador = numeroMensagensNaoLidasVereador;
+    }
+
+    public Integer getnumeroMensagensNaoLidasCidadao() {
+        return numeroMensagensNaoLidasCidadao;
+    }
+
+    public void setnumeroMensagensNaoLidasCidadao(Integer numeroMensagensNaoLidasCidadao) {
+        this.numeroMensagensNaoLidasCidadao = numeroMensagensNaoLidasCidadao;
     }
 
     public List<MensagemChat> getList() {
