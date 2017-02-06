@@ -21,6 +21,7 @@ GET     /denuncia/minhasDenunciasUsu/{idUsuario}        DenunciaController.minha
 GET     /denuncia/{idVereador}/{idSolicitacao}          DenunciaController.find
 POST    /denuncia/mudarEstado                           DenunciaController.changeStatus
 GET     /denuncia/solUsu/{idCidadao}/{idSolicitacao}    DenunciaController.findSolicitacaoUsuario
+POST    /denuncia/envioFoto                             DenunciaController.envioFoto
 
 # Vereador
 POST    /vereador/login                                     VereadorController.login

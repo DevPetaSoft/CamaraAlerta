@@ -65,4 +65,13 @@ public class Denuncia extends GenericModel implements Serializable {
 
     @Column(nullable=false, unique=false)
     public boolean novo=true;
+
+    @Column(nullable=false,unique=false)
+    public int numeroFotos;
+
+    @Column(nullable=false,unique=false)
+    public int numeroFotosAtual;
+
+    @Column(nullable=false,unique=false)
+    public boolean valida;
 }

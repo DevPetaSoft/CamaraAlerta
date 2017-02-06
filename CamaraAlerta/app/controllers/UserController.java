@@ -89,9 +89,9 @@ public class UserController extends Controller {
     }
 
     public void numeroDenuncias(int idUsuario){
-        long count = Denuncia.count("byCidadao_id", idUsuario);
+        long count = Denuncia.count("cidadao_id = ? AND valida = true", idUsuario);
         int codResolvido = 2;
-        long countResolvidas = Denuncia.count("cidadao_id = ? and status = ?", idUsuario, codResolvido);
+        long countResolvidas = Denuncia.count("cidadao_id = ? and status = ? AND valida = true", idUsuario, codResolvido);
         String message = "Numero de denuncias = " + count;
         Logger.info(message);
         int[] contador = {(int)count, (int)countResolvidas};

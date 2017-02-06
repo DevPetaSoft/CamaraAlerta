@@ -86,7 +86,7 @@ public class VereadorController extends Controller {
         }
 
 
-        List<Denuncia> list = Denuncia.find("vereador = ? order by data desc", vereador).fetch();
+        List<Denuncia> list = Denuncia.find("vereador = ? AND valida = true order by data desc", vereador).fetch();
 
         //TODO: Criar serializer
         renderJSON(list);
@@ -108,7 +108,7 @@ public class VereadorController extends Controller {
             renderJSON(new String("Não exista vereador com o id passado"));
         }
 
-        List<Denuncia> list = Denuncia.find("byVereadorAndNovo", vereador,true).fetch();
+        List<Denuncia> list = Denuncia.find("byVereadorAndNovoAndValida", vereador,true,true).fetch();
 
         //TODO: Criar serializer
         renderJSON(list);
@@ -132,7 +132,7 @@ public class VereadorController extends Controller {
         }
 
         NumerosMenuDTO dto = new NumerosMenuDTO();
-        dto.setNumerosDeSolicitacoesNovas((int) Denuncia.count("vereador = ? AND novo = ?", vereador, true));
+        dto.setNumerosDeSolicitacoesNovas((int) Denuncia.count("vereador = ? AND novo = ? AND valida = true", vereador, true));
 
         //TODO: Arrumar os Warnings vindo dessa linha
         //dto.setNumerosDeMensagensNovas((int) MensagemChat.count("denuncia.vereador = ?1 AND novo = ?2",vereador,true));
@@ -239,9 +239,9 @@ public class VereadorController extends Controller {
 
         NumerosSolicitacoesDTO dto = new NumerosSolicitacoesDTO();
 
-        dto.setNumeroSolicitacoes((int) Denuncia.count("vereador = ?", vereador));
-        dto.setNumeroSolicitacoesResolvidas((int) Denuncia.count("vereador = ? AND status = ?", vereador, 2));
-        dto.setNuemroSolicitacoesPendentes((int) Denuncia.count("vereador = ? AND status = ?", vereador, 0));
+        dto.setNumeroSolicitacoes((int) Denuncia.count("vereador = ? AND valida = ?", vereador, true));
+        dto.setNumeroSolicitacoesResolvidas((int) Denuncia.count("vereador = ? AND status = ? AND valida = true", vereador, 2));
+        dto.setNuemroSolicitacoesPendentes((int) Denuncia.count("vereador = ? AND status = ? AND valida = true", vereador, 0));
 
         renderJSON(dto);
     }

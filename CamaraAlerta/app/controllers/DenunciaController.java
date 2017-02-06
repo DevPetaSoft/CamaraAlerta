@@ -26,11 +26,10 @@ import java.util.Date;
 public class DenunciaController extends Controller {
 
     //Cria uma nova denuncia e salva fotos da denuncia no servidor
-    public void novaDenuncia(String dDTOString){
+    public void novaDenuncia(String denunciaString){
 
         Gson gson = new Gson();
-        DenunciaDTO dDTO = gson.fromJson(dDTOString, DenunciaDTO.class);
-        ArrayList<String> listaDeFotos = (ArrayList<String>) dDTO.getListaFotos();
+        Denuncia d = gson.fromJson(denunciaString, Denuncia.class);
         ArrayList<String> photoPaths = new ArrayList<String>();
 
         //Adm
@@ -59,7 +58,6 @@ public class DenunciaController extends Controller {
             vereador.save();
         }*/
 
-        Denuncia d = dDTO.getDenuncia();
         d.mensagem = "";
         d.relatorio = "";
         d.data = new Date();
@@ -70,26 +68,8 @@ public class DenunciaController extends Controller {
         //Salvando coordenadas no banco
         Coordenadas c = d.coordenadas;
         c.save();
-        d.fotosServidor = photoPaths;
+        d.fotosServidor = new ArrayList<String>();
         d.save();
-
-        Denuncia dAtual = Denuncia.find("order by id desc").first();
-        //salvando fotos
-        for(int i = 0; i<listaDeFotos.size(); i++){
-            byte[] decoded = org.apache.commons.codec.binary.Base64.decodeBase64(listaDeFotos.get(i).getBytes());
-            try {
-                InputStream in2 = new ByteArrayInputStream(decoded);
-                BufferedImage bImageFromConvert = ImageIO.read(in2);
-                ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + (dAtual.id) + "_" + i + ".png"));
-                photoPaths.add("public/denounce_image/" + (dAtual.id) + "_" + i + ".png");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        dAtual.fotosServidor = photoPaths;
-        dAtual.save();
-
 
         SolicitacaoPorMes solicitacaoPorMes = SolicitacaoPorMes.find("byVereadorAndMesAndAno",d.vereador,d.data.getMonth(), d.data.getYear()).first();
 
@@ -113,11 +93,40 @@ public class DenunciaController extends Controller {
 
 
         Logger.info("Sucesso incluindo denuncia!");
-        renderJSON(d);
+        renderJSON(d.id);
+    }
+
+    /**
+     * Recebimento de foto individual da aplicação
+     * @param foto
+     * @param id
+     */
+    public void envioFoto(String foto, String idSolicitacao){
+        Integer idSolicitacaoInt = Integer.parseInt(idSolicitacao);
+        Denuncia dAtual = Denuncia.findById(idSolicitacaoInt);
+        ArrayList<String> photoPaths = dAtual.fotosServidor;
+        byte[] decoded = org.apache.commons.codec.binary.Base64.decodeBase64(foto.getBytes());
+        try {
+            InputStream in2 = new ByteArrayInputStream(decoded);
+            BufferedImage bImageFromConvert = ImageIO.read(in2);
+            ImageIO.write(bImageFromConvert, "png", new File(Play.applicationPath+"/public/denounce_image/" + (dAtual.id) + "_" + (dAtual.numeroFotosAtual) + ".png"));
+            photoPaths.add("public/denounce_image/" + (dAtual.id) + "_" + (dAtual.numeroFotosAtual) + ".png");
+            dAtual.fotosServidor = photoPaths;
+            if(dAtual.numeroFotosAtual + 1 == dAtual.numeroFotos){
+                dAtual.valida = true;
+            }
+            dAtual.numeroFotosAtual = dAtual.numeroFotosAtual + 1;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        dAtual.save();
+        Logger.info("Sucesso incluindo foto!");
+        renderJSON(dAtual.numeroFotosAtual);
     }
 
     public void minhasDenuncias(Integer idUsuario){
-        ArrayList<Denuncia> denunciasUsuario = (ArrayList) Denuncia.find("byCidadao_id", idUsuario).fetch();
+        ArrayList<Denuncia> denunciasUsuario = (ArrayList) Denuncia.find("cidadao_id = ? and valida = true", idUsuario).fetch();
         if(denunciasUsuario == null){
             renderJSON(new String("Usuário não tem denuncias!"));
         } else {
@@ -154,7 +163,7 @@ public class DenunciaController extends Controller {
             renderJSON(new String("Não foi possivel encontrar uma solicitação com o id passado"));
         }
 
-        if(solicitacao.cidadao.id == cidadao.id){
+        if(solicitacao.cidadao.id == cidadao.id && solicitacao.valida == true){
             renderJSON(solicitacao);
         }
     }
@@ -188,7 +197,7 @@ public class DenunciaController extends Controller {
             solicitacao.save();
         }
 
-        if(solicitacao.vereador.id == vereador.id){
+        if(solicitacao.vereador.id == vereador.id && solicitacao.valida == true){
             renderJSON(solicitacao);
         }
 
@@ -223,7 +232,7 @@ public class DenunciaController extends Controller {
             renderJSON(new String("Não foi passado nenhuma solicitacao para ser alterada"));
         }
 
-        Denuncia solicitacao = Denuncia.findById(solicitacaoId);
+        Denuncia solicitacao = Denuncia.find("id = ? and valida = true",solicitacaoId).first();
 
         if(solicitacao == null){
             renderJSON(new String("Não foi encotnrado nenhuma solicitacao com esse id"));
