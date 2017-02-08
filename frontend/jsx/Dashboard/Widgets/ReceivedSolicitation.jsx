@@ -36,9 +36,13 @@ export default class ReceivedSolicitation extends React.Component{
 
 	formatarNumerosParaGrafico(numbers){
 		var vetor = [['Mês', 'Solicitações']];
-		for(var i =0;i<numbers.length;i++){
-			var item = [verificarMes(numbers[i].mes), numbers[i].numeroDeSolicitacoesRecebidas];
-			vetor.push(item);	
+		if(numbers.length>0){
+			for(var i =0;i<numbers.length;i++){
+				var item = [verificarMes(numbers[i].mes), numbers[i].numeroDeSolicitacoesRecebidas];
+				vetor.push(item);	
+			}
+		}else{
+			vetor.push(['',0]);
 		}
 		this.setState({
 			items:vetor

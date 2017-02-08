@@ -47882,7 +47882,7 @@
 							_react2.default.createElement(
 								_reactRouter.Link,
 								{ to: "/messages", className: "sideMenuItens", activeClassName: "sideMenuItensActive" },
-								"Mensagens",
+								"Bate-papo",
 								_react2.default.createElement(
 									"span",
 									{ className: "sideMenuItensNumber" },
@@ -48429,9 +48429,13 @@
 			key: "formatarNumerosParaGrafico",
 			value: function formatarNumerosParaGrafico(numbers) {
 				var vetor = [['Mês', 'Solicitações']];
-				for (var i = 0; i < numbers.length; i++) {
-					var item = [(0, _DateUtils.verificarMes)(numbers[i].mes), numbers[i].numeroDeSolicitacoesRecebidas];
-					vetor.push(item);
+				if (numbers.length > 0) {
+					for (var i = 0; i < numbers.length; i++) {
+						var item = [(0, _DateUtils.verificarMes)(numbers[i].mes), numbers[i].numeroDeSolicitacoesRecebidas];
+						vetor.push(item);
+					}
+				} else {
+					vetor.push(['', 0]);
 				}
 				this.setState({
 					items: vetor
@@ -55603,11 +55607,15 @@
 			key: "formatarNumerosParaGrafico",
 			value: function formatarNumerosParaGrafico(numbers) {
 				var vetor = [['Mês', 'Solicitações']];
-
-				for (var i = 0; i < numbers.length; i++) {
-					var item = [(0, _DateUtils.verificarMes)(numbers[i].mes), numbers[i].numeroDeSolicitacoesResolvidas];
-					vetor.push(item);
+				if (numbers.length > 0) {
+					for (var i = 0; i < numbers.length; i++) {
+						var item = [(0, _DateUtils.verificarMes)(numbers[i].mes), numbers[i].numeroDeSolicitacoesResolvidas];
+						vetor.push(item);
+					}
+				} else {
+					vetor.push(['', 0]);
 				}
+
 				this.setState({
 					items: vetor
 				});
@@ -65647,7 +65655,7 @@
 					_react2.default.createElement(
 						"h4",
 						{ className: "dashboardWidgetTitle" },
-						"Lista de mensagens"
+						"Lista de bate-papo"
 					),
 					this.state ? this.state.listaDeCanais.map(function (canal, idx) {
 						return _react2.default.createElement(
@@ -65839,14 +65847,14 @@
 					return _react2.default.createElement(
 						"div",
 						{ className: "messageBoardBackground" },
-						"Nenhuma mensagem selecionada"
+						"Nenhuma bate-papo selecionado"
 					);
 				}
 				if (!this.state.canalComunicacao) {
 					return _react2.default.createElement(
 						"div",
 						{ className: "messageBoardBackground" },
-						"Nenhuma mensagem selecionada"
+						"Nenhuma bate-papo selecionado"
 					);
 				}
 				return _react2.default.createElement(

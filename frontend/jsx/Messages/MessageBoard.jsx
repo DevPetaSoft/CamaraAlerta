@@ -58,12 +58,12 @@ export default class SolicitationList extends React.Component{
   	render() {
   		if(!this.state){
   			return(<div className="messageBoardBackground">
-  				Nenhuma mensagem selecionada
+  				Nenhuma bate-papo selecionado
   				</div>)
   		}
   		if(!this.state.canalComunicacao ){
   			return(<div className="messageBoardBackground">
-  				Nenhuma mensagem selecionada
+  				Nenhuma bate-papo selecionado
   				</div>)
   		}
 	    return (

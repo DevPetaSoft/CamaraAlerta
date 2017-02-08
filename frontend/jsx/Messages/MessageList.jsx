@@ -38,7 +38,7 @@ export default class MessageList extends React.Component{
   		}
 	    return (
 	     	<div className="dashboardWidgetList">
-	     		<h4 className="dashboardWidgetTitle">Lista de mensagens</h4>
+	     		<h4 className="dashboardWidgetTitle">Lista de bate-papo</h4>
 	     		{(this.state)?(this.state.listaDeCanais.map((canal,idx) =>{
 	     			return (<div onClick={this.onClickHandler.bind(this,canal.id)} ><MessageItem key={idx} canal={canal} /></div>)
 	     		})):("")}
