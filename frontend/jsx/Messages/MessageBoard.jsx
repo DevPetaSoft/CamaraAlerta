@@ -37,17 +37,20 @@ export default class SolicitationList extends React.Component{
 
 	sendMessage(){
 		var mensagem = "";
-		if(this.refs.message.state){		
-			mensagem = this.refs.message.state.innerValue;
+		if(this.state.value){		
+			mensagem = this.state.value;
 		}
 		this.props.dispatch(novaMensagem(this.state.canalComunicacao.id, mensagem));
+		this.setState({
+			value: ""
+		});
 	}
 
 	handleEvent(code,event){
 		
 		//Preenche os valores dos inputs
-		this.refs[code].setState({
-		    innerValue: event.target.value
+		this.setState({
+			value: event.target.value
 		});
 
 	}
@@ -76,7 +79,12 @@ export default class SolicitationList extends React.Component{
 		     				}
 		     			</div>
 		     			
-			     		<Input onChange={this.handleEvent.bind(this,"message")} ref="message" hint="Digite sua mensagem aqui..." className="messageInput col-md-10"/>
+			     		<Input 
+			     		    onChange={this.handleEvent.bind(this,"message")} 
+			     		    ref="message" 
+			     		    hint="Digite sua mensagem aqui..." 
+			     		    value={this.state.value}
+			     		    className="messageInput col-md-10"/>
 			     		<button onClick={this.sendMessage.bind(this)} className="messageButton col-md-2"><img src="public/icons/send.svg" /></button>
 		     		</div>
 
