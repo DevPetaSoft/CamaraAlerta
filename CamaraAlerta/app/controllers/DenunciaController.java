@@ -71,25 +71,6 @@ public class DenunciaController extends Controller {
         d.fotosServidor = new ArrayList<String>();
         d.save();
 
-        SolicitacaoPorMes solicitacaoPorMes = SolicitacaoPorMes.find("byVereadorAndMesAndAno",d.vereador,d.data.getMonth(), d.data.getYear()).first();
-
-        // Criar uma nova solicitacao por mes
-        if(solicitacaoPorMes == null){
-            solicitacaoPorMes = new SolicitacaoPorMes();
-            solicitacaoPorMes.ano = d.data.getYear();
-            solicitacaoPorMes.mes = d.data.getMonth();
-            solicitacaoPorMes.data = new Date();
-            solicitacaoPorMes.vereador = d.vereador;
-            solicitacaoPorMes.numeroDeSolicitacoesRecebidas = 1;
-            solicitacaoPorMes.numeroDeSolicitacoesResolvidas = 0;
-            solicitacaoPorMes.save();
-        }
-        // Edita a solicitacao daquele mes
-        else{
-            solicitacaoPorMes.numeroDeSolicitacoesRecebidas += 1;
-            solicitacaoPorMes.save();
-
-        }
 
 
         Logger.info("Sucesso incluindo denuncia!");
@@ -99,7 +80,7 @@ public class DenunciaController extends Controller {
     /**
      * Recebimento de foto individual da aplicação
      * @param foto
-     * @param id
+     * @param idSolicitacao
      */
     public void envioFoto(String foto, String idSolicitacao){
         Integer idSolicitacaoInt = Integer.parseInt(idSolicitacao);
@@ -114,6 +95,25 @@ public class DenunciaController extends Controller {
             dAtual.fotosServidor = photoPaths;
             if(dAtual.numeroFotosAtual + 1 == dAtual.numeroFotos){
                 dAtual.valida = true;
+                SolicitacaoPorMes solicitacaoPorMes = SolicitacaoPorMes.find("byVereadorAndMesAndAno",dAtual.vereador,dAtual.data.getMonth(), dAtual.data.getYear()).first();
+
+                // Criar uma nova solicitacao por mes
+                if(solicitacaoPorMes == null){
+                    solicitacaoPorMes = new SolicitacaoPorMes();
+                    solicitacaoPorMes.ano = dAtual.data.getYear();
+                    solicitacaoPorMes.mes = dAtual.data.getMonth();
+                    solicitacaoPorMes.data = new Date();
+                    solicitacaoPorMes.vereador = dAtual.vereador;
+                    solicitacaoPorMes.numeroDeSolicitacoesRecebidas = 1;
+                    solicitacaoPorMes.numeroDeSolicitacoesResolvidas = 0;
+                    solicitacaoPorMes.save();
+                }
+                // Edita a solicitacao daquele mes
+                else{
+                    solicitacaoPorMes.numeroDeSolicitacoesRecebidas += 1;
+                    solicitacaoPorMes.save();
+
+                }
             }
             dAtual.numeroFotosAtual = dAtual.numeroFotosAtual + 1;
         } catch (IOException e) {

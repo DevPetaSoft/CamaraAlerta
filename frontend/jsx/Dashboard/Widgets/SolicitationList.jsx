@@ -40,8 +40,8 @@ export default class SolicitationList extends React.Component{
 	    return (
 	     	<div className="dashboardWidgetList">
 	     		<h4 className="dashboardWidgetTitle">Lista de solicitações</h4>
-	     		{(this.state.solicitacoes)?(this.state.solicitacoes.map(solicitacao =>{
-	     			return (<div onClick={this.onClickHandler.bind(this,solicitacao.id)}><SolicitationListItem key={solicitacao.id} solicitacao={solicitacao} /></div>)
+	     		{(this.state.solicitacoes)?(this.state.solicitacoes.map((solicitacao, idx) =>{
+	     			return (<div key={idx} onClick={this.onClickHandler.bind(this,solicitacao.id)}><SolicitationListItem key={solicitacao.id} solicitacao={solicitacao} /></div>)
 	     		})):("")}
 	      	</div>
 	    );
