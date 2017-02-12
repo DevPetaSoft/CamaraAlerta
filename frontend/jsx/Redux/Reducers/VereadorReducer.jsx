@@ -4,6 +4,8 @@ export default function reducer(state={
 	fetched:false,
 	numeroDeNovasSolicitacoes: 0,
 	numeroDeNovasMensagens: 0,
+	gerouToken:false,
+	trocarSenha:false,
 	error:null
 },action){
 
@@ -63,6 +65,14 @@ export default function reducer(state={
 			state.fetching = false;
 			state.fetched = true;
 			state.graphNumbers = action.payload;
+			return state;
+		}
+		case "GERAR_TOKEN":{
+			state.gerouToken = action.payload;
+			return state;
+		}
+		case "TROCAR_SENHA":{
+			state.trocarSenha = action.payload;
 			return state;
 		}
 	}

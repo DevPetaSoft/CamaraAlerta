@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	__webpack_require__(723);
+	__webpack_require__(725);
 
 /***/ },
 /* 1 */
@@ -9697,6 +9697,14 @@
 
 	var _ConfigurationBoard2 = _interopRequireDefault(_ConfigurationBoard);
 
+	var _VereadorForgetPassword = __webpack_require__(723);
+
+	var _VereadorForgetPassword2 = _interopRequireDefault(_VereadorForgetPassword);
+
+	var _ChangePassword = __webpack_require__(724);
+
+	var _ChangePassword2 = _interopRequireDefault(_ChangePassword);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Store do redux
@@ -9718,7 +9726,9 @@
 				_react2.default.createElement(_reactRouter.Route, { path: "/messages", component: _Messages2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: "/maps", component: _MapsBoard2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: "/editProfile", component: _EditProfile2.default }),
-				_react2.default.createElement(_reactRouter.Route, { path: "/configuration", component: _ConfigurationBoard2.default })
+				_react2.default.createElement(_reactRouter.Route, { path: "/configuration", component: _ConfigurationBoard2.default }),
+				_react2.default.createElement(_reactRouter.Route, { path: "/forgetPassword", component: _VereadorForgetPassword2.default }),
+				_react2.default.createElement(_reactRouter.Route, { path: "/changePassword", component: _ChangePassword2.default })
 			)
 		)
 	), document.getElementById('content'));
@@ -38503,6 +38513,8 @@
 			fetched: false,
 			numeroDeNovasSolicitacoes: 0,
 			numeroDeNovasMensagens: 0,
+			gerouToken: false,
+			trocarSenha: false,
 			error: null
 		};
 		var action = arguments[1];
@@ -38575,6 +38587,16 @@
 					state.fetching = false;
 					state.fetched = true;
 					state.graphNumbers = action.payload;
+					return state;
+				}
+			case "GERAR_TOKEN":
+				{
+					state.gerouToken = action.payload;
+					return state;
+				}
+			case "TROCAR_SENHA":
+				{
+					state.trocarSenha = action.payload;
 					return state;
 				}
 		}
@@ -45687,6 +45709,8 @@
 	exports.editConfiguration = editConfiguration;
 	exports.listSolicitationNumbers = listSolicitationNumbers;
 	exports.listSolicitacoesPorMesList = listSolicitacoesPorMesList;
+	exports.gerarToken = gerarToken;
+	exports.trocarSenha = trocarSenha;
 
 	var _axios = __webpack_require__(447);
 
@@ -45785,6 +45809,35 @@
 			dispatch({ type: "FETCHING_GRAPH_NUMBERS" });
 			_axios2.default.get(window.location.origin + "/vereador/" + id + "/listSolicitacoesPorMesList").then(function (response) {
 				dispatch({ type: "FETCHED_GRAPH_NUMBERS", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function gerarToken(email) {
+		return function (dispatch) {
+			var params = {
+				email: email
+			};
+			_axios2.default.post(window.location.origin + "/vereador/gerarToken", params).then(function (response) {
+				dispatch({ type: "GERAR_TOKEN", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function trocarSenha(email, token, password) {
+		return function (dispatch) {
+			var params = {
+				email: email,
+				token: token,
+				password: password
+			};
+			params.password = (0, _md2.default)(password);
+			_axios2.default.post(window.location.origin + "/user/trocarSenha", params).then(function (response) {
+				dispatch({ type: "TROCAR_SENHA", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -47713,7 +47766,7 @@
 							_react2.default.createElement(
 								"div",
 								{ className: "row" },
-								_react2.default.createElement(_SolicitationSolved2.default, null)
+								_react2.default.createElement(_ReceivedSolicitation2.default, null)
 							)
 						),
 						_react2.default.createElement(
@@ -47722,12 +47775,12 @@
 							_react2.default.createElement(
 								"div",
 								{ className: "row" },
-								_react2.default.createElement(_ReceivedSolicitation2.default, null)
+								_react2.default.createElement(_SolicitationMap2.default, null)
 							),
 							_react2.default.createElement(
 								"div",
 								{ className: "row" },
-								_react2.default.createElement(_SolicitationMap2.default, null)
+								_react2.default.createElement(_SolicitationSolved2.default, null)
 							)
 						)
 					)
@@ -48301,47 +48354,45 @@
 						{ className: "row solicitationNumbers" },
 						_react2.default.createElement(
 							"div",
-							{ className: "col-md-4 textAlignCenter" },
-							_react2.default.createElement(
-								"span",
-								{ className: "solicitationNumber" },
-								this.state.numbers.numeroSolicitacoes
-							),
-							_react2.default.createElement("br", null),
+							{ className: "solicitationNumbersItens" },
 							_react2.default.createElement(
 								"span",
 								{ className: "solicitationSubtitle" },
-								"Solicita\xE7\xF5es recebidas"
-							)
-						),
-						_react2.default.createElement(
-							"div",
-							{ className: "col-md-4 textAlignCenter" },
+								"Solicita\xE7\xF5es resolvidas: "
+							),
 							_react2.default.createElement(
 								"span",
 								{ className: "solicitationNumber" },
 								this.state.numbers.numeroSolicitacoesResolvidas
-							),
-							_react2.default.createElement("br", null),
-							_react2.default.createElement(
-								"span",
-								{ className: "solicitationSubtitle" },
-								"Solicita\xE7\xF5es resolvidas"
 							)
 						),
 						_react2.default.createElement(
 							"div",
-							{ className: "col-md-4 textAlignCenter" },
+							{ className: "solicitationNumbersItens" },
+							_react2.default.createElement(
+								"span",
+								{ className: "solicitationSubtitle" },
+								"Solicita\xE7\xF5es aguardando: "
+							),
 							_react2.default.createElement(
 								"span",
 								{ className: "solicitationNumber" },
 								this.state.numbers.nuemroSolicitacoesPendentes
-							),
-							_react2.default.createElement("br", null),
+							)
+						),
+						_react2.default.createElement("div", { className: "linhaDivisoria marginTop15" }),
+						_react2.default.createElement(
+							"div",
+							{ className: "solicitationNumbersItens " },
 							_react2.default.createElement(
 								"span",
 								{ className: "solicitationSubtitle" },
-								"Solicita\xE7\xF5es aguardando"
+								"Total de Solicita\xE7\xF5es: "
+							),
+							_react2.default.createElement(
+								"span",
+								{ className: "solicitationNumber" },
+								this.state.numbers.numeroSolicitacoes
 							)
 						)
 					)
@@ -48459,7 +48510,7 @@
 					_react2.default.createElement(
 						"h4",
 						{ className: "dashboardWidgetTitle" },
-						"Solicita\xE7\xF5es recebidas"
+						"Total de solicita\xE7\xF5es / m\xEAs"
 					),
 					_react2.default.createElement(_reactGoogleCharts.Chart, {
 						chartType: "ColumnChart",
@@ -55638,7 +55689,7 @@
 					_react2.default.createElement(
 						"h4",
 						{ className: "dashboardWidgetTitle" },
-						"Solicita\xE7\xF5es resolvidas"
+						"Solicita\xE7\xF5es resolvidas / m\xEAs"
 					),
 					_react2.default.createElement(_reactGoogleCharts.Chart, {
 						chartType: "ColumnChart",
@@ -66712,10 +66763,387 @@
 /* 723 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(169);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactRedux = __webpack_require__(234);
+
+	var _Footer = __webpack_require__(437);
+
+	var _Footer2 = _interopRequireDefault(_Footer);
+
+	var _reactRouter = __webpack_require__(170);
+
+	var _form = __webpack_require__(438);
+
+	var _form2 = _interopRequireDefault(_form);
+
+	var _input = __webpack_require__(440);
+
+	var _input2 = _interopRequireDefault(_input);
+
+	var _VereadorActions = __webpack_require__(446);
+
+	var _Store = __webpack_require__(271);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReactToastr = __webpack_require__(286);
+	var ToastContainer = ReactToastr.ToastContainer; // This is a React Element.
+	// For Non ES6...
+	// var ToastContainer = ReactToastr.ToastContainer;
+
+	var ToastMessageFactory = _react2.default.createFactory(ReactToastr.ToastMessage.animation);
+
+	var Login = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			vereador: store.vereador
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(Login, _React$Component);
+
+		function Login(props) {
+			_classCallCheck(this, Login);
+
+			var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
+
+			_this.state = {
+				value: ""
+			};
+			return _this;
+		}
+
+		_createClass(Login, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					var storeState = _Store2.default.getState();
+					_this2.setState({
+						gerouToken: storeState.vereador.gerouToken
+					});
+
+					if (storeState.vereador.gerouToken == "Ok") {
+						_this2.refs.container.success("E-mail enviado com sucesso, verifique para dar continuidade na troca de senha!!", "", {
+							timeOut: 30000,
+							extendedTimeOut: 10000
+						});
+					} else {
+						_this2.refs.container.error(storeState.vereador.gerouToken, "", {
+							timeOut: 30000,
+							extendedTimeOut: 10000
+						});
+					}
+				});
+			}
+		}, {
+			key: "sendEmail",
+			value: function sendEmail() {
+
+				// Dispara o evento para gerar token
+				this.props.dispatch((0, _VereadorActions.gerarToken)(this.state.value));
+			}
+		}, {
+			key: "handleEvent",
+			value: function handleEvent(code, event) {
+
+				//Preenche os valores dos inputs
+				this.setState({
+					value: event.target.value
+				});
+			}
+		}, {
+			key: "render",
+			value: function render() {
+
+				return _react2.default.createElement(
+					"div",
+					{ className: "loginBackground" },
+					_react2.default.createElement(ToastContainer, { ref: "container",
+						toastMessageFactory: ToastMessageFactory,
+						className: "toast-top-right" }),
+					_react2.default.createElement(
+						"div",
+						{ className: "col-sm-offset-3 col-sm-6" },
+						_react2.default.createElement("img", { className: "loginLogotype", src: "public/images/logotipo.svg" }),
+						_react2.default.createElement(
+							"div",
+							{ className: "loginPanel" },
+							_react2.default.createElement(
+								"p",
+								{ className: "forgetPassword" },
+								"Para recuperar sua senha digite o e-mail de sua conta:"
+							),
+							_react2.default.createElement(
+								"label",
+								null,
+								"E-mail:"
+							),
+							_react2.default.createElement("br", null),
+							_react2.default.createElement(_input2.default, {
+								onChange: this.handleEvent.bind(this, "message"),
+								hint: "email",
+								ref: "email",
+								value: this.state.value,
+								type: "email" }),
+							_react2.default.createElement(
+								"button",
+								{ className: "loginButton", onClick: this.sendEmail.bind(this) },
+								_react2.default.createElement("img", { src: "public/icons/send.svg" })
+							)
+						)
+					),
+					_react2.default.createElement(_Footer2.default, null)
+				);
+			}
+		}]);
+
+		return Login;
+	}(_react2.default.Component)) || _class);
+	exports.default = Login;
+
+/***/ },
+/* 724 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _dec, _class;
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(169);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactRedux = __webpack_require__(234);
+
+	var _Footer = __webpack_require__(437);
+
+	var _Footer2 = _interopRequireDefault(_Footer);
+
+	var _reactRouter = __webpack_require__(170);
+
+	var _form = __webpack_require__(438);
+
+	var _form2 = _interopRequireDefault(_form);
+
+	var _input = __webpack_require__(440);
+
+	var _input2 = _interopRequireDefault(_input);
+
+	var _VereadorActions = __webpack_require__(446);
+
+	var _Store = __webpack_require__(271);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReactToastr = __webpack_require__(286);
+	var ToastContainer = ReactToastr.ToastContainer; // This is a React Element.
+	// For Non ES6...
+	// var ToastContainer = ReactToastr.ToastContainer;
+
+	var ToastMessageFactory = _react2.default.createFactory(ReactToastr.ToastMessage.animation);
+
+	var ChangePassword = (_dec = (0, _reactRedux.connect)(function (store) {
+		return {
+			vereador: store.vereador
+		};
+	}), _dec(_class = function (_React$Component) {
+		_inherits(ChangePassword, _React$Component);
+
+		function ChangePassword(props) {
+			_classCallCheck(this, ChangePassword);
+
+			var _this = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
+
+			_this.state = {
+				email: "",
+				token: "",
+				password: "",
+				confirmPassword: ""
+			};
+			return _this;
+		}
+
+		_createClass(ChangePassword, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				_Store2.default.subscribe(function () {
+					var storeState = _Store2.default.getState();
+					if (storeState.vereador.trocarSenha !== "Ok") {
+						_this2.refs.container.error(storeState.vereador.trocarSenha, "", {
+							timeOut: 30000,
+							extendedTimeOut: 10000
+						});
+					} else {
+						_this2.refs.container.success("Senha trocada com sucesso!!", "", {
+							timeOut: 30000,
+							extendedTimeOut: 10000
+						});
+					}
+					console.log(storeState);
+				});
+			}
+		}, {
+			key: "changePassword",
+			value: function changePassword() {
+
+				if (this.state.password === this.state.confirmPassword) {
+
+					this.props.dispatch((0, _VereadorActions.trocarSenha)(this.state.email, this.state.token, this.state.password));
+				} else {
+					this.refs.container.error("A senha informada não é igual a senha digitada no campo confirmar senha!", "", {
+						timeOut: 30000,
+						extendedTimeOut: 10000
+					});
+				}
+			}
+		}, {
+			key: "handleEvent",
+			value: function handleEvent(code, event) {
+				//Preenche os valores dos inputs
+				this.setState(_defineProperty({}, code, event.target.value));
+			}
+		}, {
+			key: "render",
+			value: function render() {
+
+				return _react2.default.createElement(
+					"div",
+					{ className: "loginBackground" },
+					_react2.default.createElement(ToastContainer, { ref: "container",
+						toastMessageFactory: ToastMessageFactory,
+						className: "toast-top-right" }),
+					_react2.default.createElement(
+						"div",
+						{ className: "col-sm-offset-3 col-sm-6" },
+						_react2.default.createElement("img", { className: "loginLogotype", src: "public/images/logotipo.svg" }),
+						_react2.default.createElement(
+							"div",
+							{ className: "loginPanel" },
+							_react2.default.createElement(
+								"p",
+								{ className: "forgetPassword" },
+								"Para recuperar sua senha digite o e-mail de sua conta:"
+							),
+							_react2.default.createElement(
+								"label",
+								null,
+								"E-mail:"
+							),
+							_react2.default.createElement("br", null),
+							_react2.default.createElement(_input2.default, {
+								onChange: this.handleEvent.bind(this, "email"),
+								hint: "E-mail",
+								ref: "email",
+								value: this.state.email,
+								type: "email" }),
+							_react2.default.createElement(
+								"label",
+								null,
+								"Token:"
+							),
+							_react2.default.createElement("br", null),
+							_react2.default.createElement(_input2.default, {
+								onChange: this.handleEvent.bind(this, "token"),
+								hint: "Token",
+								ref: "token",
+								value: this.state.token,
+								type: "text" }),
+							_react2.default.createElement(
+								"label",
+								null,
+								"Nova senha:"
+							),
+							_react2.default.createElement("br", null),
+							_react2.default.createElement(_input2.default, {
+								onChange: this.handleEvent.bind(this, "password"),
+								hint: "Nova senha",
+								ref: "token",
+								value: this.state.password,
+								type: "password" }),
+							_react2.default.createElement(
+								"label",
+								null,
+								"Confirmar nova senha:"
+							),
+							_react2.default.createElement("br", null),
+							_react2.default.createElement(_input2.default, {
+								onChange: this.handleEvent.bind(this, "confirmPassword"),
+								hint: "Confirmar nova senha",
+								ref: "confirmPassword",
+								value: this.state.confirmPassword,
+								type: "password" }),
+							_react2.default.createElement(
+								"button",
+								{ className: "loginButton", onClick: this.changePassword.bind(this) },
+								_react2.default.createElement("img", { src: "public/icons/send.svg" })
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return ChangePassword;
+	}(_react2.default.Component)) || _class);
+	exports.default = ChangePassword;
+
+/***/ },
+/* 725 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(724);
+	var content = __webpack_require__(726);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -66735,7 +67163,7 @@
 	}
 
 /***/ },
-/* 724 */
+/* 726 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -66743,7 +67171,7 @@
 
 
 	// module
-	exports.push([module.id, ".loginBackground {\n  background-color: #3DB2FF;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.logout {\n  cursor: pointer; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444;\n    margin-left: 10px;\n    margin-right: 10px; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 24px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 14px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px;\n    max-height: 200px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px;\n    max-height: 100px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  max-width: 100%;\n  min-width: 100%;\n  max-height: 300px; }\n\n.emptySolicitationLabel {\n  text-align: center;\n  top: 50%;\n  position: relative;\n  font-size: 25px; }\n\n.solicitationModalButtons {\n  bottom: 0;\n  position: absolute;\n  width: 90%; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute;\n      width: 100%; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 7%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 230px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
+	exports.push([module.id, ".loginBackground {\n  width: 100%;\n  height: 100%;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.logout {\n  cursor: pointer; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444;\n    margin-left: 10px;\n    margin-right: 10px; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 20px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 16px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.solicitationNumbersItens {\n  text-align: center; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.marginTop15 {\n  margin-top: 15px; }\n\n.linhaDivisoria {\n  border-bottom: 1px solid #CCC;\n  margin-left: 80px;\n  margin-right: 80px; }\n\nbody {\n  background-color: #3DB2FF; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px;\n    max-height: 200px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px;\n    max-height: 100px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  max-width: 100%;\n  min-width: 100%;\n  max-height: 300px; }\n\n.emptySolicitationLabel {\n  text-align: center;\n  top: 50%;\n  position: relative;\n  font-size: 25px; }\n\n.solicitationModalButtons {\n  bottom: 0;\n  position: absolute;\n  width: 90%; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute;\n      width: 100%; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 7%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 230px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.forgetPassword {\n  text-align: center;\n  font-weight: bold;\n  font-size: 18px;\n  margin-bottom: 25px; }\n", ""]);
 
 	// exports
 

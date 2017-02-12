@@ -92,7 +92,7 @@ export default class Login extends React.Component {
 
 	     		<div className="col-sm-offset-3 col-sm-6">
 
-	     		<img className="loginLogotype" src="public/images/logotipo.svg"/>
+		     		<img className="loginLogotype" src="public/images/logotipo.svg"/>
 	     			<div className="loginPanel">
 	     				<label>E-mail:</label><br/>
 	     				<Input hint="email" ref="email" type="email" onChange={this.handleEvent.bind(this,"email")}/>

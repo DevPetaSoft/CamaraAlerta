@@ -63,7 +63,7 @@ export default class ReceivedSolicitation extends React.Component{
   		}
 	    return (
 	     	<div className="dashboardWidget">
-	     		<h4 className="dashboardWidgetTitle">Solicitações recebidas</h4>
+	     		<h4 className="dashboardWidgetTitle">Total de solicitações / mês</h4>
 				<Chart
 			        chartType="ColumnChart" 
 			        data={this.state.items}

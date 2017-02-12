@@ -37,4 +37,7 @@ public class User extends GenericModel implements Serializable {
 
     @Column(nullable=true, length=255)
     public String tokenGPlus;
+
+    @Column(nullable=true)
+    public String resetPasswordTocken;
 }

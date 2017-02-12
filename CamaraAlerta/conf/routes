@@ -14,6 +14,7 @@ POST    /user/recuperarSenha                            UserController.recuperar
 GET     /user/numeroDenuncias/{idUsuario}               UserController.numeroDenuncias
 POST    /user/facebookJaLogado                          UserController.facebookJaLogado
 POST    /user/facebookTelefone                          UserController.cadastrarSenhaFacebook
+POST    /user/trocarSenha                               UserController.trocarSenha
 
 # Denuncias
 POST    /denuncia/novaDenuncia                          DenunciaController.novaDenuncia
@@ -34,6 +35,9 @@ POST    /vereador/editProfile                               VereadorController.e
 POST    /vereador/editConfiguration                         VereadorController.editConfigurations
 GET     /vereador/{vereadorId}/listSolicitationNumbers      VereadorController.listNumbersSolicitations
 GET     /vereador/{vereadorId}/listSolicitacoesPorMesList   VereadorController.listSolicitacoesPorMesList
+POST    /vereador/esqueceuSenha                             VereadorController.esqueciSenha
+POST    /vereador/gerarToken                                VereadorController.gerarChaveDeRecuperarSenha
+
 
 # Canal de comunicação
 POST    /canalComunicacao/entrarEmContato                               CanalDeComunicacaoController.entrarEmContato
@@ -53,5 +57,4 @@ GET     /favicon.ico                                    404
 GET     /public/                                        staticDir:public
 
 # Catch all
-*       /{controller}/{action}                          Application.index
 *       /{controller}                                   Application.index

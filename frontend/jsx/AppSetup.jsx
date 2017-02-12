@@ -21,6 +21,9 @@ import MapsBoard from "./Maps/MapsBoard.jsx";
 import EditProfile from "./Profile/EditProfile.jsx";
 import Configuration from "./Configuration/ConfigurationBoard.jsx";
 
+import VereadorForgetPassword from "./Password/VereadorForgetPassword.jsx";
+import ChangePassword from "./Password/ChangePassword.jsx";
+
 
 ReactDOM.render(
 	(
@@ -35,6 +38,9 @@ ReactDOM.render(
 				    <Route path="/maps" component={MapsBoard}/>
 				    <Route path="/editProfile" component={EditProfile}/>
 				    <Route path="/configuration" component={Configuration}/>
+
+				    <Route path="/forgetPassword" component={VereadorForgetPassword}/>
+				    <Route path="/changePassword" component={ChangePassword}/>
 				</Router>
 			</div>
 		</Provider>

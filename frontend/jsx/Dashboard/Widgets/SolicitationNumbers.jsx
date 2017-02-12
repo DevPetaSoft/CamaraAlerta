@@ -38,22 +38,23 @@ export default class SolicitationNumber extends React.Component{
 
 	     		<div className="row solicitationNumbers">
 
-	     			<div className="col-md-4 textAlignCenter">
-	     				<span className="solicitationNumber">{this.state.numbers.numeroSolicitacoes}</span>
-	     				<br/>
-	     				<span className="solicitationSubtitle">Solicitações recebidas</span>
-	     			</div>
+	     			
 
-	     			<div className="col-md-4 textAlignCenter">
+	     			<div className="solicitationNumbersItens">
+	     				<span className="solicitationSubtitle">Solicitações resolvidas: </span>
 	     				<span className="solicitationNumber">{this.state.numbers.numeroSolicitacoesResolvidas}</span>
-	     				<br/>
-	     				<span className="solicitationSubtitle">Solicitações resolvidas</span>
 	     			</div>
 
-	     			<div className="col-md-4 textAlignCenter">
+	     			<div className="solicitationNumbersItens">
+	     				<span className="solicitationSubtitle">Solicitações aguardando: </span>
 	     				<span className="solicitationNumber">{this.state.numbers.nuemroSolicitacoesPendentes}</span>
-	     				<br/>
-	     				<span className="solicitationSubtitle">Solicitações aguardando</span>
+	     			</div>
+
+	     			<div className="linhaDivisoria marginTop15"></div>
+
+	     			<div className="solicitationNumbersItens ">
+	     				<span className="solicitationSubtitle">Total de Solicitações: </span>
+	     				<span className="solicitationNumber">{this.state.numbers.numeroSolicitacoes}</span>
 	     			</div>
 	     		</div>
 	      	</div>

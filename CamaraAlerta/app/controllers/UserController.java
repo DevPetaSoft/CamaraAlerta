@@ -1,17 +1,18 @@
 package controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import dto.FacebookDTO;
 import models.Cidadao;
 import models.Denuncia;
+import models.User;
 import play.Logger;
 import play.mvc.Controller;
 
-import java.io.StringReader;
 import java.util.Date;
+
+
+
 
 /**
  * Created by gudominguete on 24/11/16.
@@ -110,6 +111,7 @@ public class UserController extends Controller {
 
     public void cadastrarSenhaFacebook(String id, String telefone){
 
+
         if(id == null){
 
             renderJSON(new String("É necessário passar um id"));
@@ -137,5 +139,55 @@ public class UserController extends Controller {
         cidadao.save();
 
         renderJSON(cidadao);
+    }
+
+    /**
+     * Função para realizar a troca de senha de um usuário
+     * @param body
+     */
+    public void trocarSenha(String body){
+
+        Logger.info("Trocando senha");
+
+        JsonParser parser = new JsonParser();
+        JsonObject json =(JsonObject) parser.parse(body);
+
+
+        String email = json.get("email").getAsString();
+
+        if(email == null){
+            renderJSON(new String("Não foi passado um e-mail!"));
+        }
+
+        User usuario = User.find("byEmail", email).first();
+
+        if(usuario == null){
+            renderJSON(new String("Não foi possível encontrar o usuário com o e-mail informado!"));
+        }
+
+        String token = json.get("token").getAsString();
+
+        if(token == null){
+            renderJSON(new String("Não foi passado um token!"));
+        }
+
+        if(!token.equals(usuario.resetPasswordTocken)){
+            renderJSON(new String("O token passado não confere com o enviado por e-mail"));
+        }
+
+
+        String password = json.get("password").getAsString();
+
+        if(password == null){
+            renderJSON(new String("Não foi passado uma senha!"));
+        }
+
+        usuario.senha = password;
+        usuario.resetPasswordTocken = null;
+
+        usuario.save();
+
+        renderJSON(new String("Ok"));
+
     }
 }

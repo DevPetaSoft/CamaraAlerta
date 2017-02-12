@@ -1,21 +1,31 @@
 package controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.NumerosMenuDTO;
 import dto.NumerosSolicitacoesDTO;
 import models.Denuncia;
-import models.MensagemChat;
 import models.SolicitacaoPorMes;
 import models.Vereador;
 import play.Logger;
+import play.Play;
 import play.mvc.Controller;
+import utils.EmailUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import java.util.Properties;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Created by gudominguete on 28/12/16.
@@ -246,22 +256,70 @@ public class VereadorController extends Controller {
         renderJSON(dto);
     }
 
-    public void listSolicitacoesPorMesList(Integer vereadorId){
-        if(vereadorId == null){
+    public void listSolicitacoesPorMesList(Integer vereadorId) {
+        if (vereadorId == null) {
             renderJSON(new String("Não foi passado um id de um vereador"));
         }
 
         Vereador vereador = Vereador.findById(vereadorId);
 
-        if(vereador == null){
+        if (vereador == null) {
             renderJSON(new String("Não foi encontrado esse vereador"));
         }
 
         // TODO: Implementar serializer
 
-        List<SolicitacaoPorMes> list = SolicitacaoPorMes.find("byVereador",vereador).fetch(0,12);
+        List<SolicitacaoPorMes> list = SolicitacaoPorMes.find("byVereador", vereador).fetch(0, 12);
 
         renderJSON(list);
+    }
+
+
+    public void gerarChaveDeRecuperarSenha(String body){
+
+
+        Logger.info("Gerar token");
+        JsonParser parser = new JsonParser();
+        JsonObject json =(JsonObject) parser.parse(body);
+
+
+        String email = json.get("email").getAsString();
+
+        Logger.info(email);
+
+        if(email == null){
+            renderJSON(new String("Não foi passado nenhum e-mail"));
+        }
+
+
+        Vereador vereador = Vereador.find("byEmail",email).first();
+
+        if(vereador == null){
+
+            renderJSON(new String("Não foi encontrado nenhuma conta com esse e-mail"));
+        }
+
+
+        SecureRandom random = new SecureRandom();
+
+        String codigoCadastro = new BigInteger(130, random).toString(32);
+
+
+        vereador.resetPasswordTocken = codigoCadastro;
+
+        vereador.save();
+
+        String subject = "Câmara Alerta - E-mail de recuperação de senha";
+
+        String corpoDoEmail = "Olá, para realizar a recuperação de senha, basta clicar no link:\n"+
+                                Play.configuration.getProperty("application.url")+
+                                "changePassword \ne digitar o código: " + codigoCadastro +
+                                "\n com a nova senha. \n Equipe Venit agradece a sua experiência com o Câmara Alerta!";
+
+        EmailUtils.enviarEmail(email,subject,corpoDoEmail);
+
+
+        renderJSON(new String("Ok"));
     }
 
 }

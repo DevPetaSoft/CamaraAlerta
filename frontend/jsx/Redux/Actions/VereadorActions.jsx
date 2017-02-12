@@ -108,3 +108,36 @@ export function listSolicitacoesPorMesList(id){
 			})
 	}
 }
+
+export function gerarToken(email){
+	return function (dispatch){
+		var params = {
+			email:email,
+		};
+		axios.post(window.location.origin+"/vereador/gerarToken",params)
+			.then((response) => {
+				dispatch({type: "GERAR_TOKEN", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}
+
+export function trocarSenha(email, token, password){
+	return function (dispatch){
+		var params = {
+			email:email,
+			token:token,
+			password:password,
+		};
+		params.password = md5(password);
+		axios.post(window.location.origin+"/user/trocarSenha",params)
+			.then((response) => {
+				dispatch({type: "TROCAR_SENHA", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}

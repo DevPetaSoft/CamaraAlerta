@@ -32,16 +32,17 @@ export default class Dashboard extends React.Component{
 	     					<SolicitationNumbers/>
 	     				</div>
 	     				<div className="row">
+	     					<ReceivedSolicitation/>
 
-	     					<SolicitationSolved/>
 	     				</div>
 	     			</div>
 	     			<div className="col-sm-6">
 	     				<div className="row">
-	     					<ReceivedSolicitation/>
+	     				
+	     					<SolicitationMap/>	
 	     				</div>
 	     				<div className="row">
-	     					<SolicitationMap/>	
+	     					<SolicitationSolved/>
 	     				</div>
 	     			</div>
 	     		</div>
