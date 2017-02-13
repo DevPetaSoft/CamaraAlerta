@@ -10,7 +10,6 @@ GET     /                                               Application.index
 POST    /user/facebookLogin                             UserController.facebookLogin
 POST    /user/novoCidadao                               UserController.novoCadastroCidadao
 POST    /user/login                                     UserController.cidadaoLogin
-POST    /user/recuperarSenha                            UserController.recuperarSenha
 GET     /user/numeroDenuncias/{idUsuario}               UserController.numeroDenuncias
 POST    /user/facebookJaLogado                          UserController.facebookJaLogado
 POST    /user/facebookTelefone                          UserController.cadastrarSenhaFacebook
@@ -37,6 +36,10 @@ GET     /vereador/{vereadorId}/listSolicitationNumbers      VereadorController.l
 GET     /vereador/{vereadorId}/listSolicitacoesPorMesList   VereadorController.listSolicitacoesPorMesList
 POST    /vereador/esqueceuSenha                             VereadorController.esqueciSenha
 POST    /vereador/gerarToken                                VereadorController.gerarChaveDeRecuperarSenha
+
+# Cidadao
+
+POST    /cidadao/gerarToken                                 UserController.esqueceuSenha
 
 
 # Canal de comunicação

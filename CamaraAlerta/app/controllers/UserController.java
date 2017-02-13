@@ -7,8 +7,12 @@ import models.Cidadao;
 import models.Denuncia;
 import models.User;
 import play.Logger;
+import play.Play;
 import play.mvc.Controller;
+import utils.EmailUtils;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Date;
 
 
@@ -189,5 +193,48 @@ public class UserController extends Controller {
 
         renderJSON(new String("Ok"));
 
+    }
+
+    /**
+     *
+     * @param email
+     */
+    public void esqueceuSenha(String email){
+        Logger.info("Gerar token");
+
+       
+        if(email == null){
+            renderJSON(new String("Não foi passado nenhum e-mail"));
+        }
+
+
+        Cidadao cidadao = Cidadao.find("byEmail",email).first();
+
+        if(cidadao == null){
+
+            renderJSON(new String("Não foi encontrado nenhuma conta com esse e-mail"));
+        }
+
+
+        SecureRandom random = new SecureRandom();
+
+        String codigoCadastro = new BigInteger(130, random).toString(32);
+
+
+        cidadao.resetPasswordTocken = codigoCadastro;
+
+        cidadao.save();
+
+        String subject = "Câmara Alerta - E-mail de recuperação de senha";
+
+        String corpoDoEmail = "Olá, para realizar a recuperação de senha, basta clicar no link:\n"+
+                Play.configuration.getProperty("application.url")+
+                "changePassword \ne digitar o código: " + codigoCadastro +
+                "\n com a nova senha. \n Equipe Venit agradece a sua experiência com o Câmara Alerta!";
+
+        EmailUtils.enviarEmail(email,subject,corpoDoEmail);
+
+
+        renderJSON(new String("Ok"));
     }
 }
