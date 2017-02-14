@@ -211,7 +211,6 @@ public class UserController extends Controller {
         Cidadao cidadao = Cidadao.find("byEmail",email).first();
 
         if(cidadao == null){
-
             renderJSON(new String("Não foi encontrado nenhuma conta com esse e-mail"));
         }
 
@@ -224,7 +223,6 @@ public class UserController extends Controller {
         cidadao.resetPasswordTocken = codigoCadastro;
 
         cidadao.save();
-
         String subject = "Câmara Alerta - E-mail de recuperação de senha";
 
         String corpoDoEmail = "Olá, para realizar a recuperação de senha, basta clicar no link:\n"+
@@ -234,7 +232,6 @@ public class UserController extends Controller {
 
         EmailUtils.enviarEmail(email,subject,corpoDoEmail);
 
-
-        renderJSON(new String("Ok"));
+        renderJSON(new String("Cheque o seu email para recuperar a senha!"));
     }
 }
