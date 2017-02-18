@@ -178,15 +178,15 @@ export default class SolicitationDetails extends React.Component{
 
 	     		<div className="col-sm-6">
 
-		     		<h4>Assunto</h4>
+		     		<h4 className="cursorDefault">Assunto</h4>
 		     		<p className="cursorDefault">{this.state.solicitacao.titulo}</p>
 
-		     		<h4>Descrição</h4>
+		     		<h4 className="cursorDefault">Descrição</h4>
 		     		<p className="solicitationDescription cursorDefault">
 		     		{this.state.solicitacao.descricao}
 		     		</p>
 
-		     		<h4>Autor</h4>
+		     		<h4 className="cursorDefault">Autor</h4>
 		     		<p className="cursorDefault">{this.state.solicitacao.cidadao.nome}
 		     			<Button className="solicitationModalSendButton contactButton" 
 		     					onClick={this.openModalMessage.bind(this)} 
@@ -197,7 +197,7 @@ export default class SolicitationDetails extends React.Component{
 	          		
 				  
 
-		     		<h4>Status</h4>
+		     		<h4 className="cursorDefault">Status</h4>
 		     		<p className="cursorDefault">{this.getStatus(this.state.solicitacao.status)}</p>
 					
 					<Button className="col-sm-offset-3 col-sm-6" 

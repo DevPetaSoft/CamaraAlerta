@@ -63882,7 +63882,7 @@
 						{ className: "col-sm-6" },
 						_react2.default.createElement(
 							"h4",
-							null,
+							{ className: "cursorDefault" },
 							"Assunto"
 						),
 						_react2.default.createElement(
@@ -63892,7 +63892,7 @@
 						),
 						_react2.default.createElement(
 							"h4",
-							null,
+							{ className: "cursorDefault" },
 							"Descri\xE7\xE3o"
 						),
 						_react2.default.createElement(
@@ -63902,7 +63902,7 @@
 						),
 						_react2.default.createElement(
 							"h4",
-							null,
+							{ className: "cursorDefault" },
 							"Autor"
 						),
 						_react2.default.createElement(
@@ -63920,7 +63920,7 @@
 						),
 						_react2.default.createElement(
 							"h4",
-							null,
+							{ className: "cursorDefault" },
 							"Status"
 						),
 						_react2.default.createElement(
