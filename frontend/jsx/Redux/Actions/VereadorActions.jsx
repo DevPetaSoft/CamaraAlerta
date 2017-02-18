@@ -8,7 +8,8 @@ export function vereadorLogin(email, senha){
 	if(senha == undefined){
 		senha = "";
 	}
-	params.senha = md5(senha);
+	console.log(md5("CAM-"+senha+"-RTA"));
+	params.senha = md5("CAM-"+senha+"-RTA");
 	return function (dispatch){
 		axios.post(window.location.origin+"/vereador/login",params)
 			.then((response) => {
@@ -131,7 +132,7 @@ export function trocarSenha(email, token, password){
 			token:token,
 			password:password,
 		};
-		params.password = md5(password);
+		params.password = md5("CAM-"+password+"-RTA");
 		axios.post(window.location.origin+"/user/trocarSenha",params)
 			.then((response) => {
 				dispatch({type: "TROCAR_SENHA", payload:response.data})
