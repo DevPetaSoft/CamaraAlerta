@@ -3,6 +3,7 @@ export default function reducer(state={
 	solicitacaoSelecionada:null,
 	fetching:false,
 	fetched:false,
+	historicos:[],
 	error:null
 },action){
 
@@ -25,6 +26,17 @@ export default function reducer(state={
 			state.fetching = false;
 			state.fetched = true;
 			state.solicitacaoSelecionada = action.payload;
+			return state;
+		}
+		case "FETCHING_HISTORICOS":{	
+			state.fetching = true;
+			state.fetched = false;
+			return state;
+		}
+		case "FETCHED_HISTORICOS":{	
+			state.fetching = true;
+			state.fetched = false;
+			state.historicos = action.payload;
 			return state;
 		}
 		case "CHANGING_SOLICITATION_STATE":{

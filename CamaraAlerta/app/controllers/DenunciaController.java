@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mysql.jdbc.log.Log;
 import dto.DenunciaDTO;
 import dto.MinhasDenunciasDTO;
 import models.*;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -265,6 +267,7 @@ public class DenunciaController extends Controller {
         historicoRelatorio.relatorio = relatorio;
         historicoRelatorio.status = status;
         historicoRelatorio.denuncia = solicitacao;
+        historicoRelatorio.dataCriacao = new Date();
         historicoRelatorio.save();
 
         solicitacaoPorMes.save();
@@ -275,6 +278,36 @@ public class DenunciaController extends Controller {
 
         Gson gson = builder.create();
         renderJSON(gson.toJson(solicitacao));
+
+    }
+
+
+    /**
+     * Busca de lista de historicos de uma solicitacao
+     * @param idSolicitacao
+     */
+    public static void listarHistorico(Integer idSolicitacao){
+
+        Logger.info("Listando historico de uma solicitacao");
+        if(idSolicitacao == null){
+            renderJSON(new String("Não foi passado um id da solicitação"));
+        }
+
+        Denuncia solicitacao = Denuncia.findById(idSolicitacao);
+
+        if(solicitacao == null){
+            renderJSON(new String("Não foi encontrado a solicitação enviada"));
+        }
+
+        List<HistoricoRelatorio> historicoRelatorios = HistoricoRelatorio.find("byDenuncia",solicitacao).fetch();
+
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+
+        renderJSON(gson.toJson(historicoRelatorios));
 
     }
 }

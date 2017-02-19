@@ -62,3 +62,11 @@
 		float:right;
 	}
 }
+
+.solicitationReportHistory{
+
+    max-height: 130px;
+    overflow-y: scroll;
+    border: 1px solid #CCC;
+    padding: 5px;
+}

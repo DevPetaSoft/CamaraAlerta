@@ -63,3 +63,16 @@ export function mudancaEstado(idSolicitacao, relatorio, status){
 			})
 	}
 }
+
+export function listHistoricosSolicitacao(idSolicitacao){
+	return function (dispatch){
+		dispatch({type: "FETCHING_HISTORICOS"});
+		axios.get(window.location.origin+"/denuncia/historicoRelatorios/"+idSolicitacao)
+			.then((response) => {
+				dispatch({type: "FETCHED_HISTORICOS", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}

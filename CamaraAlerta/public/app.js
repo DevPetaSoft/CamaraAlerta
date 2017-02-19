@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	__webpack_require__(741);
+	__webpack_require__(742);
 
 /***/ },
 /* 1 */
@@ -9681,47 +9681,47 @@
 
 	var _Solicitations2 = _interopRequireDefault(_Solicitations);
 
-	var _Messages = __webpack_require__(714);
+	var _Messages = __webpack_require__(715);
 
 	var _Messages2 = _interopRequireDefault(_Messages);
 
-	var _MapsBoard = __webpack_require__(719);
+	var _MapsBoard = __webpack_require__(720);
 
 	var _MapsBoard2 = _interopRequireDefault(_MapsBoard);
 
-	var _EditProfile = __webpack_require__(723);
+	var _EditProfile = __webpack_require__(724);
 
 	var _EditProfile2 = _interopRequireDefault(_EditProfile);
 
-	var _ConfigurationBoard = __webpack_require__(724);
+	var _ConfigurationBoard = __webpack_require__(725);
 
 	var _ConfigurationBoard2 = _interopRequireDefault(_ConfigurationBoard);
 
-	var _VereadorForgetPassword = __webpack_require__(726);
+	var _VereadorForgetPassword = __webpack_require__(727);
 
 	var _VereadorForgetPassword2 = _interopRequireDefault(_VereadorForgetPassword);
 
-	var _ChangePassword = __webpack_require__(727);
+	var _ChangePassword = __webpack_require__(728);
 
 	var _ChangePassword2 = _interopRequireDefault(_ChangePassword);
 
-	var _Index = __webpack_require__(728);
+	var _Index = __webpack_require__(729);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _AdminDashboard = __webpack_require__(730);
+	var _AdminDashboard = __webpack_require__(731);
 
 	var _AdminDashboard2 = _interopRequireDefault(_AdminDashboard);
 
-	var _CadastroEstado = __webpack_require__(733);
+	var _CadastroEstado = __webpack_require__(734);
 
 	var _CadastroEstado2 = _interopRequireDefault(_CadastroEstado);
 
-	var _CadastroCidade = __webpack_require__(735);
+	var _CadastroCidade = __webpack_require__(736);
 
 	var _CadastroCidade2 = _interopRequireDefault(_CadastroCidade);
 
-	var _CadastroVereador = __webpack_require__(740);
+	var _CadastroVereador = __webpack_require__(741);
 
 	var _CadastroVereador2 = _interopRequireDefault(_CadastroVereador);
 
@@ -38664,6 +38664,7 @@
 			solicitacaoSelecionada: null,
 			fetching: false,
 			fetched: false,
+			historicos: [],
 			error: null
 		};
 		var action = arguments[1];
@@ -38692,6 +38693,19 @@
 					state.fetching = false;
 					state.fetched = true;
 					state.solicitacaoSelecionada = action.payload;
+					return state;
+				}
+			case "FETCHING_HISTORICOS":
+				{
+					state.fetching = true;
+					state.fetched = false;
+					return state;
+				}
+			case "FETCHED_HISTORICOS":
+				{
+					state.fetching = true;
+					state.fetched = false;
+					state.historicos = action.payload;
 					return state;
 				}
 			case "CHANGING_SOLICITATION_STATE":
@@ -48380,6 +48394,7 @@
 	exports.listagemNovaSolicitacao = listagemNovaSolicitacao;
 	exports.listagemUnicaSolicitacao = listagemUnicaSolicitacao;
 	exports.mudancaEstado = mudancaEstado;
+	exports.listHistoricosSolicitacao = listHistoricosSolicitacao;
 
 	var _axios = __webpack_require__(450);
 
@@ -48437,6 +48452,17 @@
 				console.log(response);
 
 				dispatch({ type: "CHANGING_SOLICITATION_STATE", payload: response.data });
+			}).catch(function (err) {
+				console.log(err);
+			});
+		};
+	}
+
+	function listHistoricosSolicitacao(idSolicitacao) {
+		return function (dispatch) {
+			dispatch({ type: "FETCHING_HISTORICOS" });
+			_axios2.default.get(window.location.origin + "/denuncia/historicoRelatorios/" + idSolicitacao).then(function (response) {
+				dispatch({ type: "FETCHED_HISTORICOS", payload: response.data });
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -63786,13 +63812,17 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _button = __webpack_require__(712);
+	var _ReportHistory = __webpack_require__(712);
+
+	var _ReportHistory2 = _interopRequireDefault(_ReportHistory);
+
+	var _button = __webpack_require__(713);
 
 	var _button2 = _interopRequireDefault(_button);
 
 	var _SolicitacaoActions = __webpack_require__(484);
 
-	var _CanalDeComunicacaoActions = __webpack_require__(713);
+	var _CanalDeComunicacaoActions = __webpack_require__(714);
 
 	var _ToastrActions = __webpack_require__(270);
 
@@ -63852,9 +63882,11 @@
 				var _this2 = this;
 
 				_Store2.default.subscribe(function () {
+					var historicos = _Store2.default.getState().solicitacao.historicos;
 					var solicitacao = _Store2.default.getState().solicitacao.solicitacaoSelecionada;
 					_this2.setState({
-						solicitacao: solicitacao
+						solicitacao: solicitacao,
+						historicos: historicos
 
 					});
 				});
@@ -63901,6 +63933,8 @@
 		}, {
 			key: "openModal",
 			value: function openModal() {
+				//Busca os historicos pela solicitacao
+				this.props.dispatch((0, _SolicitacaoActions.listHistoricosSolicitacao)(this.state.solicitacao.id));
 				this.setState({
 					modalOpen: true
 				});
@@ -63951,6 +63985,7 @@
 						)
 					);
 				}
+
 				return _react2.default.createElement(
 					"div",
 					{ className: "solicitationBackground" },
@@ -64001,6 +64036,18 @@
 								{ value: "3" },
 								"N\xE3o resolvida(ou recusada)"
 							)
+						),
+						_react2.default.createElement(
+							"h5",
+							null,
+							"Hist\xF3rico de relat\xF3rios"
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "solicitationReportHistory" },
+							this.state.historicos.map(function (historico, idx) {
+								return _react2.default.createElement(_ReportHistory2.default, { key: idx, historico: historico });
+							})
 						),
 						_react2.default.createElement("br", null),
 						_react2.default.createElement(
@@ -65423,6 +65470,111 @@
 /* 712 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(12);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(169);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReportHistory = function (_React$Component) {
+		_inherits(ReportHistory, _React$Component);
+
+		function ReportHistory() {
+			_classCallCheck(this, ReportHistory);
+
+			return _possibleConstructorReturn(this, (ReportHistory.__proto__ || Object.getPrototypeOf(ReportHistory)).apply(this, arguments));
+		}
+
+		_createClass(ReportHistory, [{
+			key: "getStatus",
+			value: function getStatus(status) {
+				if (status === 0) {
+					return "Pendente";
+				} else if (status === 1) {
+					return "Em andamento";
+				} else if (status === 2) {
+					return "Finalizada com sucesso";
+				} else if (status === 3) {
+					return "Não resolvida(ou recusada)";
+				}
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				return _react2.default.createElement(
+					"div",
+					{ className: "reportHistory" },
+					_react2.default.createElement(
+						"p",
+						null,
+						_react2.default.createElement(
+							"span",
+							null,
+							"Status:"
+						),
+						_react2.default.createElement(
+							"span",
+							null,
+							" ",
+							this.getStatus(this.props.historico.status)
+						)
+					),
+					_react2.default.createElement(
+						"p",
+						null,
+						_react2.default.createElement(
+							"span",
+							null,
+							"Relat\xF3rio:"
+						),
+						" ",
+						this.props.historico.relatorio,
+						" "
+					),
+					_react2.default.createElement(
+						"p",
+						null,
+						_react2.default.createElement(
+							"span",
+							null,
+							"Data:"
+						),
+						" ",
+						this.props.historico.dataCriacao,
+						" "
+					)
+				);
+			}
+		}]);
+
+		return ReportHistory;
+	}(_react2.default.Component);
+
+	exports.default = ReportHistory;
+
+/***/ },
+/* 713 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var babelHelpers = __webpack_require__(442);
 	/**
 	 * MUI React button module
@@ -65660,7 +65812,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 713 */
+/* 714 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65731,7 +65883,7 @@
 	}
 
 /***/ },
-/* 714 */
+/* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65756,11 +65908,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageList = __webpack_require__(715);
+	var _MessageList = __webpack_require__(716);
 
 	var _MessageList2 = _interopRequireDefault(_MessageList);
 
-	var _MessageBoard = __webpack_require__(717);
+	var _MessageBoard = __webpack_require__(718);
 
 	var _MessageBoard2 = _interopRequireDefault(_MessageBoard);
 
@@ -65794,7 +65946,7 @@
 	});
 
 /***/ },
-/* 715 */
+/* 716 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65816,13 +65968,13 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MessageItem = __webpack_require__(716);
+	var _MessageItem = __webpack_require__(717);
 
 	var _MessageItem2 = _interopRequireDefault(_MessageItem);
 
 	var _reactRedux = __webpack_require__(234);
 
-	var _CanalDeComunicacaoActions = __webpack_require__(713);
+	var _CanalDeComunicacaoActions = __webpack_require__(714);
 
 	var _Store = __webpack_require__(271);
 
@@ -65900,7 +66052,7 @@
 	exports.default = MessageList;
 
 /***/ },
-/* 716 */
+/* 717 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65962,7 +66114,7 @@
 	});
 
 /***/ },
-/* 717 */
+/* 718 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65992,7 +66144,7 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MessageChatItem = __webpack_require__(718);
+	var _MessageChatItem = __webpack_require__(719);
 
 	var _MessageChatItem2 = _interopRequireDefault(_MessageChatItem);
 
@@ -66006,7 +66158,7 @@
 
 	var _reactRedux = __webpack_require__(234);
 
-	var _CanalDeComunicacaoActions = __webpack_require__(713);
+	var _CanalDeComunicacaoActions = __webpack_require__(714);
 
 	var _Store = __webpack_require__(271);
 
@@ -66127,7 +66279,7 @@
 	exports.default = SolicitationList;
 
 /***/ },
-/* 718 */
+/* 719 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66169,7 +66321,7 @@
 	});
 
 /***/ },
-/* 719 */
+/* 720 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66194,11 +66346,11 @@
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _MapsList = __webpack_require__(720);
+	var _MapsList = __webpack_require__(721);
 
 	var _MapsList2 = _interopRequireDefault(_MapsList);
 
-	var _MapsContainer = __webpack_require__(722);
+	var _MapsContainer = __webpack_require__(723);
 
 	var _MapsContainer2 = _interopRequireDefault(_MapsContainer);
 
@@ -66232,7 +66384,7 @@
 	});
 
 /***/ },
-/* 720 */
+/* 721 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66254,7 +66406,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _MapsItem = __webpack_require__(721);
+	var _MapsItem = __webpack_require__(722);
 
 	var _MapsItem2 = _interopRequireDefault(_MapsItem);
 
@@ -66333,7 +66485,7 @@
 	exports.default = MapsList;
 
 /***/ },
-/* 721 */
+/* 722 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66395,7 +66547,7 @@
 	});
 
 /***/ },
-/* 722 */
+/* 723 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66503,7 +66655,7 @@
 	exports.default = MapsList;
 
 /***/ },
-/* 723 */
+/* 724 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66668,7 +66820,7 @@
 	exports.default = EditProfile;
 
 /***/ },
-/* 724 */
+/* 725 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66706,7 +66858,7 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _checkbox = __webpack_require__(725);
+	var _checkbox = __webpack_require__(726);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
@@ -66832,7 +66984,7 @@
 	exports.default = ConfigurationBoard;
 
 /***/ },
-/* 725 */
+/* 726 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var babelHelpers = __webpack_require__(442);
@@ -66936,7 +67088,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 726 */
+/* 727 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67110,7 +67262,7 @@
 	exports.default = Login;
 
 /***/ },
-/* 727 */
+/* 728 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67319,7 +67471,7 @@
 	exports.default = ChangePassword;
 
 /***/ },
-/* 728 */
+/* 729 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67359,7 +67511,7 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _AdministradorActions = __webpack_require__(729);
+	var _AdministradorActions = __webpack_require__(730);
 
 	var _Store = __webpack_require__(271);
 
@@ -67497,7 +67649,7 @@
 	exports.default = AdminLogin;
 
 /***/ },
-/* 729 */
+/* 730 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67535,7 +67687,7 @@
 	}
 
 /***/ },
-/* 730 */
+/* 731 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67557,11 +67709,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _TopMenu = __webpack_require__(731);
+	var _TopMenu = __webpack_require__(732);
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
-	var _Menu = __webpack_require__(732);
+	var _Menu = __webpack_require__(733);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
@@ -67608,7 +67760,7 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 731 */
+/* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67655,7 +67807,7 @@
 	});
 
 /***/ },
-/* 732 */
+/* 733 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67783,7 +67935,7 @@
 	exports.default = Menu;
 
 /***/ },
-/* 733 */
+/* 734 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67807,11 +67959,11 @@
 
 	var _reactRedux = __webpack_require__(234);
 
-	var _Menu = __webpack_require__(732);
+	var _Menu = __webpack_require__(733);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
-	var _TopMenu = __webpack_require__(731);
+	var _TopMenu = __webpack_require__(732);
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
@@ -67827,7 +67979,7 @@
 
 	var _Store2 = _interopRequireDefault(_Store);
 
-	var _EstadoActions = __webpack_require__(734);
+	var _EstadoActions = __webpack_require__(735);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67926,7 +68078,7 @@
 	exports.default = CadastroEstado;
 
 /***/ },
-/* 734 */
+/* 735 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67968,7 +68120,7 @@
 	}
 
 /***/ },
-/* 735 */
+/* 736 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67992,11 +68144,11 @@
 
 	var _reactRedux = __webpack_require__(234);
 
-	var _Menu = __webpack_require__(732);
+	var _Menu = __webpack_require__(733);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
-	var _TopMenu = __webpack_require__(731);
+	var _TopMenu = __webpack_require__(732);
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
@@ -68008,11 +68160,11 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _select = __webpack_require__(736);
+	var _select = __webpack_require__(737);
 
 	var _select2 = _interopRequireDefault(_select);
 
-	var _option = __webpack_require__(738);
+	var _option = __webpack_require__(739);
 
 	var _option2 = _interopRequireDefault(_option);
 
@@ -68020,9 +68172,9 @@
 
 	var _Store2 = _interopRequireDefault(_Store);
 
-	var _EstadoActions = __webpack_require__(734);
+	var _EstadoActions = __webpack_require__(735);
 
-	var _CidadeActions = __webpack_require__(739);
+	var _CidadeActions = __webpack_require__(740);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68136,7 +68288,7 @@
 	exports.default = CadastroCidade;
 
 /***/ },
-/* 736 */
+/* 737 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var babelHelpers = __webpack_require__(442);
@@ -68155,7 +68307,7 @@
 
 	var _react2 = babelHelpers.interopRequireDefault(_react);
 
-	var _forms = __webpack_require__(737);
+	var _forms = __webpack_require__(738);
 
 	var formlib = babelHelpers.interopRequireWildcard(_forms);
 
@@ -68577,7 +68729,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 737 */
+/* 738 */
 /***/ function(module, exports) {
 
 	/**
@@ -68642,7 +68794,7 @@
 
 
 /***/ },
-/* 738 */
+/* 739 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var babelHelpers = __webpack_require__(442);
@@ -68661,7 +68813,7 @@
 
 	var _react2 = babelHelpers.interopRequireDefault(_react);
 
-	var _forms = __webpack_require__(737);
+	var _forms = __webpack_require__(738);
 
 	var formlib = babelHelpers.interopRequireWildcard(_forms);
 
@@ -68723,7 +68875,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 739 */
+/* 740 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68767,7 +68919,7 @@
 	}
 
 /***/ },
-/* 740 */
+/* 741 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68791,11 +68943,11 @@
 
 	var _reactRedux = __webpack_require__(234);
 
-	var _Menu = __webpack_require__(732);
+	var _Menu = __webpack_require__(733);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
-	var _TopMenu = __webpack_require__(731);
+	var _TopMenu = __webpack_require__(732);
 
 	var _TopMenu2 = _interopRequireDefault(_TopMenu);
 
@@ -68807,11 +68959,11 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _select = __webpack_require__(736);
+	var _select = __webpack_require__(737);
 
 	var _select2 = _interopRequireDefault(_select);
 
-	var _option = __webpack_require__(738);
+	var _option = __webpack_require__(739);
 
 	var _option2 = _interopRequireDefault(_option);
 
@@ -68819,7 +68971,7 @@
 
 	var _Store2 = _interopRequireDefault(_Store);
 
-	var _CidadeActions = __webpack_require__(739);
+	var _CidadeActions = __webpack_require__(740);
 
 	var _VereadorActions = __webpack_require__(449);
 
@@ -68980,13 +69132,13 @@
 	exports.default = CadastroVereador;
 
 /***/ },
-/* 741 */
+/* 742 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(742);
+	var content = __webpack_require__(743);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -69006,7 +69158,7 @@
 	}
 
 /***/ },
-/* 742 */
+/* 743 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -69014,7 +69166,7 @@
 
 
 	// module
-	exports.push([module.id, ".loginBackground {\n  width: 100%;\n  height: 100%;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black;\n    margin-top: 15px; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.logout {\n  cursor: pointer; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444;\n    margin-left: 10px;\n    margin-right: 10px; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 20px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 16px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px;\n  cursor: pointer; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.solicitationNumbersItens {\n  text-align: center; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.marginTop15 {\n  margin-top: 15px; }\n\n.linhaDivisoria {\n  border-bottom: 1px solid #CCC;\n  margin-left: 80px;\n  margin-right: 80px; }\n\nbody {\n  background-color: #3DB2FF; }\n\n.cursorDefault {\n  cursor: default; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px;\n    cursor: default; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px;\n    max-height: 200px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px;\n    max-height: 100px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  max-width: 100%;\n  min-width: 100%;\n  max-height: 300px; }\n\n.emptySolicitationLabel {\n  text-align: center;\n  top: 50%;\n  position: relative;\n  font-size: 25px; }\n\n.solicitationModalButtons {\n  bottom: 0;\n  position: absolute;\n  width: 90%; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px;\n  cursor: pointer; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute;\n      width: 100%; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 7%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px;\n  cursor: pointer; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 230px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.forgetPassword {\n  text-align: center;\n  font-weight: bold;\n  font-size: 18px;\n  margin-bottom: 25px; }\n\n.novaCidadeBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 196px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .novaCidadeBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.vereadorBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 400px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .vereadorBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
+	exports.push([module.id, ".loginBackground {\n  width: 100%;\n  height: 100%;\n  padding: 0px;\n  margin: 0px;\n  top: 0px;\n  left: 0px; }\n  .loginBackground .loginPanel {\n    background-color: white;\n    top: 25%;\n    height: 50%;\n    position: relative;\n    border-radius: 2px;\n    box-shadow: 2px 2px 2px #222;\n    padding: 20px; }\n  .loginBackground .loginLogotype {\n    width: 300px;\n    left: 25%;\n    margin-top: 30px;\n    position: relative;\n    margin-bottom: 30px; }\n  .loginBackground .loginButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black;\n    margin-top: 15px; }\n    .loginBackground .loginButton .loginButtonIcon:before {\n      color: white; }\n\n.logout {\n  cursor: pointer; }\n\n.footer {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 40px;\n  background-color: white;\n  text-align: center; }\n\n.sideMenu {\n  background-color: white;\n  height: 100%;\n  width: 200px;\n  border: 1px solid #CCC;\n  border-top: none;\n  position: fixed;\n  top: 0;\n  z-index: 81; }\n  .sideMenu .sideMenuHeader {\n    font-size: 12px; }\n    .sideMenu .sideMenuHeader .sideMenuHeaderText {\n      margin-left: 15px; }\n    .sideMenu .sideMenuHeader .perfilImage {\n      width: 70px;\n      height: 70px;\n      border: 1px solid #ccc;\n      border-radius: 50px;\n      margin-left: 65px;\n      margin-bottom: 20px;\n      margin-top: 25px; }\n  .sideMenu li {\n    list-style: none; }\n    .sideMenu li ul {\n      padding-left: 0px; }\n  .sideMenu .sideMenuItensActive {\n    background-color: #3DB2FF;\n    color: white; }\n    .sideMenu .sideMenuItensActive .sideMenuItensNumber {\n      background-color: white !important;\n      color: #3DB2FF !important; }\n  .sideMenu .sideMenuItens {\n    padding-top: 5px;\n    padding-bottom: 5px;\n    border: 1px solid #3DB2FF;\n    border-radius: 5px;\n    width: 96%;\n    display: inline-block;\n    margin-left: 2%; }\n    .sideMenu .sideMenuItens:hover {\n      background-color: #3DB2FF;\n      color: white;\n      padding-top: 5px;\n      padding-bottom: 5px;\n      border-radius: 5px;\n      text-decoration: none; }\n      .sideMenu .sideMenuItens:hover .sideMenuItensNumber {\n        float: right;\n        background-color: white;\n        padding-right: 5px;\n        border-radius: 3px;\n        color: #3DB2FF;\n        margin-right: 10px;\n        padding-left: 5px;\n        padding-bottom: 2px; }\n    .sideMenu .sideMenuItens .sideMenuItensNumber {\n      float: right;\n      background-color: #3DB2FF;\n      padding-right: 5px;\n      border-radius: 3px;\n      color: white;\n      margin-right: 10px;\n      padding-left: 5px;\n      padding-bottom: 2px; }\n\n.topMenu {\n  width: 100%;\n  height: 60px;\n  background-color: white;\n  border-bottom: 1px solid #ccc;\n  position: fixed;\n  z-index: 80; }\n  .topMenu .topMenuImage {\n    height: 60px;\n    left: 50%;\n    position: fixed; }\n  .topMenu .logout {\n    float: right;\n    margin-right: 20px;\n    font-size: 18px;\n    margin-top: 15px; }\n\n.dashboardBody {\n  height: 100%;\n  width: 100%;\n  overflow-y: auto;\n  position: fixed;\n  background-color: #3DB2FF; }\n  .dashboardBody .dashboardContainder {\n    margin-left: 200px;\n    margin-top: 60px; }\n  .dashboardBody .dashboardWidgetList {\n    background-color: white;\n    border-radius: 5px;\n    min-height: 570px;\n    box-shadow: 2px 3px 5px #444; }\n  .dashboardBody .dashboardWidgetTitle {\n    padding-top: 15px;\n    padding-bottom: 15px;\n    text-align: center; }\n  .dashboardBody .dashboardWidget {\n    background-color: white;\n    border-radius: 5px;\n    height: 250px;\n    box-shadow: 2px 3px 5px #444;\n    margin-left: 10px;\n    margin-right: 10px; }\n    .dashboardBody .dashboardWidget .solicitationNumbers {\n      margin-top: 40px; }\n  .dashboardBody .solicitationNumber {\n    font-size: 20px; }\n  .dashboardBody .solicitationSubtitle {\n    font-size: 16px; }\n\n.solicitationListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px;\n  cursor: pointer; }\n  .solicitationListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.solicitationNumbersItens {\n  text-align: center; }\n\n.bold {\n  font-weight: bold; }\n\n.marginLeft20 {\n  margin-left: 20px; }\n\n.textAlignCenter {\n  text-align: center; }\n\n.mui-textfield {\n  padding-top: 0px; }\n\n.paddingBottom0 {\n  padding-bottom: 0px !important; }\n\n.marginTop10 {\n  margin-top: 10px; }\n\n.marginTop15 {\n  margin-top: 15px; }\n\n.linhaDivisoria {\n  border-bottom: 1px solid #CCC;\n  margin-left: 80px;\n  margin-right: 80px; }\n\nbody {\n  background-color: #3DB2FF; }\n\n.cursorDefault {\n  cursor: default; }\n\n.solicitationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 570px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n  .solicitationBackground .solicitationDescription {\n    height: 200px;\n    overflow-y: auto;\n    border: 1px solid #ccc;\n    padding: 10px;\n    border-radius: 10px;\n    cursor: default; }\n  .solicitationBackground .contactButton {\n    float: right; }\n  .solicitationBackground .solicitationImage {\n    width: 100%;\n    margin-top: 30px;\n    max-height: 200px; }\n  .solicitationBackground .solicitationImageSecundary {\n    width: 100%;\n    margin-top: 10px;\n    max-height: 100px; }\n\n.solicitationModalTitle {\n  text-align: center; }\n\n.solicitationModalTextArea {\n  max-width: 100%;\n  min-width: 100%;\n  max-height: 300px; }\n\n.emptySolicitationLabel {\n  text-align: center;\n  top: 50%;\n  position: relative;\n  font-size: 25px; }\n\n.solicitationModalButtons {\n  bottom: 0;\n  position: absolute;\n  width: 90%; }\n  .solicitationModalButtons .solicitationModalSendButton {\n    float: right; }\n\n.solicitationReportHistory {\n  max-height: 130px;\n  overflow-y: scroll;\n  border: 1px solid #CCC;\n  padding: 5px; }\n\n.messageListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px;\n  cursor: pointer; }\n  .messageListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.messageBoardBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .messageBoardBackground .messageBoardBackgroundContainer {\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    width: 100%;\n    height: 92%; }\n    .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock {\n      bottom: 0;\n      position: absolute;\n      width: 100%; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messagesBlock {\n        overflow-y: auto;\n        height: 390px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageInput {\n        border: 1px solid #ccc;\n        border-radius: 5px;\n        padding: 5px;\n        margin-left: 10px; }\n      .messageBoardBackground .messageBoardBackgroundContainer .messageInputBlock .messageButton {\n        background-color: #2ecc71;\n        border: 0;\n        border-radius: 50px;\n        padding: 10px;\n        width: 42px;\n        box-shadow: 2px 2px 2px black;\n        margin-left: 10px; }\n\n.messageItemChatBackgroundYourself {\n  width: 75%;\n  margin-left: 1%;\n  float: left;\n  background-color: #3F51B5;\n  border: 1px solid white;\n  color: white;\n  border-radius: 10px;\n  margin-bottom: 10px;\n  padding: 5px; }\n\n.messageItemChatBackgroundClient {\n  width: 75%;\n  float: right;\n  margin-right: 7%;\n  border: 1px solid #ccc;\n  padding: 5px;\n  border-radius: 10px;\n  margin-bottom: 10px; }\n\n.mapsListItemBackground {\n  background-color: white;\n  border: 1px solid #3F51B5;\n  color: black;\n  border-radius: 5px;\n  margin: 10px;\n  padding: 5px;\n  cursor: pointer; }\n  .mapsListItemBackground:hover {\n    background-color: #3F51B5;\n    border: 1px solid white;\n    color: white; }\n\n.mapsBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 510px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n\n.profileBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 230px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .profileBackground .profileTitle {\n    text-align: center; }\n  .profileBackground .profileEditButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.configurationBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 135px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .configurationBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.forgetPassword {\n  text-align: center;\n  font-weight: bold;\n  font-size: 18px;\n  margin-bottom: 25px; }\n\n.novaCidadeBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 196px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .novaCidadeBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n\n.vereadorBackground {\n  background-color: white;\n  border-radius: 5px;\n  height: 400px;\n  box-shadow: 2px 3px 5px #444;\n  margin-top: 10px;\n  padding: 10px; }\n  .vereadorBackground .configurationButton {\n    background-color: #2ecc71;\n    border: 0;\n    border-radius: 50px;\n    padding: 13px;\n    float: right;\n    box-shadow: 2px 2px 2px black; }\n", ""]);
 
 	// exports
 

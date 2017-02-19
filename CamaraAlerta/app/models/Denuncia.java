@@ -52,6 +52,7 @@ public class Denuncia extends GenericModel implements Serializable {
     @Column(nullable=false,unique=false)
     public boolean comunicacaoPermitida;
 
+    //@OneToMany(mappedBy = "denuncia", fetch = FetchType.LAZY)
     @Transient
     public List<HistoricoRelatorio> relatorio;
 

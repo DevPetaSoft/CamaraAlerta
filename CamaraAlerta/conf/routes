@@ -20,6 +20,8 @@ POST    /user/trocarSenha                               UserController.trocarSen
 POST    /administrador/login                            AdministradorController.adminsitradorLogin
 
 # Denuncias
+
+GET     /denuncia/historicoRelatorios/{idSolicitacao}   DenunciaController.listarHistorico
 POST    /denuncia/novaDenuncia                          DenunciaController.novaDenuncia
 GET     /denuncia/minhasDenunciasUsu/{idUsuario}        DenunciaController.minhasDenuncias
 GET     /denuncia/{idVereador}/{idSolicitacao}          DenunciaController.find
@@ -41,6 +43,7 @@ GET     /vereador/{vereadorId}/listSolicitacoesPorMesList   VereadorController.l
 POST    /vereador/esqueceuSenha                             VereadorController.esqueciSenha
 POST    /vereador/gerarToken                                VereadorController.gerarChaveDeRecuperarSenha
 POST    /vereador/save                                      VereadorController.cadastrarVereador
+
 
 # Cidadao
 POST    /cidadao/gerarToken                                 UserController.esqueceuSenha

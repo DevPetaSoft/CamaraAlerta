@@ -5,9 +5,11 @@ import Modal from "react-modal";
 import Menu from "./../Dashboard/Menu.jsx";
 import TopMenu from "./../Dashboard/TopMenu.jsx";
 
+import ReportHistory from "./ReportHistory.jsx";
+
 import Button from 'muicss/lib/react/button';
 
-import { mudancaEstado } from "./../Redux/Actions/SolicitacaoActions.jsx";
+import { mudancaEstado, listHistoricosSolicitacao } from "./../Redux/Actions/SolicitacaoActions.jsx";
 import { novoCanal } from "./../Redux/Actions/CanalDeComunicacaoActions.jsx";
 import { successMessage } from "./../Redux/Actions/ToastrActions.jsx";
 
@@ -47,9 +49,11 @@ const modalStyle = {
 export default class SolicitationDetails extends React.Component{
 	componentDidMount(){
 		store.subscribe(()=>{
+			var historicos = store.getState().solicitacao.historicos;
 			var solicitacao = store.getState().solicitacao.solicitacaoSelecionada;
 			this.setState({
-				solicitacao: solicitacao
+				solicitacao: solicitacao,
+				historicos: historicos
 			
 			});
 		});
@@ -95,6 +99,8 @@ export default class SolicitationDetails extends React.Component{
 	}
 
 	openModal(){
+		//Busca os historicos pela solicitacao
+		this.props.dispatch(listHistoricosSolicitacao(this.state.solicitacao.id));
 		this.setState({
 			modalOpen:true
 		});
@@ -130,6 +136,7 @@ export default class SolicitationDetails extends React.Component{
 	     		<h4 className="emptySolicitationLabel">Nenhuma solicitação selecionada</h4>
 	     	</div>)
   		}
+
 	    return (
 	     	<div className="solicitationBackground">
 
@@ -150,6 +157,14 @@ export default class SolicitationDetails extends React.Component{
 			  	<option value="2">Finalizado com sucesso</option>
 			  	<option value="3">Não resolvida(ou recusada)</option>
 			  </select>
+
+			  <h5>Histórico de relatórios</h5>
+			  <div className="solicitationReportHistory">
+			  		{this.state.historicos.map((historico,idx)=>{
+		     			return(<ReportHistory key={idx} historico={historico} />);
+		     		})}
+				  
+			  </div>
 			  <br/>
 
 			  <div className="solicitationModalButtons">
