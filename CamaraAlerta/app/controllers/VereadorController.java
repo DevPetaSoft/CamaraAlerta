@@ -180,7 +180,13 @@ public class VereadorController extends Controller {
             renderJSON("Não foi possivel encontrar um vereador com esse Id");
         }
 
-        renderJSON(vereador);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+
+        renderJSON(gson.toJson(vereador));
 
     }
 
@@ -282,9 +288,17 @@ public class VereadorController extends Controller {
 
         // TODO: Implementar serializer
 
+
+
         List<SolicitacaoPorMes> list = SolicitacaoPorMes.find("byVereador", vereador).fetch(0, 12);
 
-        renderJSON(list);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+
+        renderJSON(gson.toJson(list));
     }
 
 
@@ -324,10 +338,11 @@ public class VereadorController extends Controller {
 
         String subject = "Câmara Alerta - E-mail de recuperação de senha";
 
-        String corpoDoEmail = "Olá, para realizar a recuperação de senha, basta clicar no link:\n"+
-                                Play.configuration.getProperty("application.url")+
-                                "changePassword \ne digitar o código: " + codigoCadastro +
-                                "\n com a nova senha. \n Equipe Venit agradece a sua experiência com o Câmara Alerta!";
+        String corpoDoEmail = "Olá "+vereador.nome + "\n"+
+                "Recebemos um pedido de recuperação de senha.\n"+
+                "Para cadastrar uma nova senha, acesse o link: "+ Play.configuration.getProperty("application.url")+  "changePassword " +
+                "e digitar o código: " + codigoCadastro + ".\n"+
+                "Equipe Venit agradece a sua experiência com o Câmara Alerta!";
 
         EmailUtils.enviarEmail(email,subject,corpoDoEmail);
 

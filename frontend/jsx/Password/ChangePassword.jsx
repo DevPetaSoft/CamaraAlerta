@@ -49,6 +49,7 @@ export default class ChangePassword extends React.Component {
 			      timeOut: 30000,
 			      extendedTimeOut: 10000
 			    });
+			    location.assign("./");
 			}else{
 				this.refs.container.success(
 			      "Senha trocada com sucesso!!",

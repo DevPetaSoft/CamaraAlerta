@@ -50,6 +50,7 @@ export default class Login extends React.Component {
 			      timeOut: 30000,
 			      extendedTimeOut: 10000
 			    });
+			    location.assign("./");
 			}else{
 				this.refs.container.error(
 			      storeState.vereador.gerouToken,
@@ -97,7 +98,9 @@ export default class Login extends React.Component {
 	     				    ref="email" 
 			     		    value={this.state.value}
 			     		    type="email"/>
-
+						
+						<Link to="/">Voltar para tela de login</Link>
+	     				
 	     				<button className="loginButton" onClick={this.sendEmail.bind(this)} ><img src="public/icons/send.svg" /></button>
 	     			
 	     			</div>

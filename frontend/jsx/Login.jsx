@@ -98,7 +98,7 @@ export default class Login extends React.Component {
 	     				<Input hint="email" ref="email" type="email" onChange={this.handleEvent.bind(this,"email")}/>
 	     				<label>Senha:</label><br/>
 	     				<Input hint="password" ref="senha" type="password" onChange={this.handleEvent.bind(this,"senha")}/>
-
+	     				<Link to="/forgetPassword">Esqueci minha senha</Link>
 	     				<button className="loginButton" onClick={this.login.bind(this)}><img src="public/icons/login-variant.svg" /></button>
 	     			
 	     			</div>
