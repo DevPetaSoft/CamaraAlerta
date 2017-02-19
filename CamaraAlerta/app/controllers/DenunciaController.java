@@ -1,6 +1,7 @@
 package controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.DenunciaDTO;
@@ -9,6 +10,7 @@ import models.*;
 import play.Logger;
 import play.Play;
 import play.mvc.Controller;
+import utils.HibernateProxyTypeAdapter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -126,7 +128,13 @@ public class DenunciaController extends Controller {
         } else {
             int count = denunciasUsuario.size();
             MinhasDenunciasDTO minhasDenunciaDTO = new MinhasDenunciasDTO(denunciasUsuario, count);
-            renderJSON(minhasDenunciaDTO);
+
+            GsonBuilder builder = new GsonBuilder();
+
+            builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+            Gson gson = builder.create();
+            renderJSON(gson.toJson(minhasDenunciaDTO));
         }
     }
 
@@ -192,7 +200,12 @@ public class DenunciaController extends Controller {
         }
 
         if(solicitacao.vereador.id == vereador.id && solicitacao.valida == true){
-            renderJSON(solicitacao);
+            GsonBuilder builder = new GsonBuilder();
+
+            builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+            Gson gson = builder.create();
+            renderJSON(gson.toJson(solicitacao));
         }
 
         renderJSON("Não foi possivel buscar a solicitacao");
@@ -245,7 +258,7 @@ public class DenunciaController extends Controller {
             solicitacaoPorMes.numeroDeSolicitacoesResolvidas -=1;
         }
 
-        solicitacao.save();
+        solicitacao = solicitacao.save();
 
 
         HistoricoRelatorio historicoRelatorio = new HistoricoRelatorio();
@@ -256,7 +269,12 @@ public class DenunciaController extends Controller {
 
         solicitacaoPorMes.save();
 
-        renderJSON(solicitacao);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(solicitacao));
 
     }
 }

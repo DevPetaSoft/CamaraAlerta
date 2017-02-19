@@ -75,7 +75,13 @@ public class VereadorController extends Controller {
         List<Vereador> list = new ArrayList<Vereador>();
         list = Vereador.findAll();
         if(list.size()>0){
-            renderJSON(list);
+
+            GsonBuilder builder = new GsonBuilder();
+
+            builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+            Gson gson = builder.create();
+            renderJSON(gson.toJson(list));
         }else{
             renderJSON(new String("Não existem vereadores nessa cidade"));
         }
@@ -101,7 +107,12 @@ public class VereadorController extends Controller {
         List<Denuncia> list = Denuncia.find("vereador = ? AND valida = true order by data desc", vereador).fetch();
 
         //TODO: Criar serializer
-        renderJSON(list);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(list));
     }
 
     /**

@@ -23,7 +23,7 @@ public class HistoricoRelatorio extends GenericModel implements Serializable{
     public Integer status;
 
 
-    @ManyToOne(targetEntity=Denuncia.class, fetch= FetchType.EAGER, optional=false)
+    @ManyToOne(targetEntity=Denuncia.class, fetch= FetchType.LAZY, optional=false)
     public Denuncia denuncia;
 
 }

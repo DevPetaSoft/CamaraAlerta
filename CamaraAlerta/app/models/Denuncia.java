@@ -52,8 +52,7 @@ public class Denuncia extends GenericModel implements Serializable {
     @Column(nullable=false,unique=false)
     public boolean comunicacaoPermitida;
 
-    @OneToMany
-    @JoinColumn(name="id")
+    @Transient
     public List<HistoricoRelatorio> relatorio;
 
     @ManyToOne(targetEntity=Cidadao.class, fetch=FetchType.EAGER, optional=false)
@@ -76,4 +75,8 @@ public class Denuncia extends GenericModel implements Serializable {
 
     @Column(nullable=false,unique=false)
     public boolean valida;
+
+    public List<HistoricoRelatorio> getRelatorio(){
+        return HistoricoRelatorio.find("byDenuncia",this).fetch();
+    }
 }
