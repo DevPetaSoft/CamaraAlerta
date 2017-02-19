@@ -8,7 +8,6 @@ export function vereadorLogin(email, senha){
 	if(senha == undefined){
 		senha = "";
 	}
-	console.log(md5("CAM-"+senha+"-RTA"));
 	params.senha = md5("CAM-"+senha+"-RTA");
 	return function (dispatch){
 		axios.post(window.location.origin+"/vereador/login",params)
@@ -136,6 +135,30 @@ export function trocarSenha(email, token, password){
 		axios.post(window.location.origin+"/user/trocarSenha",params)
 			.then((response) => {
 				dispatch({type: "TROCAR_SENHA", payload:response.data})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+}
+
+
+export function criarVereador(vereador){
+
+	var params = {};
+	params.nome = vereador.nome;
+	params.email = vereador.email;
+	params.cpf = vereador.cpf;
+	params.senha = md5("CAM-"+vereador.senha+"-RTA");
+	params.cidade = {};
+	params.cidade.id = vereador.cidade;
+	params.criadoPor = {};
+	params.criadoPor.email = localStorage.administradorEmail;
+
+	return function (dispatch){
+		axios.post(window.location.origin+"/vereador/save",params)
+			.then((response) => {
+				dispatch({type: "VEREADOR_NOVO", payload:response.data})
 			})
 			.catch((err) => {
 				console.log(err);

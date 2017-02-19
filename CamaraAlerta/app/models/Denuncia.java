@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by gudominguete on 24/11/16.
@@ -51,8 +52,9 @@ public class Denuncia extends GenericModel implements Serializable {
     @Column(nullable=false,unique=false)
     public boolean comunicacaoPermitida;
 
-    @Column(nullable=false,unique=false, length=4000)
-    public String relatorio;
+    @OneToMany
+    @JoinColumn(name="id")
+    public List<HistoricoRelatorio> relatorio;
 
     @ManyToOne(targetEntity=Cidadao.class, fetch=FetchType.EAGER, optional=false)
     public Cidadao cidadao;

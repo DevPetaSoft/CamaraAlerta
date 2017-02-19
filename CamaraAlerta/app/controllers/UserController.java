@@ -84,8 +84,6 @@ public class UserController extends Controller {
 
     // Realiza a o login de um cidadao
     public void cidadaoLogin(String login, String senha){
-        Logger.info(login);
-        Logger.info(senha);
         Cidadao cidadao;
         cidadao = Cidadao.find("byEmailAndSenha",login,senha).first();
         if(cidadao == null){

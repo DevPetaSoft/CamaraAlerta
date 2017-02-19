@@ -57,7 +57,6 @@ export default class ChangePassword extends React.Component {
 			      extendedTimeOut: 10000
 			    });
 			}
-			console.log(storeState);
 		});
 
 

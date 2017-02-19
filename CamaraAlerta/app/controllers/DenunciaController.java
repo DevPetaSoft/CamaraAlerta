@@ -43,23 +43,17 @@ public class DenunciaController extends Controller {
 
         Cidade cidade = Cidade.find("byNome", "Lavras").first();
         if(cidade==null) {
-            cidade.estado = "MG";
+            Estado novoEstado = new Estado();
+            novoEstado.nome = "Minas Gerais";
+            novoEstado.save();
+            cidade.estado = novoEstado;
             cidade.nome = "Lavras";
             cidade.save();
         }
-        /*
-        Vereador vereador = Vereador.find("byEmail", "vereador1@email.com").first();
-        if(vereador==null) {
-            vereador.cidade=cidade;
-            vereador.nome = "Vereador 1";
-            vereador.dataCadastro = new Date();
-            vereador.email = "vereador1@email.com";
-            vereador.criadoPor = a;
-            vereador.save();
-        }*/
+
 
         d.mensagem = "";
-        d.relatorio = "";
+        d.relatorio = null;
         d.data = new Date();
         Logger.info("Paths" + d.fotos);
         //d.vereador = vereador;
@@ -239,7 +233,8 @@ public class DenunciaController extends Controller {
         }
         int statusAntigo = solicitacao.status;
 
-        solicitacao.relatorio = relatorio;
+
+
         solicitacao.status = status;
 
         SolicitacaoPorMes solicitacaoPorMes = SolicitacaoPorMes.find("byVereadorAndMesAndAno",solicitacao.vereador,solicitacao.data.getMonth(), solicitacao.data.getYear()).first();
@@ -251,6 +246,14 @@ public class DenunciaController extends Controller {
         }
 
         solicitacao.save();
+
+
+        HistoricoRelatorio historicoRelatorio = new HistoricoRelatorio();
+        historicoRelatorio.relatorio = relatorio;
+        historicoRelatorio.status = status;
+        historicoRelatorio.denuncia = solicitacao;
+        historicoRelatorio.save();
+
         solicitacaoPorMes.save();
 
         renderJSON(solicitacao);

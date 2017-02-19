@@ -15,6 +15,10 @@ POST    /user/facebookJaLogado                          UserController.facebookJ
 POST    /user/facebookTelefone                          UserController.cadastrarSenhaFacebook
 POST    /user/trocarSenha                               UserController.trocarSenha
 
+
+# Administrador
+POST    /administrador/login                            AdministradorController.adminsitradorLogin
+
 # Denuncias
 POST    /denuncia/novaDenuncia                          DenunciaController.novaDenuncia
 GET     /denuncia/minhasDenunciasUsu/{idUsuario}        DenunciaController.minhasDenuncias
@@ -36,11 +40,18 @@ GET     /vereador/{vereadorId}/listSolicitationNumbers      VereadorController.l
 GET     /vereador/{vereadorId}/listSolicitacoesPorMesList   VereadorController.listSolicitacoesPorMesList
 POST    /vereador/esqueceuSenha                             VereadorController.esqueciSenha
 POST    /vereador/gerarToken                                VereadorController.gerarChaveDeRecuperarSenha
+POST    /vereador/save                                      VereadorController.cadastrarVereador
 
 # Cidadao
-
 POST    /cidadao/gerarToken                                 UserController.esqueceuSenha
 
+# Estado
+POST    /estado/save                                        EstadoController.cadastrarEstado
+GET     /estado/list                                        EstadoController.listAll
+
+# Cidade
+POST    /cidade/save                                        CidadeController.cadastroCidade
+GET     /cidade/list                                        CidadeController.listAll
 
 # Canal de comunicação
 POST    /canalComunicacao/entrarEmContato                               CanalDeComunicacaoController.entrarEmContato

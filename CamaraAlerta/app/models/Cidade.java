@@ -3,10 +3,7 @@ package models;
 import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -22,8 +19,11 @@ public class Cidade extends GenericModel implements Serializable{
     @GeneratedValue
     public int id;
 
+    @Column(name = "nome")
     public String nome;
 
-    public String estado;
+
+    @ManyToOne(targetEntity=Estado.class, fetch=FetchType.LAZY, optional=false)
+    public Estado estado;
 
 }

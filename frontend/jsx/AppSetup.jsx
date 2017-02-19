@@ -24,6 +24,13 @@ import Configuration from "./Configuration/ConfigurationBoard.jsx";
 import VereadorForgetPassword from "./Password/VereadorForgetPassword.jsx";
 import ChangePassword from "./Password/ChangePassword.jsx";
 
+//Páginas do administrador
+import AdminLogin from "./Administrador/Index.jsx";
+import AdminDashboard from "./Administrador/Dashboard/AdminDashboard.jsx";
+import AdminCadastrarEstado from "./Administrador/Estado/CadastroEstado.jsx";
+import AdminCadastrarCidade from "./Administrador/Cidades/CadastroCidade.jsx";
+import AdminCadastrarVereador from "./Administrador/Vereador/CadastroVereador.jsx";
+
 
 ReactDOM.render(
 	(
@@ -41,6 +48,12 @@ ReactDOM.render(
 
 				    <Route path="/forgetPassword" component={VereadorForgetPassword}/>
 				    <Route path="/changePassword" component={ChangePassword}/>
+
+				    <Route path="/AdminLogin" component={AdminLogin}/>
+				    <Route path="/AdminDashboard" component={AdminDashboard} />
+				    <Route path="/AdminCadastrarEstado" component={AdminCadastrarEstado} />
+				    <Route path="/AdminCadastrarCidade" component={AdminCadastrarCidade} />
+				    <Route path="/AdminCadastrarVereador" component={AdminCadastrarVereador} />
 				</Router>
 			</div>
 		</Provider>

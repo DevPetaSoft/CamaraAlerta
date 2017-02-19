@@ -1,9 +1,12 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.NumerosMenuDTO;
 import dto.NumerosSolicitacoesDTO;
+import models.Administrador;
 import models.Denuncia;
 import models.SolicitacaoPorMes;
 import models.Vereador;
@@ -11,21 +14,14 @@ import play.Logger;
 import play.Play;
 import play.mvc.Controller;
 import utils.EmailUtils;
+import utils.HibernateProxyTypeAdapter;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import java.util.Properties;
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 /**
  * Created by gudominguete on 28/12/16.
@@ -60,7 +56,13 @@ public class VereadorController extends Controller {
         if(vereador == null){
             renderJSON(new String("E-mail ou senha incorretas!"));
         }
-        renderJSON(vereador);
+
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(vereador));
 
     }
 
@@ -320,6 +322,25 @@ public class VereadorController extends Controller {
 
 
         renderJSON(new String("Ok"));
+    }
+
+    public static void cadastrarVereador(String body){
+        Logger.info("Cadastrando Vereador");
+        Gson gson = new Gson();
+        Vereador vereador = gson.fromJson(body, Vereador.class);
+
+        if(vereador == null){
+            renderJSON(new String("Não foi possível salvar a cidade"));
+        }
+
+        Administrador adm = Administrador.find("byEmail", vereador.criadoPor.email).first();
+
+        vereador.criadoPor = adm;
+        vereador.dataCadastro = new Date();
+
+        vereador.save();
+
+        renderJSON(vereador);
     }
 
 }
