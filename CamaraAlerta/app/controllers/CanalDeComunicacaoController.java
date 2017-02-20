@@ -1,5 +1,7 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.MensagensDTO;
@@ -9,6 +11,7 @@ import models.MensagemChat;
 import models.Vereador;
 import play.Logger;
 import play.mvc.Controller;
+import utils.HibernateProxyTypeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +78,13 @@ public class CanalDeComunicacaoController extends Controller {
 
         mensagemChat.save();
 
-        renderJSON(canal);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+
+        renderJSON(gson.toJson(canal));
 
 
     }
@@ -128,7 +137,12 @@ public class CanalDeComunicacaoController extends Controller {
 
         List<CanalDeComunicacao> list = CanalDeComunicacao.find("byVereador", vereador).fetch();
 
-        renderJSON(list);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(list));
 
     }
 
@@ -160,7 +174,13 @@ public class CanalDeComunicacaoController extends Controller {
         dto.setNumeroMensagensNaoLidasVereador(numeroMensagensNaoLidasVereador);
         dto.setnumeroMensagensNaoLidasCidadao(numeroMensagensNaoLidasCidadao);
 
-        renderJSON(dto);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+
+        renderJSON(gson.toJson(dto));
     }
 
 
@@ -204,7 +224,12 @@ public class CanalDeComunicacaoController extends Controller {
         dto.setCanal(canal);
         dto.setList(MensagemChat.find("byCanal",canal).<MensagemChat>fetch());
 
-        renderJSON(dto);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(dto));
 
     }
 
