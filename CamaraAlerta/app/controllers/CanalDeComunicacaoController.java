@@ -114,7 +114,12 @@ public class CanalDeComunicacaoController extends Controller {
         dto.setnumeroMensagensNaoLidasCidadao(numeroMensagensNaoLidasCidadao);
         dto.setNumeroMensagensNaoLidasVereador(numeroMensagensNaoLidasVereador);
 
-        renderJSON(dto);
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(dto));
 
     }
 
@@ -289,7 +294,11 @@ public class CanalDeComunicacaoController extends Controller {
             msg.novo = false;
             msg.save();
         }
+        GsonBuilder builder = new GsonBuilder();
 
-        renderJSON(list);
+        builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        Gson gson = builder.create();
+        renderJSON(gson.toJson(list));
     }
 }
