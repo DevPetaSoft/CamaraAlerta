@@ -9,6 +9,10 @@ public class NumerosSolicitacoesDTO {
 
     private int numeroSolicitacoesResolvidas;
 
+    private int numeroSolicitacoesNaoResolvidas;
+
+    private int numeroSolicitacoesEmAndamento;
+
     private int nuemroSolicitacoesPendentes;
 
     public int getNumeroSolicitacoesResolvidas() {
@@ -27,6 +31,22 @@ public class NumerosSolicitacoesDTO {
         this.nuemroSolicitacoesPendentes = nuemroSolicitacoesPendentes;
     }
 
+
+    public int getNumeroSolicitacoesEmAndamento() {
+        return numeroSolicitacoesEmAndamento;
+    }
+
+    public void setNumeroSolicitacoesEmAndamento(int numeroSolicitacoesEmAndamento) {
+        this.numeroSolicitacoesEmAndamento = numeroSolicitacoesEmAndamento;
+    }
+
+    public int getNumeroSolicitacoesNaoResolvidas() {
+        return numeroSolicitacoesNaoResolvidas;
+    }
+
+    public void setNumeroSolicitacoesNaoResolvidas(int numeroSolicitacoesNaoResolvidas) {
+        this.numeroSolicitacoesNaoResolvidas = numeroSolicitacoesNaoResolvidas;
+    }
     public int getNumeroSolicitacoes() {
         return numeroSolicitacoes;
     }

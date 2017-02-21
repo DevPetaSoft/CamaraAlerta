@@ -32,9 +32,10 @@ export default class SolicitationNumber extends React.Component{
   		if(!this.state.numbers){
   			return(<div></div>);
   		}
+  		console.log(this.state.numbers);
 	    return (
 	     	<div className="dashboardWidget">
-	     		<h4 className="dashboardWidgetTitle">Número de solicitações</h4>
+	     		<h4 className="dashboardWidgetTitle">Resumo das solicitações</h4>
 
 	     		<div className="row solicitationNumbers">
 
@@ -44,12 +45,20 @@ export default class SolicitationNumber extends React.Component{
 	     				<span className="solicitationSubtitle">Solicitações resolvidas: </span>
 	     				<span className="solicitationNumber">{this.state.numbers.numeroSolicitacoesResolvidas}</span>
 	     			</div>
+	     			<div className="solicitationNumbersItens">
+	     				<span className="solicitationSubtitle">Solicitações em andamento: </span>
+	     				<span className="solicitationNumber">{this.state.numbers.numeroSolicitacoesEmAndamento}</span>
+	     			</div>
 
 	     			<div className="solicitationNumbersItens">
 	     				<span className="solicitationSubtitle">Solicitações aguardando: </span>
 	     				<span className="solicitationNumber">{this.state.numbers.nuemroSolicitacoesPendentes}</span>
 	     			</div>
-
+					
+					<div className="solicitationNumbersItens">
+	     				<span className="solicitationSubtitle">Solicitações não resolvidas: </span>
+	     				<span className="solicitationNumber">{this.state.numbers.numeroSolicitacoesNaoResolvidas}</span>
+	     			</div>
 	     			<div className="linhaDivisoria marginTop15"></div>
 
 	     			<div className="solicitationNumbersItens ">

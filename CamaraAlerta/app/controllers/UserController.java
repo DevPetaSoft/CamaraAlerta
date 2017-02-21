@@ -225,10 +225,12 @@ public class UserController extends Controller {
         cidadao.save();
         String subject = "Câmara Alerta - E-mail de recuperação de senha";
 
-        String corpoDoEmail = "Olá, para realizar a recuperação de senha, basta clicar no link:\n"+
-                Play.configuration.getProperty("application.url")+
-                "changePassword \ne digitar o código: " + codigoCadastro +
-                "\n com a nova senha. \n Equipe Venit agradece a sua experiência com o Câmara Alerta!";
+
+        String corpoDoEmail = "Olá "+cidadao.nome + "\n"+
+                "Recebemos um pedido de recuperação de senha.\n"+
+                "Para cadastrar uma nova senha, acesse o link: "+ Play.configuration.getProperty("application.url")+  "changePassword " +
+                "e digitar o token: " + codigoCadastro + ".\n"+
+                "Equipe Venit agradece a sua experiência com o Câmara Alerta!";
 
         EmailUtils.enviarEmail(email,subject,corpoDoEmail);
 

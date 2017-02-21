@@ -84,7 +84,7 @@ export default class ConfigurationBoard extends React.Component{
 		     					onChange={this.handleEvent.bind(this,"messageNotification")} 
 		     					defaultChecked={this.state.vereador.notificacaoMensagem} />
 
-		     				<button className="configurationButton" onClick={this.sendProfile.bind(this)}><img src="public/icons/send.svg" /></button>
+		     				<button className="configurationButton" onClick={this.sendProfile.bind(this)}><img src="public/icons/check.svg" /></button>
 
 		     			</div>
 	     			</div>

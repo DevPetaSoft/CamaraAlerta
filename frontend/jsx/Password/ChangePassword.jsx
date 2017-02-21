@@ -49,7 +49,6 @@ export default class ChangePassword extends React.Component {
 			      timeOut: 30000,
 			      extendedTimeOut: 10000
 			    });
-			    location.assign("./");
 			}else{
 				this.refs.container.success(
 			      "Senha trocada com sucesso!!",
@@ -57,6 +56,7 @@ export default class ChangePassword extends React.Component {
 			      timeOut: 30000,
 			      extendedTimeOut: 10000
 			    });
+			    location.assign("./");
 			}
 		});
 
@@ -127,7 +127,8 @@ export default class ChangePassword extends React.Component {
 	     				    ref="confirmPassword" 
 			     		    value={this.state.confirmPassword}
 			     		    type="password"/>
-
+						
+						<Link to="/">Voltar para tela de login</Link>
 	     				<button className="loginButton" onClick={this.changePassword.bind(this)} ><img src="public/icons/send.svg" /></button>
 	     			
 	     			</div>

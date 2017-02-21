@@ -45,7 +45,7 @@ export default class Login extends React.Component {
 				location.assign("/dashboard");
 			}else{
 				this.refs.container.error(
-			      "Não foi possível realizar o login !!",
+			      "Usuário ou senha inválidos!!",
 			      "", {
 			      timeOut: 30000,
 			      extendedTimeOut: 10000

@@ -269,6 +269,8 @@ public class VereadorController extends Controller {
         NumerosSolicitacoesDTO dto = new NumerosSolicitacoesDTO();
 
         dto.setNumeroSolicitacoes((int) Denuncia.count("vereador = ? AND valida = ?", vereador, true));
+        dto.setNumeroSolicitacoesNaoResolvidas((int) Denuncia.count("vereador = ? AND valida = ? AND status= ?",vereador, true,3));
+        dto.setNumeroSolicitacoesEmAndamento((int) Denuncia.count("vereador = ? AND valida = ? AND status= ?",vereador, true,1));
         dto.setNumeroSolicitacoesResolvidas((int) Denuncia.count("vereador = ? AND status = ? AND valida = true", vereador, 2));
         dto.setNuemroSolicitacoesPendentes((int) Denuncia.count("vereador = ? AND status = ? AND valida = true", vereador, 0));
 
@@ -341,7 +343,7 @@ public class VereadorController extends Controller {
         String corpoDoEmail = "Olá "+vereador.nome + "\n"+
                 "Recebemos um pedido de recuperação de senha.\n"+
                 "Para cadastrar uma nova senha, acesse o link: "+ Play.configuration.getProperty("application.url")+  "changePassword " +
-                "e digitar o código: " + codigoCadastro + ".\n"+
+                "e digitar o token: " + codigoCadastro + ".\n"+
                 "Equipe Venit agradece a sua experiência com o Câmara Alerta!";
 
         EmailUtils.enviarEmail(email,subject,corpoDoEmail);

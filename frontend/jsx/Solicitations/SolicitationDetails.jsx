@@ -201,52 +201,55 @@ export default class SolicitationDetails extends React.Component{
 		     		{this.state.solicitacao.descricao}
 		     		</p>
 
-		     		<h4 className="cursorDefault">Autor</h4>
-		     		<p className="cursorDefault">{this.state.solicitacao.cidadao.nome}
-		     			<Button className="solicitationModalSendButton contactButton" 
-		     					onClick={this.openModalMessage.bind(this)} 
-		     					variant="raised" 
-		     					color="primary">Bate-papo</Button>
- 					</p>
+		     		<div className="autorStatusDetails">
+			     		<h4 className="cursorDefault">Autor</h4>
+			     		<p className="cursorDefault">{this.state.solicitacao.cidadao.nome}
+			     			<Button className="solicitationModalSendButton contactButton" 
+			     					onClick={this.openModalMessage.bind(this)} 
+			     					variant="raised" 
+			     					color="primary">Bate-papo</Button>
+	 					</p>
 
-	          		
-				  
+		          		
+					  
 
-		     		<h4 className="cursorDefault">Status</h4>
-		     		<p className="cursorDefault">{this.getStatus(this.state.solicitacao.status)}</p>
-					
-					<Button className="col-sm-offset-3 col-sm-6" 
-		     					onClick={this.openModal.bind(this)} 
-		     					variant="raised" 
-		     					color="primary">Enviar relatório</Button>
+			     		<h4 className="cursorDefault">Status</h4>
+			     		<p className="cursorDefault">{this.getStatus(this.state.solicitacao.status)}</p>
+						
+						<Button className="col-sm-offset-3 col-sm-6" 
+			     					onClick={this.openModal.bind(this)} 
+			     					variant="raised" 
+			     					color="primary">Enviar relatório</Button>
+		     		</div>
 		     		
 	     		</div>
 
 
 	     		<div className="col-sm-6">
+	     			<div className="solicitacaoImagens">
+			     		<div className="col-sm-12">
+			     			<img className="solicitationImage" 
+			     			src={this.state.solicitacao.fotosServidor[0]}/>
+			     		</div>
 
-		     		<div className="col-sm-12">
-		     			<img className="solicitationImage" 
-		     			src={this.state.solicitacao.fotosServidor[0]}/>
-		     		</div>
+			     		<div className="col-sm-4">
+			     			{(this.state.solicitacao.fotosServidor.length >= 2)?(
+			     			<img className="solicitationImageSecundary" 
+				     		src={this.state.solicitacao.fotosServidor[1]}  />):("")}
+			     		</div>
 
-		     		<div className="col-sm-4">
-		     			{(this.state.solicitacao.fotosServidor.length >= 2)?(
-		     			<img className="solicitationImageSecundary" 
-			     		src={this.state.solicitacao.fotosServidor[1]}  />):("")}
-		     		</div>
+			     		<div className="col-sm-4">
+			     		{(this.state.solicitacao.fotosServidor.length >= 3)?(
+			     			<img className="solicitationImageSecundary" 
+				     		src={this.state.solicitacao.fotosServidor[2]}  />):("")}
+				     		
+			     		</div>
 
-		     		<div className="col-sm-4">
-		     		{(this.state.solicitacao.fotosServidor.length >= 3)?(
-		     			<img className="solicitationImageSecundary" 
-			     		src={this.state.solicitacao.fotosServidor[2]}  />):("")}
-			     		
-		     		</div>
-
-		     		<div className="col-sm-4">
-			     		{(this.state.solicitacao.fotosServidor.length >= 4)?(
-		     			<img className="solicitationImageSecundary" 
-			     		src={this.state.solicitacao.fotosServidor[3]}  />):("")}
+			     		<div className="col-sm-4">
+				     		{(this.state.solicitacao.fotosServidor.length >= 4)?(
+			     			<img className="solicitationImageSecundary" 
+				     		src={this.state.solicitacao.fotosServidor[3]}  />):("")}
+			     		</div>
 		     		</div>
 
 		     		<div className="col-sm-12 marginTop10">

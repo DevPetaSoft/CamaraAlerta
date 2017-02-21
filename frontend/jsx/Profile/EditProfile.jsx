@@ -76,7 +76,7 @@ export default class EditProfile extends React.Component{
 		     				<label>Telefone:</label><br/>
 		     				<Input hint="Telefone" defaultValue={this.state.vereador.telefone} ref="telefone" onChange={this.handleEvent.bind(this,"telefone")}/>
 
-		     				<button className="profileEditButton" onClick={this.sendProfile.bind(this)}><img src="public/icons/send.svg" /></button>
+		     				<button className="profileEditButton" onClick={this.sendProfile.bind(this)}><img src="public/icons/check.svg" /></button>
 
 		     			</div>
 	     			</div>
