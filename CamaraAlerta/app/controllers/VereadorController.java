@@ -342,8 +342,9 @@ public class VereadorController extends Controller {
 
         String corpoDoEmail = "Olá "+vereador.nome + "\n"+
                 "Recebemos um pedido de recuperação de senha.\n"+
-                "Para cadastrar uma nova senha, acesse o link: "+ Play.configuration.getProperty("application.url")+  "changePassword " +
-                "e digitar o token: " + codigoCadastro + ".\n"+
+                "Para cadastrar uma nova senha, acesse o link a seguir\n"+
+                Play.configuration.getProperty("application.url")+  "changePassword \n" +
+                "e informe o seguinte token " + codigoCadastro + ".\n"+
                 "Equipe Venit agradece a sua experiência com o Câmara Alerta!";
 
         EmailUtils.enviarEmail(email,subject,corpoDoEmail);
