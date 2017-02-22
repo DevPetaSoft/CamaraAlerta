@@ -17,7 +17,9 @@ import { connect } from "react-redux";
 })
 export default class Menu extends React.Component{
 	componentDidMount(){
-
+		if(localStorage.vereadorId == 'null' || localStorage.vereadorId == undefined){
+			location.assign("./");
+		}
 		store.subscribe(()=>{
 			var storeState = store.getState();
 			this.setState({
@@ -45,7 +47,7 @@ export default class Menu extends React.Component{
 	     		</div>
 	     		<hr/>
 	     		<li>
-	     			<ul ><Link to="/dashboard" activeClassName="sideMenuItensActive" className="sideMenuItens">Painel de bordo</Link></ul>
+	     			<ul ><Link to="/dashboard" activeClassName="sideMenuItensActive" className="sideMenuItens">Início</Link></ul>
 	     			<ul ><Link to="/solicitations" className="sideMenuItens" activeClassName="sideMenuItensActive"  >Solicitações<span className="sideMenuItensNumber">{(this.state)?(this.state.numeroDeNovasSolicitacoes):("0")}</span></Link></ul>
 	     			<ul ><Link to="/messages" className="sideMenuItens" activeClassName="sideMenuItensActive">Bate-papo<span className="sideMenuItensNumber">{(this.state)?(this.state.numeroDeNovasMensagens):("0")}</span></Link></ul>
 	     			<ul ><Link to="/maps" className="sideMenuItens" activeClassName="sideMenuItensActive">Mapas</Link></ul>

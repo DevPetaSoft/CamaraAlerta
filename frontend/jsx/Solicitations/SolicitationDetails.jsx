@@ -204,10 +204,7 @@ export default class SolicitationDetails extends React.Component{
 		     		<div className="autorStatusDetails">
 			     		<h4 className="cursorDefault">Autor</h4>
 			     		<p className="cursorDefault">{this.state.solicitacao.cidadao.nome}
-			     			<Button className="solicitationModalSendButton contactButton" 
-			     					onClick={this.openModalMessage.bind(this)} 
-			     					variant="raised" 
-			     					color="primary">Bate-papo</Button>
+			     			
 	 					</p>
 
 		          		
@@ -216,12 +213,18 @@ export default class SolicitationDetails extends React.Component{
 			     		<h4 className="cursorDefault">Status</h4>
 			     		<p className="cursorDefault">{this.getStatus(this.state.solicitacao.status)}</p>
 						
-						<Button className="col-sm-offset-3 col-sm-6" 
-			     					onClick={this.openModal.bind(this)} 
-			     					variant="raised" 
-			     					color="primary">Enviar relatório</Button>
+						
 		     		</div>
-		     		
+		     		<div className="solicitationDetailsButton">
+			     		<Button className="" 
+				     					onClick={this.openModal.bind(this)} 
+				     					variant="raised" 
+				     					color="primary">Enviar relatório</Button>
+			     		<Button className="solicitationModalSendButton contactButton" 
+				     					onClick={this.openModalMessage.bind(this)} 
+				     					variant="raised" 
+				     					color="primary">Bate-papo</Button>
+			     	</div>
 	     		</div>
 
 

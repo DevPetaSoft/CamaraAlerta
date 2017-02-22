@@ -54,6 +54,12 @@ export default class SolicitationList extends React.Component{
 		});
 
 	}
+	handleKeyDownEvent(event){
+		if(event.keyCode == 13 && this.state.value !== ""){
+
+			this.sendMessage();
+		}
+	}
 
   	render() {
   		if(!this.state){
@@ -80,6 +86,7 @@ export default class SolicitationList extends React.Component{
 		     			</div>
 		     			
 			     		<Input 
+			     			onKeyDown={this.handleKeyDownEvent.bind(this)}
 			     		    onChange={this.handleEvent.bind(this,"message")} 
 			     		    ref="message" 
 			     		    hint="Digite sua mensagem aqui..." 

@@ -32,7 +32,6 @@ export default class SolicitationNumber extends React.Component{
   		if(!this.state.numbers){
   			return(<div></div>);
   		}
-  		console.log(this.state.numbers);
 	    return (
 	     	<div className="dashboardWidget">
 	     		<h4 className="dashboardWidgetTitle">Resumo das solicitações</h4>
